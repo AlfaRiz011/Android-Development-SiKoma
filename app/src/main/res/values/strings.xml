@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">SiKoma</string>
+
+    <!--  LOREM  -->
+    <string name="lorem_ipsum_1">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="lorem_ipsum_2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s.</string>
+
+    <!--  LOGIN & REGISTER  -->
+    <string name="login_label">LOGIN</string>
+    <string name="register_label">REGISTER</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="register">REGISTER</string>
+    <string name="already_have_account">Already have account?</string>
+    <string name="have_no_account">Haven\'t account yet?</string>
+    <string name="enter_otp">ENTER OTP CODE</string>
+    <string name="send_otp">SEND</string>
+    <string name="resend_otp">resend code</string>
+    <string name="done">DONE</string>
+
+    <!--  USER PERSONAL DATA  -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="student_id">Student ID (NIM)</string>
+    <string name="student_program">Study Program</string>
+    <string name="phone_number">Phone Number</string>
+
+    <!--  IN-APP  -->
+    <string name="dashboard_label">Dashboard</string>
+    <string name="search_label">Search</string>
+    <string name="notification_label">Notification</string>
+    <string name="statistic_label">Statistic</string>
+    <string name="activity_label">Activity</string>
+    <string name="add_post_label">Add Post</string>
+    <string name="organization_label">Organization</string>
+    <string name="topic_label">Topic</string>
+    <string name="event_label">Event</string>
+    <string name="tags_label">Tags</string>
+    <string name="post_tab">POST</string>
+    <string name="fyp_tab">FOR YOU</string>
+    <string name="event_tab">EVENT</string>
+    <string name="organization_tab">ORGANIZATION</string>
+    <string name="topic_tab">TOPIC</string>
+    <string name="description">Deskripsi</string>
+    <string name="join_event">JOIN EVENT</string>
+    <string name="date_today">Today</string>
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_tomorrow">Tomorrow</string>
+    <string name="date_template">01 January 2000</string>
+
 </resources>
