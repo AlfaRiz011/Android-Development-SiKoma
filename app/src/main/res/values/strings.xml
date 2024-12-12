@@ -10,7 +10,7 @@
     <string name="register_label">REGISTER</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
-    <string name="register">REGISTER</string>
+    <string name="register">Register</string>
     <string name="already_have_account">Already have account?</string>
     <string name="have_no_account">Haven\'t account yet?</string>
     <string name="enter_otp">ENTER OTP CODE</string>
@@ -48,5 +48,9 @@
     <string name="date_yesterday">Yesterday</string>
     <string name="date_tomorrow">Tomorrow</string>
     <string name="date_template">01 January 2000</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="imageViewDescription">IMAGE VIEW</string>
 
 </resources>
