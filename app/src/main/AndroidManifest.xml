@@ -13,7 +13,28 @@
         android:theme="@style/Theme.SiKoma"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activities.SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.StatisticActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.AddPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.HomeAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.ProfileOrganizationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.PostDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
