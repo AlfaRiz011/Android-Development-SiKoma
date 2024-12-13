@@ -1,5 +1,6 @@
 [versions]
 agp = "8.4.0"
+imageslideshow = "0.1.2"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -11,9 +12,15 @@ activity = "1.9.3"
 constraintlayout = "2.2.0"
 fragment = "1.8.5"
 pinview = "1.4.4"
+circleimageview = "3.1.0"
+viewpager2 = "1.1.0"
+expandabletextview = "1.0.4"
+glide = "5.0.0-rc01"
+compiler = "5.0.0-rc01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+imageslideshow = { module = "com.github.denzcoskun:ImageSlideshow", version.ref = "imageslideshow" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -23,6 +30,11 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 pinview = { group = "io.github.chaosleung", name = "pinview", version.ref = "pinview" }
+circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview" }
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
+expandabletextview = { group = "io.github.glailton.expandabletextview", name = "expandabletextview", version.ref = "expandabletextview" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "compiler" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

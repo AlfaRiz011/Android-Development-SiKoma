@@ -18,6 +18,7 @@
     <string name="resend_otp">resend code</string>
     <string name="done">DONE</string>
 
+
     <!--  USER PERSONAL DATA  -->
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -25,6 +26,9 @@
     <string name="student_id">Student ID (NIM)</string>
     <string name="student_program">Study Program</string>
     <string name="phone_number">Phone Number</string>
+    <string name="title">Complete Your Profile</string>
+    <string name="title_desc">To use this application as a student of UPNVJ please complete your personal information</string>
+    <string name="edit_data">Edit Data</string>
 
     <!--  IN-APP  -->
     <string name="dashboard_label">Dashboard</string>
@@ -52,5 +56,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="imageViewDescription">IMAGE VIEW</string>
+    <string name="like_number">10</string>
 
 </resources>
