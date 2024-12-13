@@ -7,4 +7,199 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.ProfileActivity">
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/imageViewDescription"
+        android:src="@drawable/background_profile"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@color/whitePrimary"
+        app:layout_constraintTop_toTopOf="@id/button_back"
+        app:layout_constraintBottom_toBottomOf="@id/button_back"
+        app:layout_constraintStart_toStartOf="@id/button_back"
+        app:layout_constraintEnd_toEndOf="@id/button_back"/>
+
+    <ImageView
+        android:id="@+id/button_back"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/imageViewDescription"
+        android:src="@drawable/icon_arrow_left"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@color/whitePrimary"
+        app:layout_constraintTop_toTopOf="@id/profile_pic"
+        app:layout_constraintBottom_toBottomOf="@id/profile_pic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_pic"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/icon_profile_fill"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@id/card"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="300dp"
+        android:layout_height="550dp"
+        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/whiteSecondary"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintTop_toBottomOf="@id/profile_pic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_edit_text"
+                android:hint="@string/email"
+                android:textColorHint="@color/blueSecondary"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="13dp"
+                android:layout_margin="20dp"/>
+
+            <EditText
+                android:id="@+id/input_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_edit_text"
+                android:hint="@string/full_name"
+                android:textColorHint="@color/blueSecondary"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="13dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"/>
+
+            <EditText
+                android:id="@+id/input_nim"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_edit_text"
+                android:hint="@string/student_id"
+                android:textColorHint="@color/blueSecondary"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="13dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"/>
+
+            <EditText
+                android:id="@+id/input_study_program"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_edit_text"
+                android:hint="@string/student_program"
+                android:textColorHint="@color/blueSecondary"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="13dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"/>
+
+            <EditText
+                android:id="@+id/input_phone"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/shape_edit_text"
+                android:hint="@string/phone_number"
+                android:textColorHint="@color/blueSecondary"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="13dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:padding="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_edit_data"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/bluePrimary"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/edit_data"
+                android:letterSpacing="0.3"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                app:cornerRadius="10dp"
+                android:visibility="visible"  />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_done"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/bluePrimary"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/done"
+                android:letterSpacing="0.3"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                app:cornerRadius="10dp"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_logout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/red"
+                android:layout_marginHorizontal="20dp"
+                android:text="@string/logout"
+                android:letterSpacing="0.3"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                app:cornerRadius="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

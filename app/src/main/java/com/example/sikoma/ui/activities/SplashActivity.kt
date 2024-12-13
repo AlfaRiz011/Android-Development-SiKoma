@@ -1,5 +1,6 @@
 package com.example.sikoma.ui.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity

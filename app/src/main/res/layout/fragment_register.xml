@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/imageViewDescription"
         android:src="@drawable/background_auth"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -132,7 +132,7 @@
         app:layout_constraintEnd_toEndOf="@id/card"/>
 
     <include
-        android:visibility="visible"
+        android:visibility="gone"
         layout="@layout/item_otp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
