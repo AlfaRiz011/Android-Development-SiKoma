@@ -8,5 +8,7 @@
     <color name="bluePrimary">#112D4E</color>
     <color name="blueSecondary">#3F72AF</color>
     <color name="red">#D82F2F</color>
+    <color name="blueTransparent">#653F72AF</color>
+    <color name="grey">#4A4A4A</color>
 
 </resources>

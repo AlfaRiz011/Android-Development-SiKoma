@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sikoma.R
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.models.PostProvider
@@ -27,13 +28,17 @@ class AllPostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val posts = PostProvider.createDummy(20)
+        setAdapter()
+    }
 
-        
+    private fun setAdapter() {
+        val posts = PostProvider.createDummy(20)
 
         postAdapter = AllPostAdapter(posts)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvAllPost.layoutManager = layoutManager
         binding.rvAllPost.adapter = postAdapter
+
+
     }
 }

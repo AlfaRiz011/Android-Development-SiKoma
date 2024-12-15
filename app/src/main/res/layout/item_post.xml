@@ -6,6 +6,7 @@
     xmlns:expandableTextView="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="20dp"
+    android:background="@color/whitePrimary"
     android:paddingVertical="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView

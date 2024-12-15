@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
@@ -30,6 +31,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setOnBack()
         setImageSlider()
         setTabLayout()
     }
@@ -67,10 +69,10 @@ class HomeFragment : Fragment() {
         val posts =  PostProvider.createDummy(5)
 
         for (i in posts.indices) {
-            imageList.add(SlideModel(R.drawable.background_auth, "\uD83D\uDD34" + posts[i].title))
+            imageList.add(SlideModel(R.drawable.logo_app, "\uD83D\uDD34" + posts[i].title))
         }
         val imageSlider = binding.imageSlider
-        imageSlider.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
 
         imageSlider.setItemClickListener(object : ItemClickListener {
             override fun onItemSelected(position: Int) {
@@ -88,5 +90,15 @@ class HomeFragment : Fragment() {
         val fragmentTransaction = parentFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container_tab, fragment)
         fragmentTransaction.commit()
+    }
+
+    private fun setOnBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            })
     }
 }
