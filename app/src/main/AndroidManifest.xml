@@ -28,13 +28,13 @@
             android:name=".ui.activities.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.ProfileOrganizationActivity"
-           android:exported="false" />
+            android:name=".ui.activities.AuthActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.AuthActivity"
+            android:name=".ui.activities.ProfileOrganizationActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.sikoma.ui.fragments.HomeFragment"
+        android:label="@string/home_label"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.sikoma.ui.fragments.SearchFragment"
+        android:label="@string/search_label"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/nav_notification"
+        android:name="com.example.sikoma.ui.fragments.NotificationFragment"
+        android:label="@string/notification_label"
+        tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/nav_myevent"
+        android:name="com.example.sikoma.ui.fragments.MyEventFragment"
+        android:label="@string/activity_label"
+        tools:layout="@layout/fragment_my_event" />
+
+</navigation>

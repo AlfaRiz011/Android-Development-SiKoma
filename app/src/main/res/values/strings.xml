@@ -31,9 +31,10 @@
     <string name="edit_data">Edit Data</string>
 
     <!--  IN-APP  -->
-    <string name="dashboard_label">Dashboard</string>
+    <string name="home_label">Home</string>
     <string name="search_label">Search</string>
     <string name="notification_label">Notification</string>
+    <string name="my_event_label">My Event</string>
     <string name="statistic_label">Statistic</string>
     <string name="activity_label">Activity</string>
     <string name="add_post_label">Add Post</string>
@@ -52,10 +53,10 @@
     <string name="date_yesterday">Yesterday</string>
     <string name="date_tomorrow">Tomorrow</string>
     <string name="date_template">01 January 2000</string>
+    <string name="like_number">10</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="imageViewDescription">IMAGE VIEW</string>
-    <string name="like_number">10</string>
 
 </resources>
