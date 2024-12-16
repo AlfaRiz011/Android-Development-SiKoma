@@ -3,4 +3,9 @@
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/blueTransparent</item>
     </style>
+
+    <style name="CustomSearchBar" parent="Widget.Material3.SearchBar">
+        <item name="cornerRadius">0dp</item>
+    </style>
+
 </resources>
