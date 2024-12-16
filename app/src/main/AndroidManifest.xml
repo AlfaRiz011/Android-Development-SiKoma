@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SiKoma"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.ProfileOrganizationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.SplashActivity"
             android:exported="false" />
         <activity
@@ -34,7 +37,8 @@
             android:name=".ui.activities.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.ProfileOrganizationActivity"
+            android:name=".ui.activities.HomeActivity"
+
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
