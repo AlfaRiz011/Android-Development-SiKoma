@@ -7,4 +7,217 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.PostDetailActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/blueSecondary"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <ImageView
+                android:id="@+id/center_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/imageViewDescription"
+                android:src="@drawable/icon_app" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/background_back"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@color/whitePrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/button_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/imageViewDescription"
+                    android:src="@drawable/icon_arrow_left_2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/button_join_event"
+        app:layout_constraintTop_toBottomOf="@id/appbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_pic"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/post_author"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="15dp"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center"
+                android:text="@string/organization_label"
+                android:textAlignment="textStart"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/profile_pic"
+                app:layout_constraintTop_toTopOf="@id/profile_pic" />
+
+            <TextView
+                android:id="@+id/post_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/lorem_ipsum_1"
+                android:textAlignment="textStart"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="@id/post_author"
+                app:layout_constraintStart_toStartOf="@id/post_author"
+                app:layout_constraintTop_toBottomOf="@id/post_author" />
+
+            <ImageView
+                android:id="@+id/post_image"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/bluePrimary"
+                android:contentDescription="@string/imageViewDescription"
+                app:layout_constraintEnd_toEndOf="@id/post_content"
+                app:layout_constraintStart_toStartOf="@id/post_content"
+                app:layout_constraintTop_toBottomOf="@id/post_content"
+                tools:src="@tools:sample/avatars" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_like"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/whiteSecondary"
+                android:text="@string/like_number"
+                android:textColor="@color/bluePrimary"
+                app:cornerRadius="5dp"
+                app:icon="@drawable/icon_like"
+                app:iconTint="@color/bluePrimary"
+                app:layout_constraintEnd_toEndOf="@id/post_image"
+                app:layout_constraintTop_toBottomOf="@id/post_image" />
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:stretchColumns="*"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/post_content"
+                app:layout_constraintStart_toStartOf="@id/post_content"
+                app:layout_constraintTop_toBottomOf="@id/button_like">
+
+                <TableRow
+                    android:layout_marginVertical="1dp">
+                    <TextView
+                        android:text="@string/tanggal_pelaksanaan"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                    <TextView
+                        android:id="@+id/tanggal_pelaksanaan"
+                        android:text="@string/date_template"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginVertical="1dp">
+                    <TextView
+                        android:text="@string/waktu_pelaksanaan"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                    <TextView
+                        android:id="@+id/waktu_pelaksanaan"
+                        android:text="@string/time_template"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_marginVertical="1dp">
+                    <TextView
+                        android:text="@string/tempat_pelaksanaan"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                    <TextView
+                        android:id="@+id/tempat_pelaksanaan"
+                        android:text="@string/tempat_template"
+                        android:padding="10dp"
+                        android:background="@color/blueSecondary"
+                        android:layout_marginHorizontal="1dp"
+                        android:textColor="@color/whitePrimary"/>
+                </TableRow>
+            </TableLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/topic_rv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="@id/post_content"
+                app:layout_constraintStart_toStartOf="@id/post_content"
+                app:layout_constraintTop_toBottomOf="@id/table"
+                app:spanCount="4"
+                tools:itemCount="12"
+                tools:listitem="@layout/item_topic" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_join_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_button_event"
+        android:text="@string/join_event"
+        app:backgroundTint="@null"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

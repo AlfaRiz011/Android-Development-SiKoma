@@ -54,6 +54,11 @@
     <string name="date_tomorrow">Tomorrow</string>
     <string name="date_template">01 January 2000</string>
     <string name="like_number">10</string>
+    <string name="time_template">12:00</string>
+    <string name="tempat_template">Gedung Dewi Sartika</string>
+    <string name="tanggal_pelaksanaan">Tanggal Pelaksanaan</string>
+    <string name="waktu_pelaksanaan">Waktu Pelaksanaan</string>
+    <string name="tempat_pelaksanaan">Tempat Pelaksanaan</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
