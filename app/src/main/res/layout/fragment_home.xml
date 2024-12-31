@@ -42,4 +42,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/button_add_post"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/icon_add"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:background="@drawable/shape_button_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
