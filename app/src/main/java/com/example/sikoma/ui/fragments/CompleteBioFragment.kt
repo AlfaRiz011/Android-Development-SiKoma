@@ -5,56 +5,95 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
 import com.example.sikoma.R
+import com.example.sikoma.data.models.Akun
+import com.example.sikoma.databinding.FragmentCompleteBioBinding
+import com.example.sikoma.utils.ValidatorAuthHelper
+import javax.xml.validation.Validator
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CompleteBioFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CompleteBioFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentCompleteBioBinding
+
+    private var email : String? = null
+    private var password : String? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_complete_bio, container, false)
+    ): View {
+        binding = FragmentCompleteBioBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CompleteBioFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CompleteBioFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
+        email = arguments?.getString("email")
+        password = arguments?.getString("password")
+
+        setView()
+    }
+
+    private fun setView() {
+        binding.apply{
+            inputEmail.hint = email
+
+            buttonDone.setOnClickListener{
+
+                val isValid = ValidatorAuthHelper.validateInputBio(
+                    requireContext(),
+                    nameLayout,
+                    nimLayout,
+                    prodiLayout,
+                    phoneLayout,
+                    inputName,
+                    inputNim,
+                    inputStudyProgram,
+                    inputPhone
+                )
+
+                if(isValid){
+                    Akun(
+                        email = email,
+                        password = password,
+                        name = inputName.text.toString(),
+                        nim = inputNim.text.toString(),
+                        prodi = inputStudyProgram.text.toString(),
+                        phone = inputPhone.text.toString()
+                    )
+
+                    val nextFragment = LoginFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("email",email)
+                            putString("password",password)
+                            putString("name",inputName.text.toString())
+                            putString("nim",inputNim.text.toString())
+                            putString("prodi",inputStudyProgram.text.toString())
+                            putString("phone",inputPhone.text.toString())
+                        }
+                    }
+
+                    Toast.makeText(requireContext(), "Register Complete", Toast.LENGTH_SHORT).show()
+
+                    parentFragmentManager.beginTransaction().apply {
+                        setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left,
+                            R.anim.slide_in_left,
+                            R.anim.slide_out_right
+                        )
+                        replace(R.id.fragment_container_auth, nextFragment)
+                        addToBackStack(null)
+                    }.commit()
+                } else {
+                    Toast.makeText(requireContext(), "Try Again", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
     }
 }
