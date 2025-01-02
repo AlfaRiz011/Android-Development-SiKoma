@@ -1,5 +1,6 @@
 package com.example.sikoma.ui.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,8 @@ import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.ItemDateSectionBinding
 import com.example.sikoma.databinding.ItemPostBinding
 import com.example.sikoma.databinding.ItemSearchOrganizationBinding
+import com.example.sikoma.ui.activities.PostDetailActivity
+import com.example.sikoma.ui.activities.ProfileOrganizationActivity
 
 class NotificationListAdapter(private val items: List<Any>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -57,12 +60,12 @@ class NotificationListAdapter(private val items: List<Any>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is Notification.DateSectionItem -> DateSectionBind(item, holder, position)
-            is Notification.PostItem -> PostBind(item, holder, position)
+            is Notification.DateSectionItem -> dateSectionBind(item, holder, position)
+            is Notification.PostItem -> postBind(item, holder, position)
         }
     }
 
-    private fun PostBind(item: Notification.PostItem, holder: ViewHolder, position: Int) {
+    private fun postBind(item: Notification.PostItem, holder: ViewHolder, position: Int) {
         val postHolder = holder as PostViewHolder
 
         postHolder.binding.apply {
@@ -78,10 +81,31 @@ class NotificationListAdapter(private val items: List<Any>) :
                 .load(item.post.profilePic)
                 .placeholder(R.drawable.icon_profile_fill)
                 .into(profilePic)
+
+            itemPost.setOnClickListener {
+                val intent = Intent(root.context, PostDetailActivity::class.java).apply {
+                    putExtra("author", item.post.author)
+                    putExtra("content", item.post.content)
+                    putExtra("image", item.post.image)
+                    putExtra("profilePic", item.post.profilePic)
+                }
+                root.context.startActivity(intent)
+            }
+
+            fun openProfileActivity() {
+                val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
+                    putExtra("author", item.post.author)
+                    putExtra("profilePic", item.post.profilePic)
+                }
+                root.context.startActivity(intent)
+            }
+
+            postAuthor.setOnClickListener { openProfileActivity() }
+            profilePic.setOnClickListener { openProfileActivity() }
         }
     }
 
-    private fun DateSectionBind(item: Notification.DateSectionItem, holder: RecyclerView.ViewHolder, position: Int) {
+    private fun dateSectionBind(item: Notification.DateSectionItem, holder: RecyclerView.ViewHolder, position: Int) {
         val dateHolder = holder as DateSectionViewHolder
 
         dateHolder.binding.apply {
