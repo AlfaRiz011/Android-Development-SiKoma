@@ -2,6 +2,7 @@ package com.example.sikoma.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -33,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
+        setOnBack()
         setAppBar()
         setNavBar()
         setFragment(HomeFragment())
@@ -80,6 +82,14 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun setOnBack() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
 
     private fun setFragment(fragment: Fragment) {

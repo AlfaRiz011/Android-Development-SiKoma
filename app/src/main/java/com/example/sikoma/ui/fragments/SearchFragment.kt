@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentSearchBinding
+import com.google.android.material.tabs.TabLayout
 
 class SearchFragment : Fragment() {
 
@@ -24,6 +25,37 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setOnBack()
+        setTabLayout()
+    }
+
+    private fun setTabLayout() {
+        binding.tabLayout.apply {
+            addTab(newTab().setText("Organization"))
+            addTab(newTab().setText("Topic"))
+
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab?.position) {
+                        0 -> switchFragment(SearchOrganizationFragment())
+                        1 -> switchFragment(SearchTopicFragment())
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {}
+            })
+
+            selectTab(getTabAt(0))
+            switchFragment(SearchOrganizationFragment())
+        }
+
+    }
+
+    private fun switchFragment(fragment: Fragment) {
+        val fragmentTransaction = parentFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container_search, fragment)
+        fragmentTransaction.commit()
     }
 
     private fun setOnBack() {

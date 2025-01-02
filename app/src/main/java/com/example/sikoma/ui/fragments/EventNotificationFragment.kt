@@ -5,56 +5,81 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
+import com.example.sikoma.data.models.Date
+import com.example.sikoma.data.models.Notification
+import com.example.sikoma.data.models.Post
+import com.example.sikoma.data.models.PostProvider
+import com.example.sikoma.databinding.FragmentEventNotificationBinding
+import com.example.sikoma.ui.adapters.NotificationListAdapter
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EventNotificationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EventNotificationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var binding : FragmentEventNotificationBinding
+    private lateinit var adapter : NotificationListAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_notification, container, false)
+    ): View {
+        binding = FragmentEventNotificationBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EventNotificationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EventNotificationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setOnBack()
+        setAdapter()
+    }
+
+    private fun setAdapter() {
+        val posts = PostProvider.createDummy(5)
+
+        val groupedItems = groupPostsByDate(posts)
+
+        adapter = NotificationListAdapter(groupedItems)
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvEventNotification.layoutManager = layoutManager
+        binding.rvEventNotification.adapter = adapter
+    }
+    private fun groupPostsByDate(posts: List<Post>): List<Any> {
+        val groupedItems = mutableListOf<Any>()
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val today = dateFormat.format(java.util.Date())
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        val tomorrow = dateFormat.format(calendar.time)
+
+        val grouped = posts.groupBy { it.postDate }
+
+        for ((dateStr, postsOnDate) in grouped) {
+            val sectionTitle = when {
+                dateStr == today -> "Today"
+                dateStr == tomorrow -> "Tomorrow"
+                else -> dateStr
             }
+            groupedItems.add(Notification.DateSectionItem(sectionTitle))
+            postsOnDate.forEach { post ->
+                groupedItems.add(Notification.PostItem(post))
+            }
+        }
+
+        return groupedItems
+    }
+
+    private fun setOnBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            })
     }
 }
