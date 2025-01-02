@@ -11,7 +11,8 @@ data class Post(
     val image: Int,
     val author: String,
     val profilePic: Int,
-    val postDate: String
+    val postDate: String,
+    val topic: List<Topic>
 )
 
 
@@ -20,12 +21,23 @@ object PostProvider {
         val posts = mutableListOf<Post>()
         val names = listOf("Multimedia", "Android", "Cyber Security", "Robotics")
 
+        val topics = listOf(
+            Topic("Tech"),
+            Topic("Komputer"),
+            Topic("Olahraga"),
+            Topic("AI"),
+            Topic("Mobile Development")
+        )
+
         val startDate = "2024-01-01"
         val endDate = "2024-12-31"
 
         for (i in 1..postNumber) {
             val randomIndex = names.indices.random()
             val randomPostDate = randomDate(startDate, endDate)
+
+            val randomTopicIndex = (0..2).random()
+            val selectedTopics = topics.shuffled().take(randomTopicIndex + 1)
 
             posts.add(
                 Post(
@@ -34,7 +46,8 @@ object PostProvider {
                     image = R.drawable.logo_upn,
                     author = names[randomIndex],
                     profilePic = R.drawable.icon_profile_fill,
-                    postDate = randomPostDate
+                    postDate = randomPostDate,
+                    topic = selectedTopics
                 )
             )
         }

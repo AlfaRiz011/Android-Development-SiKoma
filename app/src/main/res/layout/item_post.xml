@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingHorizontal="20dp"
-    android:background="@color/whitePrimary"
+    android:id="@+id/item_post"
+    android:background="@drawable/shape_outline_view_2"
     android:paddingVertical="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -68,12 +69,4 @@
         app:layout_constraintTop_toBottomOf="@id/post_image"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/bluePrimary"
-        app:layout_constraintTop_toBottomOf="@id/button_like"
-        app:layout_constraintEnd_toEndOf="@id/button_like"
-        app:layout_constraintStart_toStartOf="@id/profile_pic"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

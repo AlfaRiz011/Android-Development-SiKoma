@@ -1,5 +1,6 @@
 package com.example.sikoma.ui.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,6 +8,8 @@ import com.bumptech.glide.Glide
 import com.example.sikoma.R
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.ItemPostBinding
+import com.example.sikoma.ui.activities.PostDetailActivity
+import com.example.sikoma.ui.activities.ProfileOrganizationActivity
 
 class AllPostAdapter(private val posts: List<Post>) : RecyclerView.Adapter<AllPostAdapter.PostViewHolder>() {
 
@@ -32,8 +35,29 @@ class AllPostAdapter(private val posts: List<Post>) : RecyclerView.Adapter<AllPo
                 .load(post.profilePic)
                 .placeholder(R.drawable.icon_profile_fill)
                 .into(profilePic)
-        }
 
+            itemPost.setOnClickListener {
+                val intent = Intent(root.context, PostDetailActivity::class.java).apply {
+                    putExtra("author", post.author)
+                    putExtra("content", post.content)
+                    putExtra("image", post.image)
+                    putExtra("profilePic", post.profilePic)
+                    putExtra("topics", ArrayList(post.topic))
+                }
+                root.context.startActivity(intent)
+            }
+
+            fun openProfileActivity() {
+                val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
+                    putExtra("author", post.author)
+                    putExtra("profilePic", post.profilePic)
+                }
+                root.context.startActivity(intent)
+            }
+
+            postAuthor.setOnClickListener { openProfileActivity() }
+            profilePic.setOnClickListener { openProfileActivity() }
+        }
     }
 
     override fun getItemCount(): Int = posts.size
