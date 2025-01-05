@@ -25,20 +25,20 @@
             android:name=".ui.activities.AddPostActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.HomeAdminActivity"
+            android:name=".ui.activities.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.AuthActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.activities.PostDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.HomeActivity"
+            android:name=".ui.activities.HomeAdminActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -48,7 +48,6 @@ class RegisterFragment : Fragment() {
 
         binding.apply {
             buttonRegister.setOnClickListener{
-                //Validate input
                 val isValid = ValidatorAuthHelper.validateInputAuth(
                     requireContext(),
                     emailInputLayout,
@@ -86,7 +85,6 @@ class RegisterFragment : Fragment() {
                 }
             }
 
-            //Button Login
             loginPage.setOnClickListener {
                 parentFragmentManager.beginTransaction().apply {
                     setCustomAnimations(

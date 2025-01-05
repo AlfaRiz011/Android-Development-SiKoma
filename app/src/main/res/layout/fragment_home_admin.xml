@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whitePrimary"
-    tools:context=".ui.fragments.StatisticFragment">
+    tools:context=".ui.fragments.HomeAdminFragment">
 
     <com.example.sikoma.utils.StickyScrollView
         android:id="@+id/sticky_scroll"
@@ -16,6 +16,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/image_slider"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                app:iss_auto_cycle="true"
+                app:iss_delay="3000"
+                app:iss_period="3000"
+                app:iss_title_background="@drawable/gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="0dp"
@@ -24,7 +36,7 @@
                 android:tag="sticky"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_slider"
                 app:tabIndicatorColor="@color/bluePrimary"
                 app:tabRippleColor="@color/blueSecondary"
                 app:tabSelectedTextColor="@color/blueSecondary"

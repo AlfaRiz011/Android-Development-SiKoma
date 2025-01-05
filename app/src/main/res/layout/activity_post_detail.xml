@@ -121,86 +121,36 @@
                 app:layout_constraintEnd_toEndOf="@id/post_image"
                 app:layout_constraintTop_toBottomOf="@id/post_image" />
 
-            <TableLayout
-                android:id="@+id/table"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_schedule"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:stretchColumns="*"
-                android:visibility="gone"
+                android:background="@drawable/shape_button_schedule"
+                android:text="@string/show_schedule"
+                app:iconGravity="textStart"
+                app:icon="@drawable/icon_activity"
+                app:iconSize="30dp"
+                android:textColor="@color/blueSecondary"
+                app:iconTint="@color/blueSecondary"
                 app:layout_constraintEnd_toEndOf="@id/post_content"
                 app:layout_constraintStart_toStartOf="@id/post_content"
-                app:layout_constraintTop_toBottomOf="@id/button_like">
-
-                <TableRow android:layout_marginVertical="1dp">
-
-                    <TextView
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/tanggal_pelaksanaan"
-                        android:textColor="@color/whitePrimary" />
-
-                    <TextView
-                        android:id="@+id/tanggal_pelaksanaan"
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/date_template"
-                        android:textColor="@color/whitePrimary" />
-                </TableRow>
-
-                <TableRow android:layout_marginVertical="1dp">
-
-                    <TextView
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/waktu_pelaksanaan"
-                        android:textColor="@color/whitePrimary" />
-
-                    <TextView
-                        android:id="@+id/waktu_pelaksanaan"
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/time_template"
-                        android:textColor="@color/whitePrimary" />
-                </TableRow>
-
-                <TableRow android:layout_marginVertical="1dp">
-
-                    <TextView
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/tempat_pelaksanaan"
-                        android:textColor="@color/whitePrimary" />
-
-                    <TextView
-                        android:id="@+id/tempat_pelaksanaan"
-                        android:layout_marginHorizontal="1dp"
-                        android:background="@color/blueSecondary"
-                        android:padding="10dp"
-                        android:text="@string/tempat_template"
-                        android:textColor="@color/whitePrimary" />
-                </TableRow>
-            </TableLayout>
+                app:layout_constraintTop_toBottomOf="@id/button_like" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topic_rv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/shape_tag"
+                android:orientation="horizontal"
                 android:padding="10dp"
                 app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
                 app:layout_constraintEnd_toEndOf="@id/post_content"
                 app:layout_constraintStart_toStartOf="@id/post_content"
-                app:layout_constraintTop_toBottomOf="@id/table"
-                tools:listitem="@layout/item_topic"
-                tools:itemCount="14"  />
+                app:layout_constraintTop_toBottomOf="@id/button_schedule"
+                tools:itemCount="14"
+                tools:listitem="@layout/item_topic" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -217,6 +167,19 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_button_event"
+        android:backgroundTint="@color/red"
+        android:text="@string/cancel_event"
+        android:visibility="visible"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_export"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -227,4 +190,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <include
+        android:id="@+id/include_schedule"
+        android:elevation="10dp"
+        android:visibility="gone"
+        layout="@layout/item_schedule"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

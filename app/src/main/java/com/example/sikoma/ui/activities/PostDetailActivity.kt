@@ -69,6 +69,18 @@ class PostDetailActivity : AppCompatActivity() {
                 .load(imageContent)
                 .placeholder(R.drawable.logo_app)
                 .into(binding.postImage)
+
+            //EVENT
+            buttonSchedule.visibility = View.VISIBLE
+            buttonJoinEvent.visibility = View.VISIBLE
+
+            buttonSchedule.setOnClickListener{
+                includeSchedule.layoutSchedue.visibility = View.VISIBLE
+            }
+
+            includeSchedule.backButtonSchedule.setOnClickListener{
+                includeSchedule.layoutSchedue.visibility = View.GONE
+            }
         }
     }
 }

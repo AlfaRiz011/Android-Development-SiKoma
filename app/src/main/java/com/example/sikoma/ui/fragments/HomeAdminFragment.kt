@@ -14,12 +14,12 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sikoma.R
 import com.example.sikoma.data.models.PostProvider
-import com.example.sikoma.databinding.FragmentStatisticBinding
+import com.example.sikoma.databinding.FragmentHomeAdminBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class StatisticFragment : Fragment() {
-    private lateinit var binding: FragmentStatisticBinding
+class HomeAdminFragment : Fragment() {
+    private lateinit var binding: FragmentHomeAdminBinding
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var constraintLayout: ConstraintLayout
@@ -28,7 +28,7 @@ class StatisticFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStatisticBinding.inflate(inflater, container, false)
+        binding = FragmentHomeAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,6 +38,7 @@ class StatisticFragment : Fragment() {
         constraintLayout = requireActivity().findViewById(R.id.main)
 
         setOnBack()
+        setImageSlider()
         setTabLayout()
         setView()
     }
@@ -76,6 +77,26 @@ class StatisticFragment : Fragment() {
         }
     }
 
+    private fun setImageSlider() {
+        val imageList = ArrayList<SlideModel>()
+
+        val posts = PostProvider.createDummy(5)
+        for (i in posts.indices) {
+            imageList.add(SlideModel(R.drawable.logo_app, "\uD83D\uDD34" + posts[i].title))
+        }
+
+        val imageSlider = binding.imageSlider
+        imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
+
+        imageSlider.setItemClickListener(object : ItemClickListener {
+            override fun onItemSelected(position: Int) {
+                val title = posts[position].title
+                Toast.makeText(requireContext(), "Clicked $title", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun doubleClick(position: Int) {}
+        })
+    }
 
     private fun switchFragment(fragment: Fragment) {
         val fragmentTransaction = parentFragmentManager.beginTransaction()
