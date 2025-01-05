@@ -5,6 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@color/whitePrimary"
     tools:context=".ui.activities.PostDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -35,22 +37,12 @@
                 android:layout_gravity="start"
                 android:layout_margin="10dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/background_back"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@color/whitePrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <ImageView
                     android:id="@+id/button_back"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
                     android:contentDescription="@string/imageViewDescription"
-                    android:src="@drawable/icon_arrow_left_2"
+                    android:src="@drawable/icon_arrow_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -85,9 +77,7 @@
                 android:layout_height="50dp"
                 android:layout_marginHorizontal="15dp"
                 android:fontFamily="@font/poppins_bold"
-                android:gravity="center"
                 android:text="@string/organization_label"
-                android:textAlignment="textStart"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/profile_pic"
@@ -142,55 +132,58 @@
                 app:layout_constraintStart_toStartOf="@id/post_content"
                 app:layout_constraintTop_toBottomOf="@id/button_like">
 
-                <TableRow
-                    android:layout_marginVertical="1dp">
+                <TableRow android:layout_marginVertical="1dp">
+
                     <TextView
-                        android:text="@string/tanggal_pelaksanaan"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/tanggal_pelaksanaan"
+                        android:textColor="@color/whitePrimary" />
+
                     <TextView
                         android:id="@+id/tanggal_pelaksanaan"
-                        android:text="@string/date_template"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/date_template"
+                        android:textColor="@color/whitePrimary" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_marginVertical="1dp">
+                <TableRow android:layout_marginVertical="1dp">
+
                     <TextView
-                        android:text="@string/waktu_pelaksanaan"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/waktu_pelaksanaan"
+                        android:textColor="@color/whitePrimary" />
+
                     <TextView
                         android:id="@+id/waktu_pelaksanaan"
-                        android:text="@string/time_template"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/time_template"
+                        android:textColor="@color/whitePrimary" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_marginVertical="1dp">
+                <TableRow android:layout_marginVertical="1dp">
+
                     <TextView
-                        android:text="@string/tempat_pelaksanaan"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/tempat_pelaksanaan"
+                        android:textColor="@color/whitePrimary" />
+
                     <TextView
                         android:id="@+id/tempat_pelaksanaan"
-                        android:text="@string/tempat_template"
-                        android:padding="10dp"
-                        android:background="@color/blueSecondary"
                         android:layout_marginHorizontal="1dp"
-                        android:textColor="@color/whitePrimary"/>
+                        android:background="@color/blueSecondary"
+                        android:padding="10dp"
+                        android:text="@string/tempat_template"
+                        android:textColor="@color/whitePrimary" />
                 </TableRow>
             </TableLayout>
 
@@ -198,14 +191,16 @@
                 android:id="@+id/topic_rv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                android:background="@drawable/shape_tag"
+                android:padding="10dp"
+                app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
                 app:layout_constraintEnd_toEndOf="@id/post_content"
                 app:layout_constraintStart_toStartOf="@id/post_content"
                 app:layout_constraintTop_toBottomOf="@id/table"
-                app:spanCount="4"
-                tools:itemCount="12"
-                tools:listitem="@layout/item_topic" />
+                tools:listitem="@layout/item_topic"
+                tools:itemCount="14"  />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -215,10 +210,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_button_event"
         android:text="@string/join_event"
-        app:backgroundTint="@null"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
@@ -227,9 +222,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_button_event"
         android:text="@string/export_data"
-        app:backgroundTint="@null"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

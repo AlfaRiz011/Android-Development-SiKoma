@@ -35,16 +35,8 @@ class ProfileOrganizationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityProfileOrganizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val color = ContextCompat.getColor(this, R.color.blueSecondary)
-            v.setBackgroundColor(color)
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            insets
-        }
 
         author = intent.getStringExtra("author") ?: "Unknown"
         profilePic = intent.getIntExtra("profilePic", R.drawable.icon_profile_fill)

@@ -1,6 +1,7 @@
 package com.example.sikoma.ui.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,6 +13,9 @@ import com.example.sikoma.R
 import com.example.sikoma.data.models.Topic
 import com.example.sikoma.databinding.ActivityPostDetailBinding
 import com.example.sikoma.ui.adapters.TopicPostAdapter
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -27,16 +31,9 @@ class PostDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityPostDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val color = ContextCompat.getColor(this, R.color.blueSecondary)
-            v.setBackgroundColor(color)
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            insets
-        }
+
         author = intent.getStringExtra("author") ?: "Unknown"
         content = intent.getStringExtra("content") ?: "Unkonwn"
         imageContent = intent.getIntExtra("image", R.drawable.logo_upn)
@@ -50,8 +47,11 @@ class PostDetailActivity : AppCompatActivity() {
     private fun setAdapter() {
         adapter = TopicPostAdapter(topic)
 
-        val layoutManager = LinearLayoutManager(this@PostDetailActivity)
+        val layoutManager = FlexboxLayoutManager(this@PostDetailActivity)
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.CENTER
         binding.topicRv.layoutManager = layoutManager
+        binding.topicRv.overScrollMode = View.OVER_SCROLL_NEVER
         binding.topicRv.adapter = adapter
     }
 

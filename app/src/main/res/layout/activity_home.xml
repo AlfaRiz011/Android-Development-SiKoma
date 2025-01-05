@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whitePrimary"
     tools:context=".ui.activities.HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -63,6 +64,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_outline_view"
+        android:paddingVertical="0dp"
+        android:layout_marginVertical="0dp"
         android:layout_marginHorizontal="0dp"
         app:itemIconTint="@color/blueSecondary"
         app:itemTextColor="@color/blueSecondary"
