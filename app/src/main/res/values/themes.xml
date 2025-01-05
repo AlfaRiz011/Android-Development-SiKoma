@@ -19,4 +19,13 @@
     <style name="CustomActionBar" parent="@style/Widget.AppCompat.ActionBar">
         <item name="android:textColor">@color/whitePrimary</item>
     </style>
+
+    <style name="Theme.SiKoma.CoordinatorLayout" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/blueSecondary</item>
+        <item name="android:colorBackground">@color/whitePrimary</item>
+        <item name="colorPrimary">@color/blueSecondary</item>
+        <item name="colorSurface">@color/blueSecondary</item>
+        <item name="colorOnPrimary">@color/whitePrimary</item>
+        <item name="actionBarStyle">@style/CustomActionBar</item>
+    </style>
 </resources>
