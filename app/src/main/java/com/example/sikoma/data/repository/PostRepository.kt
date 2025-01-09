@@ -1,4 +1,4 @@
-package com.example.sikoma.data.remote.repository
+package com.example.sikoma.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,8 +7,8 @@ import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.remote.config.ApiService
 
 class PostRepository(
-    apiService: ApiService,
-    pref: UserPreferences
+    private val apiService: ApiService,
+    private val pref: UserPreferences
 ) {
 
     private val _isLoading = MutableLiveData<Boolean>()

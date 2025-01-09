@@ -22,6 +22,7 @@ class UserPreferences private constructor(
     private val USER_KEY = stringPreferencesKey("user_key")
     private val ADMIN_KEY = stringPreferencesKey("admin_key")
     private val SESSION = booleanPreferencesKey("session")
+    private val ROLE = stringPreferencesKey("role")
 
     fun getUserToken(): Flow<String?> {
         return dataStore.data.map { preferences ->
@@ -32,6 +33,18 @@ class UserPreferences private constructor(
     suspend fun saveTokenUser(token: String) {
         dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = token
+        }
+    }
+
+    suspend fun saveRole(role: String) {
+        dataStore.edit { preferences ->
+            preferences[ROLE] = role
+        }
+    }
+
+    fun getRole(): Flow<String?> {
+        return dataStore.data.map { preferences ->
+            preferences[ROLE]
         }
     }
 
@@ -60,7 +73,7 @@ class UserPreferences private constructor(
         }
     }
 
-    suspend fun saveUser(user: User) {
+    suspend fun saveUser(user: User?) {
         val json = Gson().toJson(user)
         dataStore.edit { preferences ->
             preferences[USER_KEY] = json
@@ -80,7 +93,7 @@ class UserPreferences private constructor(
         }
     }
 
-    suspend fun saveAdmin(admin: Admin) {
+    suspend fun saveAdmin(admin: Admin?) {
         val json = Gson().toJson(admin)
         dataStore.edit { preferences ->
             preferences[ADMIN_KEY] = json

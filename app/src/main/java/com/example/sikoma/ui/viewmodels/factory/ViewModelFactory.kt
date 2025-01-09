@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.sikoma.data.local.UserPreferences
-import com.example.sikoma.data.remote.repository.*
+import com.example.sikoma.data.repository.*
 import com.example.sikoma.di.Injection
 import com.example.sikoma.ui.viewmodels.*
 

@@ -1,43 +1,40 @@
-package com.example.sikoma.data.remote.repository
+package com.example.sikoma.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.remote.config.ApiService
 
-class FollowRepository (
-    apiService: ApiService,
-    pref: UserPreferences
+class EventRepository (
+    private val apiService: ApiService,
+    private val pref: UserPreferences
 ) {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun followTag(userId: String, tagId: String) {
+
+    fun getParticipant(postId: String) {
 
     }
 
-    fun followAdmin(userId: String, adminId: String) {
+    fun participateEvent(postId: String, userId: String) {
 
     }
 
-    fun unfollowTag(userId: String, tagId: String) {
-
-    }
-
-    fun unfollowAdmin(userId: String, adminId: String) {
+    fun deleteParticipant(postId: String, userId: String) {
 
     }
 
     companion object {
         @Volatile
-        private var instance: FollowRepository? = null
+        private var instance: EventRepository? = null
         fun getInstance(
             apiService: ApiService,
             pref: UserPreferences
-        ): FollowRepository =
+        ): EventRepository =
             instance ?: synchronized(this) {
-                instance ?: FollowRepository(apiService, pref)
+                instance ?: EventRepository(apiService, pref)
             }.also { instance = it }
     }
 }

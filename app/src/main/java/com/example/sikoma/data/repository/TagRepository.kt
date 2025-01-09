@@ -1,40 +1,37 @@
-package com.example.sikoma.data.remote.repository
+package com.example.sikoma.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.remote.config.ApiService
 
-class EventRepository (
-    apiService: ApiService,
-    pref: UserPreferences
+class TagRepository (
+    private val apiService: ApiService,
+    private val pref: UserPreferences
 ) {
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-
-    fun getParticipant(postId: String) {
-
-    }
-
-    fun participateEvent(postId: String, userId: String) {
+    fun getAllTags(){
 
     }
 
-    fun deleteParticipant(postId: String, userId: String) {
+    fun getTagsByPost(postId: String){
 
+    }
+
+    fun tagPost(postId: String, tagName: String) {
     }
 
     companion object {
         @Volatile
-        private var instance: EventRepository? = null
+        private var instance: TagRepository? = null
         fun getInstance(
             apiService: ApiService,
             pref: UserPreferences
-        ): EventRepository =
+        ): TagRepository =
             instance ?: synchronized(this) {
-                instance ?: EventRepository(apiService, pref)
+                instance ?: TagRepository(apiService, pref)
             }.also { instance = it }
     }
 }

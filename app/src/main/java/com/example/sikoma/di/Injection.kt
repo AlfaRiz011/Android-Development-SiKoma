@@ -4,14 +4,14 @@ import android.content.Context
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.local.dataStore
 import com.example.sikoma.data.remote.config.ApiConfig
-import com.example.sikoma.data.remote.repository.AdminRepository
-import com.example.sikoma.data.remote.repository.AuthRepository
-import com.example.sikoma.data.remote.repository.EventRepository
-import com.example.sikoma.data.remote.repository.FollowRepository
-import com.example.sikoma.data.remote.repository.NotificationRepository
-import com.example.sikoma.data.remote.repository.PostRepository
-import com.example.sikoma.data.remote.repository.TagRepository
-import com.example.sikoma.data.remote.repository.UserRepository
+import com.example.sikoma.data.repository.AdminRepository
+import com.example.sikoma.data.repository.AuthRepository
+import com.example.sikoma.data.repository.EventRepository
+import com.example.sikoma.data.repository.FollowRepository
+import com.example.sikoma.data.repository.NotificationRepository
+import com.example.sikoma.data.repository.PostRepository
+import com.example.sikoma.data.repository.TagRepository
+import com.example.sikoma.data.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 

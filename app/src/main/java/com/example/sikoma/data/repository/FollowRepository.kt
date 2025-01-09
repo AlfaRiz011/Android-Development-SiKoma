@@ -1,37 +1,43 @@
-package com.example.sikoma.data.remote.repository
+package com.example.sikoma.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.remote.config.ApiService
 
-class TagRepository (
-    apiService: ApiService,
-    pref: UserPreferences
+class FollowRepository (
+    private val apiService: ApiService,
+    private val pref: UserPreferences
 ) {
+
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun getAllTags(){
+    fun followTag(userId: String, tagId: String) {
 
     }
 
-    fun getTagsByPost(postId: String){
+    fun followAdmin(userId: String, adminId: String) {
 
     }
 
-    fun tagPost(postId: String, tagName: String) {
+    fun unfollowTag(userId: String, tagId: String) {
+
+    }
+
+    fun unfollowAdmin(userId: String, adminId: String) {
+
     }
 
     companion object {
         @Volatile
-        private var instance: TagRepository? = null
+        private var instance: FollowRepository? = null
         fun getInstance(
             apiService: ApiService,
             pref: UserPreferences
-        ): TagRepository =
+        ): FollowRepository =
             instance ?: synchronized(this) {
-                instance ?: TagRepository(apiService, pref)
+                instance ?: FollowRepository(apiService, pref)
             }.also { instance = it }
     }
 }

@@ -1,7 +1,7 @@
 package com.example.sikoma.ui.viewmodels
 
 import com.example.sikoma.data.local.UserPreferences
-import com.example.sikoma.data.remote.repository.TagRepository
+import com.example.sikoma.data.repository.TagRepository
 
 class TagViewModel(tagRepository: TagRepository, pref: UserPreferences) {
 

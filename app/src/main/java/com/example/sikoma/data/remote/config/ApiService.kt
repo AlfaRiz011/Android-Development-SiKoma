@@ -83,7 +83,7 @@ interface ApiService {
     fun updateAdminProfilePic(
         @Path("id") id: String,
         @Part image: MultipartBody.Part?
-    )
+    ): Call<GenericResponse<Admin>>
 
     // POSTS
     @GET("posts")

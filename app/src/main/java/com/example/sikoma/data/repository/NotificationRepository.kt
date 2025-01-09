@@ -1,4 +1,4 @@
-package com.example.sikoma.data.remote.repository
+package com.example.sikoma.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,8 +6,8 @@ import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.remote.config.ApiService
 
 class NotificationRepository (
-    apiService: ApiService,
-    pref: UserPreferences
+    private val apiService: ApiService,
+    private val pref: UserPreferences
 ) {
 
     private val _isLoading = MutableLiveData<Boolean>()
