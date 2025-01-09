@@ -1,12 +1,42 @@
 package com.example.sikoma.data.remote.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
+import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.remote.config.ApiService
 
-class PostRepository (
+class PostRepository(
     apiService: ApiService,
     pref: UserPreferences
 ) {
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading : LiveData<Boolean> = _isLoading
+
+    fun addPostOrEvent() {
+
+    }
+
+    fun deletePostOrEvent(postId: String) {
+
+    }
+
+    fun editPostOrEvent(postId: String, post: Post) {
+
+    }
+
+    fun getAllPostsOrEvents() {
+
+    }
+
+    fun likePost(userId: String, postId: String) {
+
+    }
+
+    fun unlikePost(userId: String, postId: String) {
+
+    }
 
     companion object {
         @Volatile
