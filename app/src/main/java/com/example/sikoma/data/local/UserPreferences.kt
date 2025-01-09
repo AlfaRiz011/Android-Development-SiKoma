@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.sikoma.data.models.Admin
 import com.example.sikoma.data.models.User
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ class UserPreferences private constructor(
 ) {
     private val TOKEN_KEY = stringPreferencesKey("token_key")
     private val USER_KEY = stringPreferencesKey("user_key")
+    private val ADMIN_KEY = stringPreferencesKey("admin_key")
     private val SESSION = booleanPreferencesKey("session")
 
     fun getUserToken(): Flow<String?> {
@@ -51,7 +53,6 @@ class UserPreferences private constructor(
             preferences[SESSION] = true
         }
     }
-
     fun getUser(): Flow<User?> {
         return dataStore.data.map { preferences ->
             val json = preferences[USER_KEY]
@@ -63,6 +64,32 @@ class UserPreferences private constructor(
         val json = Gson().toJson(user)
         dataStore.edit { preferences ->
             preferences[USER_KEY] = json
+        }
+    }
+
+    suspend fun deleteUser() {
+        dataStore.edit { preferences ->
+            preferences.remove(USER_KEY)
+        }
+    }
+
+    fun getAdmin(): Flow<Admin?> {
+        return dataStore.data.map { preferences ->
+            val json = preferences[ADMIN_KEY]
+            Gson().fromJson(json, Admin::class.java)
+        }
+    }
+
+    suspend fun saveAdmin(admin: Admin) {
+        val json = Gson().toJson(admin)
+        dataStore.edit { preferences ->
+            preferences[ADMIN_KEY] = json
+        }
+    }
+
+    suspend fun deleteAdmin() {
+        dataStore.edit { preferences ->
+            preferences.remove(ADMIN_KEY)
         }
     }
 
