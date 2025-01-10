@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Admin
-import com.example.sikoma.data.models.User
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
 import kotlinx.coroutines.CoroutineScope

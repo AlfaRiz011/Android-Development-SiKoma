@@ -116,6 +116,7 @@ interface ApiService {
     @Multipart
     fun createPost(
         @Path("adminId") adminId: String,
+        @Part("admin_id") adminBody: RequestBody,
         @Part("description") description: RequestBody,
         @Part("type") type: RequestBody,
         @Part("event_name") eventName: RequestBody?,
@@ -127,6 +128,7 @@ interface ApiService {
     @PUT("posts/{postId}")
     fun updatePost(
         @Path("adminId") adminId: String,
+        @Part("admin_id") adminBody: RequestBody,
         @Part("description") description: RequestBody,
         @Part("type") type: RequestBody,
         @Part("event_name") eventName: RequestBody?,
@@ -208,6 +210,17 @@ interface ApiService {
 
     @DELETE("posts/unlike/{userId}")
     fun unlikePost(
+        @Path("userId") userId: String,
+        @Query("post_id") postId: String
+    ): Call<GenericResponse<Like>>
+
+    @POST("posts/like/{postId}")
+    fun getLikePost(
+        @Path("postId") postId: String,
+    ): Call<GenericResponse<List<Like>>>
+
+    @POST("posts/toggleLike/{userId}")
+    fun toggleLike(
         @Path("userId") userId: String,
         @Query("post_id") postId: String
     ): Call<GenericResponse<Like>>
