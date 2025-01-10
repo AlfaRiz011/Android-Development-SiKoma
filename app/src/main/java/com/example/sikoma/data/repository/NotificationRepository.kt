@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Notification
-import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
 import retrofit2.Call

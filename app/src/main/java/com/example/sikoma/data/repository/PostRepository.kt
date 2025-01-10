@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Like
 import com.example.sikoma.data.models.Post
-import com.example.sikoma.data.models.User
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
 import okhttp3.MultipartBody
@@ -13,8 +12,6 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Part
-import retrofit2.http.Path
 
 class PostRepository(
     private val apiService: ApiService,

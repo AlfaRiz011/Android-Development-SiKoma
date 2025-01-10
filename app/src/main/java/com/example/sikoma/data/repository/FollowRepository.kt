@@ -19,6 +19,72 @@ class FollowRepository (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
+    fun getFollowTag(userId: String){
+        _isLoading.value = true
+        val resultLiveData = MutableLiveData<GenericResponse<List<FollowTag>>>()
+        val client = apiService.getFollowTag(userId = userId)
+
+        client.enqueue(object : Callback<GenericResponse<List<FollowTag>>> {
+            override fun onResponse(
+                call: Call<GenericResponse<List<FollowTag>>>,
+                response: Response<GenericResponse<List<FollowTag>>>
+            ) {
+                if (response.isSuccessful) {
+                    resultLiveData.value = response.body()
+                } else {
+                    resultLiveData.value = GenericResponse(
+                        message = response.code().toString(),
+                        status = response.body()?.status,
+                        data = null
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onFailure(call: Call<GenericResponse<List<FollowTag>>>, t: Throwable) {
+                resultLiveData.value = GenericResponse(
+                    message = "500",
+                    status = "error",
+                    data = null
+                )
+                _isLoading.value = false
+            }
+        })
+    }
+
+    fun getFollowAdmin(userId: String){
+        _isLoading.value = true
+        val resultLiveData = MutableLiveData<GenericResponse<List<FollowAdmin>>>()
+        val client = apiService.getFollowAdmin(userId = userId)
+
+        client.enqueue(object : Callback<GenericResponse<List<FollowAdmin>>> {
+            override fun onResponse(
+                call: Call<GenericResponse<List<FollowAdmin>>>,
+                response: Response<GenericResponse<List<FollowAdmin>>>
+            ) {
+                if (response.isSuccessful) {
+                    resultLiveData.value = response.body()
+                } else {
+                    resultLiveData.value = GenericResponse(
+                        message = response.code().toString(),
+                        status = response.body()?.status,
+                        data = null
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onFailure(call: Call<GenericResponse<List<FollowAdmin>>>, t: Throwable) {
+                resultLiveData.value = GenericResponse(
+                    message = "500",
+                    status = "error",
+                    data = null
+                )
+                _isLoading.value = false
+            }
+        })
+    }
+
     fun followTag(userId: String, tagId: String) {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<FollowTag>>()

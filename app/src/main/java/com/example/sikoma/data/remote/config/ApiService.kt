@@ -159,6 +159,17 @@ interface ApiService {
     ): Call<GenericResponse<Tag>>
 
     // FOLLOWING
+
+    @GET("follow/tag/{userId}")
+    fun getFollowTag(
+        @Path("userId") userId: String
+    ): Call<GenericResponse<List<FollowTag>>>
+
+    @GET("follow/admin/{userId}")
+    fun getFollowAdmin(
+        @Path("userId") userId: String
+    ): Call<GenericResponse<List<FollowAdmin>>>
+
     @POST("follow/tag/{userId}")
     fun followTag(
         @Path("userId") userId: String,
@@ -265,7 +276,7 @@ interface ApiService {
 
     @POST("register/request-otp")
     fun requestOtp(
-        @Body otpRequest: OtpBodyRequest
+        @Body otpRequest: Register
     ): Call<GenericResponse<Otp>>
 
     @POST("register/verify-otp")

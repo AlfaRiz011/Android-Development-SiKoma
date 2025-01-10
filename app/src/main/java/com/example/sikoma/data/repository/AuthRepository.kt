@@ -106,10 +106,10 @@ class AuthRepository(
         })
     }
 
-    fun requestOtp(otpBodyRequest: OtpBodyRequest) {
+    fun requestOtp(otpRequest: Register) {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Otp>>()
-        val client = apiService.requestOtp(otpBodyRequest)
+        val client = apiService.requestOtp(otpRequest = otpRequest)
 
         client.enqueue(object : Callback<GenericResponse<Otp>> {
             override fun onResponse(
