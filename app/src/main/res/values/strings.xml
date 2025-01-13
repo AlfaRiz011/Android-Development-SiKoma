@@ -72,5 +72,10 @@
     <string name="confirm">CONFIRM</string>
     <string name="cancel_event_confirmation">Cancel Event</string>
     <string name="sure_to_cancel">Are you sure to cancel participating this event?</string>
+    <string name="error_invalid_input">Invalid Input, Try Again</string>
+    <string name="error_unauthorized_401">Unauthorized, try again</string>
+    <string name="error_server_500">Server Error, try again</string>
+    <string name="faculty">Faculty</string>
+    <string name="no_post">There is no Post</string>
 
 </resources>

@@ -55,12 +55,11 @@ object ValidatorAuthHelper {
         nimEditText: EditText,
         prodiInputLayout: TextInputLayout,
         prodiEditText: EditText,
-        phoneInputLayout: TextInputLayout,
-        phoneEditText: EditText
+        facultyInputLayout: TextInputLayout,
+        facultyEditText: EditText
     ): Boolean {
         var isValid = true
 
-        // Validate Name
         if (nameEditText.text.toString().isBlank()) {
             nameInputLayout.error = "Name cannot be empty"
             isValid = false
@@ -68,7 +67,6 @@ object ValidatorAuthHelper {
             nameInputLayout.error = null
         }
 
-        // Validate NIM (Student ID)
         if (nimEditText.text.toString().isBlank()) {
             nimInputLayout.error = "NIM cannot be empty"
             isValid = false
@@ -76,7 +74,6 @@ object ValidatorAuthHelper {
             nimInputLayout.error = null
         }
 
-        // Validate Study Program
         if (prodiEditText.text.toString().isBlank()) {
             prodiInputLayout.error = "Study program cannot be empty"
             isValid = false
@@ -84,12 +81,11 @@ object ValidatorAuthHelper {
             prodiInputLayout.error = null
         }
 
-        // Validate Phone Number
-        if (phoneEditText.text.toString().isBlank()) {
-            phoneInputLayout.error = "Phone number cannot be empty"
+        if (facultyEditText.text.toString().isBlank()) {
+            facultyInputLayout.error = "faculty cannot be empty"
             isValid = false
         } else {
-            phoneInputLayout.error = null
+            facultyInputLayout.error = null
         }
 
         return isValid
@@ -118,14 +114,14 @@ object ValidatorAuthHelper {
         nameLayout : TextInputLayout,
         nimLayout : TextInputLayout,
         prodiLayout : TextInputLayout,
-        phoneLayout : TextInputLayout,
+        facultyLayout : TextInputLayout,
         nameInput : EditText,
         nimInput : EditText,
         prodiInput : EditText,
-        phoneInput : EditText
+        facultyInput : EditText
     ): Boolean{
 
-        val isBioValid = validateBio(nameLayout, nameInput, nimLayout, nimInput, prodiLayout, prodiInput, phoneLayout, phoneInput)
+        val isBioValid = validateBio(nameLayout, nameInput, nimLayout, nimInput, prodiLayout, prodiInput, facultyLayout, facultyInput)
 
         if(!isBioValid){
             showToast(context, "Input Invalid")

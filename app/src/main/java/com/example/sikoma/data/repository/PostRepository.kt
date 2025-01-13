@@ -30,7 +30,7 @@ class PostRepository(
         eventDate: RequestBody,
         eventTime: RequestBody,
         image: MultipartBody.Part
-    ) {
+    ) : LiveData<GenericResponse<Post>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Post>>()
         val client = apiService.createPost(
@@ -70,9 +70,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun deletePostOrEvent(postId: String) {
+    fun deletePostOrEvent(postId: String) : LiveData<GenericResponse<Post>>  {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Post>>()
         val client = apiService.deletePost(postId = postId)
@@ -103,6 +105,8 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     fun editPostOrEvent(
@@ -114,7 +118,7 @@ class PostRepository(
         eventDate: RequestBody,
         eventTime: RequestBody,
         image: MultipartBody.Part
-    ) {
+    ) : LiveData<GenericResponse<Post>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Post>>()
         val client = apiService.updatePost(
@@ -154,10 +158,12 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
 
-    fun getAllPostsOrEvents() {
+    fun getAllPostsOrEvents() : LiveData<GenericResponse<List<Post>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getAllPost()
@@ -188,9 +194,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getPostByID (postId:String){
+    fun getPostByID (postId:String) : LiveData<GenericResponse<Post>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Post>>()
         val client = apiService.getPostById(postId = postId)
@@ -221,9 +229,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getPostByAdmin (adminId:String){
+    fun getPostByAdmin (adminId:String) : LiveData<GenericResponse<List<Post>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getPostByAdmin(adminId = adminId)
@@ -254,9 +264,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getEventPost(){
+    fun getEventPost(): LiveData<GenericResponse<List<Post>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getEventPost()
@@ -287,9 +299,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getEventPostAdmin(adminId: String){
+    fun getEventPostAdmin(adminId: String): LiveData<GenericResponse<List<Post>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getEventPostByAdmin(adminId = adminId)
@@ -320,9 +334,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun likePost(userId: String, postId: String) {
+    fun likePost(userId: String, postId: String) : LiveData<GenericResponse<Like>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Like>>()
         val client = apiService.likePost(userId = userId, postId = postId)
@@ -353,9 +369,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun unlikePost(userId: String, postId: String) {
+    fun unlikePost(userId: String, postId: String) : LiveData<GenericResponse<Like>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Like>>()
         val client = apiService.unlikePost(userId = userId, postId = postId)
@@ -386,9 +404,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun toggleLike(userId: String, postId: String){
+    fun toggleLike(userId: String, postId: String) : LiveData<GenericResponse<Like>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Like>>()
         val client = apiService.toggleLike(userId = userId, postId = postId)
@@ -419,9 +439,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getLikePost(postId: String){
+    fun getLikePost(postId: String) : LiveData<GenericResponse<List<Like>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Like>>>()
         val client = apiService.getLikePost(postId = postId)
@@ -452,9 +474,11 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getRecommendationPost(userId: String){
+    fun getRecommendationPost(userId: String) : LiveData<GenericResponse<List<Post>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getPostRecommendation(userId = userId)
@@ -485,6 +509,8 @@ class PostRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     companion object {

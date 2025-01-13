@@ -6,17 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import com.example.sikoma.R
-import com.example.sikoma.data.models.Akun
-import com.example.sikoma.databinding.FragmentLoginBinding
+import com.example.sikoma.data.models.Register
+import com.example.sikoma.data.remote.request.OtpBodyRequest
 import com.example.sikoma.databinding.FragmentRegisterBinding
+import com.example.sikoma.ui.viewmodels.AuthViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
+    private val viewModel: AuthViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,8 +51,13 @@ class RegisterFragment : Fragment() {
 
     private fun setView() {
 
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
+
         binding.apply {
-            buttonRegister.setOnClickListener{
+
+            buttonRegister.setOnClickListener {
                 val isValid = ValidatorAuthHelper.validateInputAuth(
                     requireContext(),
                     emailInputLayout,
@@ -56,32 +66,58 @@ class RegisterFragment : Fragment() {
                     inputPassword
                 )
 
-                if(isValid){
-                    otpInclude.layoutOtp.visibility = View.VISIBLE
+                val dataReqOTP = Register(
+                    email = inputEmail.toString(),
+                    password = inputPassword.toString()
+                )
+
+                if (isValid) {
+                    viewModel.requestOTP(dataReqOTP).observe(requireActivity()) {
+                        when {
+                            it.status == "success" -> {
+                                otpInclude.layoutOtp.visibility = View.VISIBLE
+                            }
+
+                            else -> handleError(it.message?.toInt())
+                        }
+                    }
                 }
             }
 
-            otpInclude.buttonSendOtp.setOnClickListener{
-                if(otpInclude.pinview.text.toString() == "1234"){
-                    val nextFragment = CompleteBioFragment().apply {
-                        arguments = Bundle().apply {
-                            putString("email", inputEmail.text.toString())
-                            putString("password",inputPassword.text.toString())
-                        }
-                    }
+            otpInclude.buttonSendOtp.setOnClickListener {
 
-                    parentFragmentManager.beginTransaction().apply {
-                        setCustomAnimations(
-                            R.anim.slide_in_right,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_left,
-                            R.anim.slide_out_right
-                        )
-                        replace(R.id.fragment_container_auth, nextFragment)
-                        addToBackStack(null)
-                    }.commit()
-                } else {
-                    Toast.makeText(requireContext(), "Incorrect OTP", Toast.LENGTH_SHORT).show()
+                val otpString = otpInclude.pinview.text.toString()
+                val otpInt = otpString.toIntOrNull()
+
+                val dataVerifyOTP = OtpBodyRequest(
+                    otp = otpInt,
+                    email = inputEmail.toString()
+                )
+
+                viewModel.verifyOTP(dataVerifyOTP).observe(requireActivity()) {
+                    when {
+                        it.status == "success" -> {
+                            val nextFragment = CompleteBioFragment().apply {
+                                arguments = Bundle().apply {
+                                    putString("email", inputEmail.text.toString())
+                                    putString("password", inputPassword.text.toString())
+                                }
+                            }
+
+                            parentFragmentManager.beginTransaction().apply {
+                                setCustomAnimations(
+                                    R.anim.slide_in_right,
+                                    R.anim.slide_out_left,
+                                    R.anim.slide_in_left,
+                                    R.anim.slide_out_right
+                                )
+                                replace(R.id.fragment_container_auth, nextFragment)
+                                addToBackStack(null)
+                            }.commit()
+                        }
+
+                        else -> handleError(it.message?.toInt())
+                    }
                 }
             }
 
@@ -98,5 +134,34 @@ class RegisterFragment : Fragment() {
                 }.commit()
             }
         }
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

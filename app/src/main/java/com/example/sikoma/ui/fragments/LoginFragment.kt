@@ -7,23 +7,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import com.example.sikoma.R
+import com.example.sikoma.data.remote.request.LoginBodyRequest
 import com.example.sikoma.databinding.FragmentLoginBinding
 import com.example.sikoma.ui.activities.HomeActivity
+import com.example.sikoma.ui.activities.HomeAdminActivity
+import com.example.sikoma.ui.viewmodels.AuthViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private val viewModel: AuthViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
+    }
 
-    private var email : String? = null
-    private var password : String? = null
-    private var name : String? = null
-    private var nim : String? = null
-    private var prodi : String? = null
-    private var phone : String? = null
+    private lateinit var dataLogin: LoginBodyRequest
+
+    private var email: String? = null
+    private var password: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,36 +45,31 @@ class LoginFragment : Fragment() {
 
         email = arguments?.getString("email")
         password = arguments?.getString("password")
-        name = arguments?.getString("name")
-        nim = arguments?.getString("nim")
-        prodi = arguments?.getString("prodi")
-        phone = arguments?.getString("phone")
 
         setView()
         setOnBack()
     }
 
-    private fun setOnBack() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    requireActivity().finish()
-                }
-            })
-    }
 
     private fun setView() {
+
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
 
         binding.apply {
 
             inputEmail.setText(email)
             inputPassword.setText(password)
 
-            var isValid : Boolean
+            dataLogin = LoginBodyRequest(
+                inputEmail.toString(),
+                inputPassword.toString()
+            )
+            var isValid: Boolean
 
             buttonLogin.setOnClickListener {
-                isValid = if(inputPassword.text.toString() == password){
+                isValid = if (inputPassword.text.toString() == password) {
                     ValidatorAuthHelper.validateInputAuth(
                         requireContext(),
                         emailInputLayout,
@@ -82,15 +82,22 @@ class LoginFragment : Fragment() {
                 }
 
                 if (isValid) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Email: $email\nPassword: $password\nName: $name\nNIM: $nim\nProdi: $prodi\nPhone: $phone",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val intent = Intent(requireContext(), HomeActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(requireContext(), "Try Again", Toast.LENGTH_SHORT).show()
+                    viewModel.login(dataLogin).observe(requireActivity()){ result ->
+                        when {
+                            result.status == "success" -> {
+                                val destinationActivity = when (result.data?.role) {
+                                    "user" -> HomeActivity::class.java
+                                    "admin" -> HomeAdminActivity::class.java
+                                    else -> null
+                                }
+                                destinationActivity?.let {
+                                    startActivity(Intent(requireActivity(), it))
+                                    requireActivity().finish()
+                                }
+                            }
+                            else -> handleError(result.message?.toInt())
+                        }
+                    }
                 }
             }
 
@@ -107,5 +114,44 @@ class LoginFragment : Fragment() {
                 }.commit()
             }
         }
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun setOnBack() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            })
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

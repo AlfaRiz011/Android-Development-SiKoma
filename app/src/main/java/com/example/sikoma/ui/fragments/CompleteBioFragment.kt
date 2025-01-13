@@ -6,19 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import com.example.sikoma.R
-import com.example.sikoma.data.models.Akun
+import com.example.sikoma.data.models.Otp
+import com.example.sikoma.data.models.Register
+import com.example.sikoma.data.models.User
+import com.example.sikoma.data.remote.request.OtpBodyRequest
+import com.example.sikoma.data.remote.request.RegisterBodyRequest
 import com.example.sikoma.databinding.FragmentCompleteBioBinding
+import com.example.sikoma.ui.viewmodels.AuthViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
-import javax.xml.validation.Validator
 
 class CompleteBioFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteBioBinding
+    private val viewModel: AuthViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
+    }
 
-    private var email : String? = null
-    private var password : String? = null
+    private var email: String? = null
+    private var password: String? = null
 
 
     override fun onCreateView(
@@ -40,60 +48,93 @@ class CompleteBioFragment : Fragment() {
     }
 
     private fun setView() {
-        binding.apply{
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
+
+        binding.apply {
             inputEmail.hint = email
 
-            buttonDone.setOnClickListener{
-
+            buttonDone.setOnClickListener {
                 val isValid = ValidatorAuthHelper.validateInputBio(
                     requireContext(),
                     nameLayout,
                     nimLayout,
                     prodiLayout,
-                    phoneLayout,
+                    facultyLayout,
                     inputName,
                     inputNim,
                     inputStudyProgram,
-                    inputPhone
+                    inputFaculty
                 )
 
-                if(isValid){
-                    Akun(
-                        email = email,
-                        password = password,
-                        name = inputName.text.toString(),
-                        nim = inputNim.text.toString(),
-                        prodi = inputStudyProgram.text.toString(),
-                        phone = inputPhone.text.toString()
-                    )
+                val dataRegister = RegisterBodyRequest(
+                    email = email,
+                    password = password,
+                    fullName = inputName.toString(),
+                    nim = inputNim.toString(),
+                    studyProg = inputStudyProgram.toString(),
+                    faculty = inputFaculty.toString(),
+                    profilePic = ""
+                )
 
-                    val nextFragment = LoginFragment().apply {
-                        arguments = Bundle().apply {
-                            putString("email",email)
-                            putString("password",password)
-                            putString("name",inputName.text.toString())
-                            putString("nim",inputNim.text.toString())
-                            putString("prodi",inputStudyProgram.text.toString())
-                            putString("phone",inputPhone.text.toString())
+                if (isValid) {
+                    viewModel.register(dataRegister).observe(requireActivity()) {
+                        when {
+                            it.status == "success" -> {
+                                val nextFragment = LoginFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putString("email", email)
+                                        putString("password", password)
+                                    }
+                                }
+
+                                parentFragmentManager.beginTransaction().apply {
+                                    setCustomAnimations(
+                                        R.anim.slide_in_right,
+                                        R.anim.slide_out_left,
+                                        R.anim.slide_in_left,
+                                        R.anim.slide_out_right
+                                    )
+                                    replace(R.id.fragment_container_auth, nextFragment)
+                                    addToBackStack(null)
+                                }.commit()
+                            }
+
+                            else -> handleError(it.message?.toInt())
                         }
                     }
-
-                    Toast.makeText(requireContext(), "Register Complete", Toast.LENGTH_SHORT).show()
-
-                    parentFragmentManager.beginTransaction().apply {
-                        setCustomAnimations(
-                            R.anim.slide_in_right,
-                            R.anim.slide_out_left,
-                            R.anim.slide_in_left,
-                            R.anim.slide_out_right
-                        )
-                        replace(R.id.fragment_container_auth, nextFragment)
-                        addToBackStack(null)
-                    }.commit()
-                } else {
-                    Toast.makeText(requireContext(), "Try Again", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

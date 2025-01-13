@@ -27,7 +27,7 @@ class AuthRepository(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun register(registerBodyRequest: RegisterBodyRequest) {
+    fun register(registerBodyRequest: RegisterBodyRequest): LiveData<GenericResponse<User>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<User>>()
         val client = apiService.register(registerBodyRequest)
@@ -58,10 +58,12 @@ class AuthRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
 
-    fun login(loginBodyRequest: LoginBodyRequest)  {
+    fun login(loginBodyRequest: LoginBodyRequest) : LiveData<GenericResponse<Login>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Login>>()
         val client = apiService.login(loginBodyRequest)
@@ -104,9 +106,11 @@ class AuthRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun requestOtp(otpRequest: Register) {
+    fun requestOtp(otpRequest: Register) : LiveData<GenericResponse<Otp>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Otp>>()
         val client = apiService.requestOtp(otpRequest = otpRequest)
@@ -137,9 +141,11 @@ class AuthRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun verifyOtp(otpBodyRequest: OtpBodyRequest){
+    fun verifyOtp(otpBodyRequest: OtpBodyRequest) : LiveData<GenericResponse<Register>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Register>>()
         val client = apiService.verifyOtp(otpBodyRequest)
@@ -170,6 +176,8 @@ class AuthRepository(
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     companion object {

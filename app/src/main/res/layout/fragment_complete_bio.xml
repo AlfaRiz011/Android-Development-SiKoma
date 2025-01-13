@@ -163,7 +163,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/phone_layout"
+                        android:id="@+id/faculty_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
@@ -171,11 +171,11 @@
                         app:boxBackgroundMode="outline">
 
                         <EditText
-                            android:id="@+id/input_phone"
+                            android:id="@+id/input_faculty"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:background="@drawable/shape_edit_text_2"
-                            android:hint="@string/phone_number"
+                            android:hint="@string/faculty"
                             android:importantForAutofill="no"
                             android:inputType="phone"
                             android:padding="13dp"
@@ -196,4 +196,15 @@
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

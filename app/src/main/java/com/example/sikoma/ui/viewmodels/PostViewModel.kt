@@ -1,8 +1,10 @@
 package com.example.sikoma.ui.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sikoma.data.local.UserPreferences
+import com.example.sikoma.data.models.Like
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.remote.response.GenericResponse
 import com.example.sikoma.data.repository.PostRepository
@@ -17,27 +19,49 @@ class PostViewModel(
     var isLoading = repository.isLoading
     val postResult = MutableLiveData<GenericResponse<Post>>()
 
-    fun getAllPost() = repository.getAllPostsOrEvents()
+    fun getAllPost() : LiveData<GenericResponse<List<Post>>> {
+        return repository.getAllPostsOrEvents()
+    }
 
-    fun getEventPost() = repository.getEventPost()
+    fun getEventPost() : LiveData<GenericResponse<List<Post>>>  {
+        return repository.getEventPost()
+    }
 
-    fun getPostById(postId: String) = repository.getPostByID(postId)
+    fun getPostById(postId: String) : LiveData<GenericResponse<Post>>  {
+        return repository.getPostByID(postId)
+    }
 
-    fun getRecommendationPost(userId: String) = repository.getRecommendationPost(userId)
+    fun getRecommendationPost(userId: String) : LiveData<GenericResponse<List<Post>>>  {
+        return repository.getRecommendationPost(userId)
+    }
 
-    fun getPostAdmin(adminId: String) = repository.getPostByAdmin(adminId)
+    fun getPostAdmin(adminId: String) : LiveData<GenericResponse<List<Post>>>  {
+        return repository.getPostByAdmin(adminId)
+    }
 
-    fun getEventPostAdmin(adminId: String) = repository.getEventPostAdmin(adminId)
+    fun getEventPostAdmin(adminId: String) : LiveData<GenericResponse<List<Post>>> {
+        return repository.getEventPostAdmin(adminId)
+    }
 
-    fun getLikePost(postId: String) = repository.getLikePost(postId)
+    fun getLikePost(postId: String): LiveData<GenericResponse<List<Like>>>   {
+        return repository.getLikePost(postId)
+    }
 
-    fun likePost(userId: String, postId: String) = repository.likePost(userId, postId)
+    fun likePost(userId: String, postId: String) : LiveData<GenericResponse<Like>> {
+        return repository.likePost(userId, postId)
+    }
 
-    fun unlikePost(userId: String, postId: String) = repository.unlikePost(userId, postId)
+    fun unlikePost(userId: String, postId: String): LiveData<GenericResponse<Like>> {
+        return repository.unlikePost(userId, postId)
+    }
 
-    fun toggleLike(userId: String, postId: String) = repository.toggleLike(userId, postId)
+    fun toggleLike(userId: String, postId: String) : LiveData<GenericResponse<Like>>  {
+        return repository.toggleLike(userId, postId)
+    }
 
-    fun deletePost(postId: String) = repository.deletePostOrEvent(postId)
+    fun deletePost(postId: String) : LiveData<GenericResponse<Post>> {
+        return repository.deletePostOrEvent(postId)
+    }
 
     fun addPost(
         adminId: String,
@@ -48,8 +72,8 @@ class PostViewModel(
         eventDate: RequestBody,
         eventTime: RequestBody,
         image: MultipartBody.Part
-    ) {
-        repository.addPostOrEvent(
+    ) : LiveData<GenericResponse<Post>> {
+        return repository.addPostOrEvent(
             adminId,
             adminBody,
             description,
@@ -70,8 +94,8 @@ class PostViewModel(
         eventDate: RequestBody,
         eventTime: RequestBody,
         image: MultipartBody.Part
-    ) {
-        repository.editPostOrEvent(
+    ) : LiveData<GenericResponse<Post>> {
+        return repository.editPostOrEvent(
             adminId,
             adminBody,
             description,

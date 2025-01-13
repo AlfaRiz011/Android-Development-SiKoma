@@ -63,7 +63,7 @@ class UserPreferences private constructor(
     suspend fun logOut() {
         dataStore.edit { preferences ->
             preferences.clear()
-            preferences[SESSION] = true
+            preferences[SESSION] = false
         }
     }
     fun getUser(): Flow<User?> {
