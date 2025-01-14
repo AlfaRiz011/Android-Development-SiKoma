@@ -80,5 +80,6 @@
     <string name="no_topic">There is no Topic</string>
     <string name="no_org">There is no Organization</string>
     <string name="no_event">You have no event yet</string>
+    <string name="no_notif">There is no Notification</string>
 
 </resources>

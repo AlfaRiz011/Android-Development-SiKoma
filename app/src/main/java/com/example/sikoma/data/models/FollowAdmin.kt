@@ -8,5 +8,8 @@ data class FollowAdmin(
 	val userId: Int? = null,
 
 	@field:SerializedName("admin_id")
-	val adminId: Int? = null
+	val adminId: Int? = null,
+
+	@field:SerializedName("admin")
+	val admin: Admin
 )

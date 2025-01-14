@@ -19,7 +19,7 @@ class FollowRepository (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun getFollowTag(userId: String){
+    fun getFollowTag(userId: String): LiveData<GenericResponse<List<FollowTag>>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<FollowTag>>>()
         val client = apiService.getFollowTag(userId = userId)
@@ -50,9 +50,10 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun getFollowAdmin(userId: String){
+    fun getFollowAdmin(userId: String): LiveData<GenericResponse<List<FollowAdmin>>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<FollowAdmin>>>()
         val client = apiService.getFollowAdmin(userId = userId)
@@ -83,9 +84,10 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun followTag(userId: String, tagId: String) {
+    fun followTag(userId: String, tagId: String) : LiveData<GenericResponse<FollowTag>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<FollowTag>>()
         val client = apiService.followTag(userId = userId, tagId = tagId)
@@ -116,9 +118,10 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun followAdmin(userId: String, adminId: String) {
+    fun followAdmin(userId: String, adminId: String) : LiveData<GenericResponse<FollowAdmin>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<FollowAdmin>>()
         val client = apiService.followAdmin(userId = userId, adminId = adminId)
@@ -149,9 +152,11 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun unfollowTag(userId: String, tagId: String) {
+    fun unfollowTag(userId: String, tagId: String): LiveData<GenericResponse<FollowTag>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<FollowTag>>()
         val client = apiService.unfollowTag(userId = userId, tagId = tagId)
@@ -182,9 +187,11 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun unfollowAdmin(userId: String, adminId: String) {
+    fun unfollowAdmin(userId: String, adminId: String): LiveData<GenericResponse<FollowAdmin>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<FollowAdmin>>()
         val client = apiService.unfollowAdmin(userId = userId, adminId = adminId)
@@ -215,6 +222,8 @@ class FollowRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     companion object {

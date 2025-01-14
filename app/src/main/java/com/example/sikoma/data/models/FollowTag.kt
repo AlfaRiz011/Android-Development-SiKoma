@@ -8,5 +8,8 @@ data class FollowTag(
 	val userId: Int? = null,
 
 	@field:SerializedName("tag_id")
-	val tagId: Int? = null
+	val tagId: Int? = null,
+
+	@field:SerializedName("tag")
+	val tag: Tag
 )

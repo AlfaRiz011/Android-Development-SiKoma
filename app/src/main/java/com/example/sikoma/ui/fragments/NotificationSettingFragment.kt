@@ -5,56 +5,127 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
+import com.example.sikoma.databinding.FragmentNotificationSettingBinding
+import com.example.sikoma.ui.adapters.AllPostAdapter
+import com.example.sikoma.ui.adapters.NotificationListAdapter
+import com.example.sikoma.ui.adapters.NotificationOrganizationAdapter
+import com.example.sikoma.ui.adapters.NotificationTopicAdapter
+import com.example.sikoma.ui.adapters.OrganizationListAdapter
+import com.example.sikoma.ui.adapters.TopicListAdapter
+import com.example.sikoma.ui.viewmodels.FollowViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.utils.ValidatorAuthHelper
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NotificationSettingFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NotificationSettingFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private lateinit var binding: FragmentNotificationSettingBinding
+    private lateinit var adapterOrg : NotificationOrganizationAdapter
+    private lateinit var adapterTag : NotificationTopicAdapter
+    
+    private val viewModel: FollowViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
     }
+
+    private val pref = viewModel.preferences
+    private var userId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification_setting, container, false)
+    ): View {
+        binding = FragmentNotificationSettingBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NotificationSettingFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NotificationSettingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch {
+            userId = pref.getUser().first()?.userId.toString()
+        }
+
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
+        setView()
+        setAdapter()
+    }
+
+    private fun setAdapter() {
+         viewModel.getFollowAdmin(userId).observe(requireActivity()){
+            when {
+                it.status == "success" -> {
+                    if(it.data != null) {
+                        val posts = it.data
+                        
+                        adapterOrg = NotificationOrganizationAdapter(posts)
+                        val layoutManager = LinearLayoutManager(requireContext())
+                        binding.organizationRv.layoutManager = layoutManager
+                        binding.organizationRv.adapter = adapterOrg
+                    }
                 }
+                
+                else -> handleError(it.message?.toInt())
+            } 
+         }
+        
+        viewModel.getFollowTag(userId).observe(requireActivity()){
+            when {
+                it.status == "success" -> {
+                    if(it.data != null) {
+                        val posts = it.data
+
+                        adapterTag = NotificationTopicAdapter(posts)
+                        val layoutManager = LinearLayoutManager(requireContext())
+                        binding.topicRv.layoutManager = layoutManager
+                        binding.topicRv.adapter = adapterTag
+                    }
+                }
+
+                else -> handleError(it.message?.toInt())
             }
+        }
+    }
+
+    private fun setView() {
+        binding.apply {
+            buttonBack.setOnClickListener {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

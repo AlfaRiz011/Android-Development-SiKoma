@@ -17,7 +17,7 @@ class TagRepository (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun getAllTags() : LiveData<GenericResponse<List<Tag>>{
+    fun getAllTags() : LiveData<GenericResponse<List<Tag>>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Tag>>>()
         val client = apiService.getAllTags()

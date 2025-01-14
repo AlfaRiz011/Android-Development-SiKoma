@@ -261,12 +261,12 @@ interface ApiService {
     @GET("notifications/info/{userId}")
     fun getUserNotificationPost(
         @Path("userId") userId: String
-    ): Call<GenericResponse<List<Notification>>>
+    ): Call<GenericResponse<List<Post>>>
 
     @GET("notifications/event/{userId}")
     fun getUserNotificationEvent(
         @Path("userId") userId: String
-    ): Call<GenericResponse<List<Notification>>>
+    ): Call<GenericResponse<List<Post>>>
 
     @GET("notifications/{notifId}")
     fun getNotifById(
