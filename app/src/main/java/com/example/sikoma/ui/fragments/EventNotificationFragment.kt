@@ -7,11 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.sikoma.R
-import com.example.sikoma.data.models.Date
 import com.example.sikoma.data.models.Notification
 import com.example.sikoma.data.models.Post
-import com.example.sikoma.data.models.PostProvider
 import com.example.sikoma.databinding.FragmentEventNotificationBinding
 import com.example.sikoma.ui.adapters.NotificationListAdapter
 import java.text.SimpleDateFormat
@@ -38,11 +35,10 @@ class EventNotificationFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        val posts = PostProvider.createDummy(5)
 
-        val groupedItems = groupPostsByDate(posts)
+//        val groupedItems = groupPostsByDate(posts)
 
-        adapter = NotificationListAdapter(groupedItems)
+//        adapter = NotificationListAdapter(groupedItems)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvEventNotification.layoutManager = layoutManager
         binding.rvEventNotification.adapter = adapter
@@ -56,19 +52,19 @@ class EventNotificationFragment : Fragment() {
         calendar.add(Calendar.DAY_OF_YEAR, 1)
         val tomorrow = dateFormat.format(calendar.time)
 
-        val grouped = posts.groupBy { it.postDate }
+//        val grouped = posts.groupBy { it.postDate }
 
-        for ((dateStr, postsOnDate) in grouped) {
-            val sectionTitle = when {
-                dateStr == today -> "Today"
-                dateStr == tomorrow -> "Tomorrow"
-                else -> dateStr
-            }
-            groupedItems.add(Notification.DateSectionItem(sectionTitle))
-            postsOnDate.forEach { post ->
-                groupedItems.add(Notification.PostItem(post))
-            }
-        }
+//        for ((dateStr, postsOnDate) in grouped) {
+//            val sectionTitle = when {
+//                dateStr == today -> "Today"
+//                dateStr == tomorrow -> "Tomorrow"
+//                else -> dateStr
+//            }
+//            groupedItems.add(Notification.DateSectionItem(sectionTitle))
+//            postsOnDate.forEach { post ->
+//                groupedItems.add(Notification.PostItem(post))
+//            }
+//        }
 
         return groupedItems
     }

@@ -19,12 +19,15 @@ data class Post(
 	@field:SerializedName("description")
 	val description: String? = null,
 
-	@field:SerializedName("event_name")
-	val eventName: String? = null,
+	@field:SerializedName("event_location")
+	val eventLocation: String? = null,
 
 	@field:SerializedName("type")
 	val type: String? = null,
 
 	@field:SerializedName("event_time")
-	val eventTime: String? = null
+	val eventTime: String? = null,
+
+	@field: SerializedName("Admin")
+	val admin: Admin? = null
 )

@@ -14,15 +14,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AdminRepository (
+class AdminRepository(
     private val apiService: ApiService,
     private val pref: UserPreferences
 ) {
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading : LiveData<Boolean> = _isLoading
+    val isLoading: LiveData<Boolean> = _isLoading
 
-    fun getAllAdmins(){
+    fun getAllAdmins(): LiveData<GenericResponse<List<Admin>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Admin>>>()
         val client = apiService.getAllAdmins()
@@ -53,9 +53,10 @@ class AdminRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun getAdminByName(organizationName: String){
+    fun getAdminByName(organizationName: String) : LiveData<GenericResponse<Admin>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Admin>>()
         val client = apiService.getAdminByName(organizationName = organizationName)
@@ -86,9 +87,10 @@ class AdminRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun getAdminById(id: String){
+    fun getAdminById(id: String): LiveData<GenericResponse<Admin>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Admin>>()
         val client = apiService.getAdminById(id)
@@ -119,9 +121,11 @@ class AdminRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun updateAdmin(id: String, admin: Admin){
+    fun updateAdmin(id: String, admin: Admin) :LiveData<GenericResponse<Admin>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Admin>>()
         val client = apiService.updateAdmin(id = id, updateAdminRequest = admin)
@@ -157,9 +161,10 @@ class AdminRepository (
                 _isLoading.value = false
             }
         })
+        return resultLiveData
     }
 
-    fun updateAdminProfilePic(id: String, image: MultipartBody.Part?){
+    fun updateAdminProfilePic(id: String, image: MultipartBody.Part?) :LiveData<GenericResponse<Admin>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Admin>>()
         val client = apiService.updateAdminProfilePic(id = id, image = image)
@@ -195,6 +200,8 @@ class AdminRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     companion object {

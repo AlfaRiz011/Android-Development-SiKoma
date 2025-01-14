@@ -200,6 +200,11 @@ interface ApiService {
         @Path("postId") postId: String
     ): Call<GenericResponse<List<EventParticipant>>>
 
+    @GET("event/{userId}")
+    fun getParticipantUserId(
+        @Path("userId") userId: String
+    ): Call<GenericResponse<List<Post>>>
+
     @POST("event/{postId}")
     fun participateEvent(
         @Path("postId") postId: String,

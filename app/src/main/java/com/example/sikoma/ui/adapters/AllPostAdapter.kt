@@ -23,8 +23,8 @@ class AllPostAdapter(private val posts: List<Post>) : RecyclerView.Adapter<AllPo
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
         holder.binding.apply {
-            postAuthor.text = post.author
-            postContent.text = holder.itemView.context.getString(post.content)
+            postAuthor.text = post.admin?.organizationName
+            postContent.text = post.description
 
             Glide.with(holder.itemView.context)
                 .load(post.image)
@@ -32,25 +32,20 @@ class AllPostAdapter(private val posts: List<Post>) : RecyclerView.Adapter<AllPo
                 .into(postImage)
 
             Glide.with(holder.itemView.context)
-                .load(post.profilePic)
+                .load(post.admin?.profilePic)
                 .placeholder(R.drawable.icon_profile_fill)
                 .into(profilePic)
 
             itemPost.setOnClickListener {
-                val intent = Intent(root.context, PostDetailActivity::class.java).apply {
-                    putExtra("author", post.author)
-                    putExtra("content", post.content)
-                    putExtra("image", post.image)
-                    putExtra("profilePic", post.profilePic)
-                    putExtra("topics", ArrayList(post.topic))
+                val intent = Intent(root.context, PostDetailActivity::class.java).apply { 
+                    putExtra("postId", post.postId)
                 }
                 root.context.startActivity(intent)
             }
 
             fun openProfileActivity() {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("author", post.author)
-                    putExtra("profilePic", post.profilePic)
+                    putExtra("adminId", post.adminId)
                 }
                 root.context.startActivity(intent)
             }

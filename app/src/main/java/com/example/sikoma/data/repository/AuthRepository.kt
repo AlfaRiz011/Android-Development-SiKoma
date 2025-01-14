@@ -85,6 +85,7 @@ class AuthRepository(
                                 pref.saveRole("admin")
                             }
                             pref.saveTokenUser(it.token)
+                            pref.setSession()
                         }
                     }
                 } else {

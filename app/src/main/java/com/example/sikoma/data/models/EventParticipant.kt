@@ -8,5 +8,11 @@ data class EventParticipant(
 	val postId: Int? = null,
 
 	@field:SerializedName("user_id")
-	val userId: Int? = null
+	val userId: Int? = null,
+
+	@field:SerializedName("post")
+	val post: Post,
+
+	@field:SerializedName("user")
+	val user: User
 )

@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import com.example.sikoma.R
+import com.example.sikoma.data.models.Tag
 import com.example.sikoma.databinding.FragmentSearchBinding
+import com.example.sikoma.utils.OnTagClickListener
 import com.google.android.material.tabs.TabLayout
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), OnTagClickListener {
 
-    private lateinit var binding : FragmentSearchBinding
+    private lateinit var binding: FragmentSearchBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +39,7 @@ class SearchFragment : Fragment() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
                         0 -> switchFragment(SearchOrganizationFragment())
-                        1 -> switchFragment(SearchTopicFragment())
+                        1 -> switchFragment(SearchTopicFragment(this@SearchFragment))
                     }
                 }
 
@@ -66,5 +68,11 @@ class SearchFragment : Fragment() {
                     requireActivity().finish()
                 }
             })
+    }
+
+    override fun onTagClick(tag: Tag) {
+        binding.apply {
+            tagCard.topicTitle.text = tag.tagName
+        }
     }
 }

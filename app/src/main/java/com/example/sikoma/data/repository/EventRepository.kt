@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.EventParticipant
+import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
 import retrofit2.Call
@@ -19,7 +20,7 @@ class EventRepository (
     val isLoading : LiveData<Boolean> = _isLoading
 
 
-    fun getParticipant(postId: String) {
+    fun getParticipant(postId: String): LiveData<GenericResponse<List<EventParticipant>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<EventParticipant>>>()
         val client = apiService.getParticipant(postId = postId)
@@ -50,9 +51,47 @@ class EventRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun participateEvent(postId: String, userId: String) {
+    fun getParticipantUserId(userId: String): LiveData<GenericResponse<List<Post>>> {
+        _isLoading.value = true
+        val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
+        val client = apiService.getParticipantUserId(userId = userId)
+
+        client.enqueue(object : Callback<GenericResponse<List<Post>>> {
+            override fun onResponse(
+                call: Call<GenericResponse<List<Post>>>,
+                response: Response<GenericResponse<List<Post>>>
+            ) {
+                if (response.isSuccessful) {
+                    resultLiveData.value = response.body()
+                } else {
+                    resultLiveData.value = GenericResponse(
+                        message = response.code().toString(),
+                        status = response.body()?.status,
+                        data = null
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onFailure(call: Call<GenericResponse<List<Post>>>, t: Throwable) {
+                resultLiveData.value = GenericResponse(
+                    message = "500",
+                    status = "error",
+                    data = null
+                )
+                _isLoading.value = false
+            }
+        })
+
+        return resultLiveData
+    }
+
+
+    fun participateEvent(postId: String, userId: String): LiveData<GenericResponse<EventParticipant>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<EventParticipant>>()
         val client = apiService.participateEvent(postId = postId, userId = userId)
@@ -83,9 +122,11 @@ class EventRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun deleteParticipant(postId: String, userId: String) {
+    fun deleteParticipant(postId: String, userId: String): LiveData<GenericResponse<EventParticipant>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<EventParticipant>>()
         val client = apiService.deleteParticipant(postId = postId, userId = userId)
@@ -116,6 +157,8 @@ class EventRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
     companion object {

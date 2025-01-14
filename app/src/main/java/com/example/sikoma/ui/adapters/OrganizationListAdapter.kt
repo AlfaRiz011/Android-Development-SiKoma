@@ -6,11 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
-import com.example.sikoma.data.models.Organization
+import com.example.sikoma.data.models.Admin
 import com.example.sikoma.databinding.ItemSearchOrganizationBinding
 import com.example.sikoma.ui.activities.ProfileOrganizationActivity
 
-class OrganizationListAdapter (private val organizations: List<Organization>) : RecyclerView.Adapter<OrganizationListAdapter.OrganizationViewHolder>() {
+class OrganizationListAdapter (private val organizations: List<Admin>) : RecyclerView.Adapter<OrganizationListAdapter.OrganizationViewHolder>() {
     inner class OrganizationViewHolder(val binding: ItemSearchOrganizationBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganizationViewHolder {
@@ -22,18 +22,16 @@ class OrganizationListAdapter (private val organizations: List<Organization>) : 
         val org = organizations[position]
         holder.binding.apply {
             organizationLabel.text = org.organizationName
-            organizationBio.text = org.organizationBio
+            organizationBio.text = org.bio
 
             Glide.with(holder.itemView.context)
-                .load(org.organizationPic)
+                .load(org.profilePic)
                 .placeholder(R.drawable.logo_app)
                 .into(organizationPic)
 
             itemSearchOrganization.setOnClickListener {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("author", org.organizationName)
-                    putExtra("profilePic", org.organizationPic)
-                    putExtra("bio", org.organizationBio)
+                    putExtra("adminId", org.adminId)
                 }
                 root.context.startActivity(intent)
             }

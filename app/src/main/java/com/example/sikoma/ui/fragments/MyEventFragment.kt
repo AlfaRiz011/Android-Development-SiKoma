@@ -7,19 +7,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.sikoma.R
+import com.example.sikoma.data.models.DateSection
 import com.example.sikoma.data.models.Notification
 import com.example.sikoma.data.models.Post
-import com.example.sikoma.data.models.PostProvider
-import com.example.sikoma.databinding.FragmentMyEventBinding  
+import com.example.sikoma.data.models.PostItem
+import com.example.sikoma.databinding.FragmentMyEventBinding
+import com.example.sikoma.ui.viewmodels.EventViewModel
+import com.example.sikoma.ui.viewmodels.PostViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.utils.ValidatorAuthHelper
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class MyEventFragment : Fragment() {
 
-    private lateinit var binding : FragmentMyEventBinding
-    private lateinit var adapter : MyEventAdapter
+    private var userId: String = ""
+    private lateinit var binding: FragmentMyEventBinding
+    private lateinit var adapter: MyEventAdapter
+
+    private val viewModel: EventViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
+    }
+
+    private val pref = viewModel.preferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,20 +49,42 @@ class MyEventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        lifecycleScope.launch {
+            userId = pref.getUser().first()?.userId.toString()
+        }
+
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
+
         setOnBack()
         setAdapter()
     }
 
     private fun setAdapter() {
-        val posts = PostProvider.createDummy(5)
 
-        val groupedItems = groupPostsByDate(posts)
+        viewModel.getParticipantUserId(userId).observe(requireActivity()) {
+            when {
+                it.status == "success" -> {
+                    if (it.data != null) {
+                        binding.noData.visibility = View.GONE
 
-        adapter = MyEventAdapter(groupedItems)
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.rvMyEventPost.layoutManager = layoutManager
-        binding.rvMyEventPost.adapter = adapter
+                        val posts = it.data
+                        val groupedItems = groupPostsByDate(posts)
+
+                        adapter = MyEventAdapter(groupedItems)
+                        val layoutManager = LinearLayoutManager(requireContext())
+                        binding.rvMyEventPost.layoutManager = layoutManager
+                        binding.rvMyEventPost.adapter = adapter
+                    } else {
+                        binding.noData.visibility = View.VISIBLE
+                    }
+                }
+                else -> handleError(it.message?.toInt())
+            }
+        }
     }
+
     private fun groupPostsByDate(posts: List<Post>): List<Any> {
         val groupedItems = mutableListOf<Any>()
 
@@ -55,7 +94,7 @@ class MyEventFragment : Fragment() {
         calendar.add(Calendar.DAY_OF_YEAR, 1)
         val tomorrow = dateFormat.format(calendar.time)
 
-        val grouped = posts.groupBy { it.postDate }
+        val grouped = posts.groupBy { it.eventDate }
 
         for ((dateStr, postsOnDate) in grouped) {
             val sectionTitle = when {
@@ -63,9 +102,9 @@ class MyEventFragment : Fragment() {
                 dateStr == tomorrow -> "Tomorrow"
                 else -> dateStr
             }
-            groupedItems.add(Notification.DateSectionItem(sectionTitle))
+            groupedItems.add(DateSection(sectionTitle))
             postsOnDate.forEach { post ->
-                groupedItems.add(Notification.PostItem(post))
+                groupedItems.add(PostItem(post))
             }
         }
 
@@ -80,5 +119,35 @@ class MyEventFragment : Fragment() {
                     requireActivity().finish()
                 }
             })
+    }
+
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

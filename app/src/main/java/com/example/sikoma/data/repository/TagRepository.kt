@@ -17,7 +17,7 @@ class TagRepository (
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading : LiveData<Boolean> = _isLoading
 
-    fun getAllTags(){
+    fun getAllTags() : LiveData<GenericResponse<List<Tag>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Tag>>>()
         val client = apiService.getAllTags()
@@ -48,9 +48,11 @@ class TagRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
-    fun getTagsByPost(postId: String){
+    fun getTagsByPost(postId: String) : LiveData<GenericResponse<List<Tag>>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Tag>>>()
         val client = apiService.getTagsByPost(postId = postId)
@@ -81,10 +83,12 @@ class TagRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
 
-    fun tagPost(postId: String, tagName: String) {
+    fun tagPost(postId: String, tagName: String) : LiveData<GenericResponse<Tag>> {
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Tag>>()
         val client = apiService.tagPost(postId = postId, tagName = tagName)
@@ -115,6 +119,8 @@ class TagRepository (
                 _isLoading.value = false
             }
         })
+
+        return resultLiveData
     }
 
 

@@ -131,6 +131,7 @@
                 app:iconGravity="textStart"
                 app:icon="@drawable/icon_activity"
                 app:iconSize="30dp"
+                android:visibility="gone"
                 android:textColor="@color/blueSecondary"
                 app:iconTint="@color/blueSecondary"
                 app:layout_constraintEnd_toEndOf="@id/post_content"
@@ -173,7 +174,7 @@
         android:background="@drawable/shape_button_event"
         android:backgroundTint="@color/red"
         android:text="@string/cancel_event"
-        android:visibility="visible"
+        android:visibility="gone"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -200,4 +201,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

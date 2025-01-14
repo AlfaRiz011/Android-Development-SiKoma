@@ -31,8 +31,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:src="@color/whitePrimary"
         app:layout_constraintBottom_toBottomOf="@id/profile_pic"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +41,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_pic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:src="@drawable/icon_profile_fill"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,14 +131,14 @@
                     android:textColorHint="@color/blueSecondary" />
 
                 <EditText
-                    android:id="@+id/input_phone"
+                    android:id="@+id/input_faculty"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginHorizontal="20dp"
                     android:background="@drawable/shape_edit_text"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="@string/phone_number"
+                    android:hint="@string/faculty"
                     android:importantForAutofill="no"
                     android:inputType="phone"
                     android:padding="13dp"

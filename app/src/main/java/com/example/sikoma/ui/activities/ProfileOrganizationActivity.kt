@@ -1,46 +1,39 @@
 package com.example.sikoma.ui.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import androidx.activity.enableEdgeToEdge
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
-import com.example.sikoma.databinding.ActivityAuthBinding
 import com.example.sikoma.databinding.ActivityProfileOrganizationBinding
 import com.example.sikoma.ui.fragments.AllPostFragment
 import com.example.sikoma.ui.fragments.EventPostFragment
-import com.example.sikoma.ui.fragments.ForYouFragment
-import com.example.sikoma.ui.fragments.HomeFragment
-import com.example.sikoma.ui.fragments.LoginFragment
-import com.example.sikoma.ui.fragments.MyEventFragment
-import com.example.sikoma.ui.fragments.NotificationFragment
-import com.example.sikoma.ui.fragments.SearchFragment
+import com.example.sikoma.ui.viewmodels.AdminViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.tabs.TabLayout
 
 class ProfileOrganizationActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityProfileOrganizationBinding
+    private lateinit var binding: ActivityProfileOrganizationBinding
+    private lateinit var adminId: String
 
-    private lateinit var author: String
-
-    private var profilePic: Int? = null
-
-    private lateinit var bio: String
+    private val viewModel: AdminViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileOrganizationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        author = intent.getStringExtra("author") ?: "Unknown"
-        profilePic = intent.getIntExtra("profilePic", R.drawable.icon_profile_fill)
-        bio = intent.getStringExtra("bio") ?: "Unknown"
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
+        adminId = intent.getStringExtra("adminId") ?: ""
 
         setView()
         setTabLayout()
@@ -55,7 +48,7 @@ class ProfileOrganizationActivity : AppCompatActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
                         0 -> switchFragment(AllPostFragment())
-                        2 -> switchFragment(EventPostFragment())
+                        1 -> switchFragment(EventPostFragment())
                     }
                 }
 
@@ -76,18 +69,52 @@ class ProfileOrganizationActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun setView(){
-        binding.apply {
+    private fun setView() {
+        viewModel.getAdminByID(adminId).observe(this) {
+            when {
+                it.status == "success" -> {
+                    if (it.data != null) {
 
-            organizationName.text = author
+                        binding.organizationName.text = it.data.organizationName
+                        binding.organizationBio.text = it.data.bio
 
-            organizationBio.text = bio
-
-            Glide.with(this@ProfileOrganizationActivity)
-                .load(profilePic)
-                .placeholder(R.drawable.icon_profile_fill)
-                .into(binding.profilePic)
+                        Glide.with(this@ProfileOrganizationActivity)
+                            .load(it.data.organizationName)
+                            .placeholder(R.drawable.icon_profile_fill)
+                            .into(binding.profilePic)
+                    }
+                }
+                else -> handleError(it.message?.toInt())
+            }
         }
     }
 
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                this,
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                this,
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                this,
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                this,
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
+    }
 }

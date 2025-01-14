@@ -21,6 +21,7 @@ import com.example.sikoma.utils.ValidatorAuthHelper
 class CompleteBioFragment : Fragment() {
 
     private lateinit var binding: FragmentCompleteBioBinding
+
     private val viewModel: AuthViewModel by activityViewModels {
         ViewModelFactory.getInstance(requireContext().applicationContext)
     }

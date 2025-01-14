@@ -4,7 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
+import com.example.sikoma.data.models.DateSection
 import com.example.sikoma.data.models.Notification
+import com.example.sikoma.data.models.PostItem
 import com.example.sikoma.databinding.ItemDateSectionBinding
 import com.example.sikoma.databinding.ItemPostBinding
 import com.example.sikoma.ui.activities.PostDetailActivity
@@ -25,8 +27,8 @@ class MyEventAdapter(private val items: List<Any>) :
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
-            is Notification.PostItem -> VIEW_TYPE_POST
-            is Notification.DateSectionItem -> VIEW_TYPE_DATE_SECTION
+            is PostItem -> VIEW_TYPE_POST
+            is DateSection -> VIEW_TYPE_DATE_SECTION
             else -> throw IllegalArgumentException("Invalid ViewType")
         }
     }
@@ -53,42 +55,38 @@ class MyEventAdapter(private val items: List<Any>) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
-            is Notification.DateSectionItem -> dateSectionBind(item, holder, position)
-            is Notification.PostItem -> postBind(item, holder, position)
+            is DateSection -> dateSectionBind(item, holder, position)
+            is PostItem -> postBind(item, holder, position)
         }
     }
 
-    private fun postBind(item: Notification.PostItem, holder: RecyclerView.ViewHolder, position: Int) {
+    private fun postBind(item: PostItem, holder: RecyclerView.ViewHolder, position: Int) {
         val postHolder = holder as PostViewHolder
 
         postHolder.binding.apply {
-            postAuthor.text = item.post.author
-            postContent.text = item.post.content.toString()
+            postAuthor.text = item.posts.admin?.organizationName
+            postContent.text = item.posts.description
 
             Glide.with(holder.itemView.context)
-                .load(item.post.image)
+                .load(item.posts.image)
                 .placeholder(R.drawable.logo_app)
                 .into(postImage)
 
             Glide.with(holder.itemView.context)
-                .load(item.post.profilePic)
+                .load(item.posts.admin?.profilePic)
                 .placeholder(R.drawable.icon_profile_fill)
                 .into(profilePic)
 
             itemPost.setOnClickListener {
                 val intent = Intent(root.context, PostDetailActivity::class.java).apply {
-                    putExtra("author", item.post.author)
-                    putExtra("content", item.post.content)
-                    putExtra("image", item.post.image)
-                    putExtra("profilePic", item.post.profilePic)
+                    putExtra("postId", item.posts.postId)
                 }
                 root.context.startActivity(intent)
             }
 
             fun openProfileActivity() {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("author", item.post.author)
-                    putExtra("profilePic", item.post.profilePic)
+                    putExtra("adminId", item.posts.adminId)
                 }
                 root.context.startActivity(intent)
             }
@@ -98,11 +96,11 @@ class MyEventAdapter(private val items: List<Any>) :
         }
     }
 
-    private fun dateSectionBind(item: Notification.DateSectionItem, holder: RecyclerView.ViewHolder, position: Int) {
+    private fun dateSectionBind(item: DateSection, holder: RecyclerView.ViewHolder, position: Int) {
         val dateHolder = holder as DateSectionViewHolder
 
         dateHolder.binding.apply {
-            dateLabel.text = item.date
+            dateLabel.text = item.dateLabel
         }
     }
     override fun getItemCount(): Int = items.size

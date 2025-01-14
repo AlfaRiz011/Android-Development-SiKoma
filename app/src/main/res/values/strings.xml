@@ -77,5 +77,8 @@
     <string name="error_server_500">Server Error, try again</string>
     <string name="faculty">Faculty</string>
     <string name="no_post">There is no Post</string>
+    <string name="no_topic">There is no Topic</string>
+    <string name="no_org">There is no Organization</string>
+    <string name="no_event">You have no event yet</string>
 
 </resources>
