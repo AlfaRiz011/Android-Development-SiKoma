@@ -5,20 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.interfaces.ItemClickListener
-import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sikoma.R
-import com.example.sikoma.data.models.PostProvider
 import com.example.sikoma.databinding.FragmentStatisticBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class StatisticFragment : Fragment() {
+class StatisticFragment(private val adminId: String) : Fragment() {
     private lateinit var binding: FragmentStatisticBinding
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
@@ -62,8 +57,8 @@ class StatisticFragment : Fragment() {
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
-                        0 -> switchFragment(AllPostFragment())
-                        1 -> switchFragment(EventPostFragment())
+                        0 -> switchFragment(AdminPostFragment(adminId))
+                        1 -> switchFragment(AdminEventPostFragment(adminId))
                     }
                 }
 

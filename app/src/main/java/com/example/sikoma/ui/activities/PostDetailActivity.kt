@@ -31,6 +31,7 @@ class PostDetailActivity : AppCompatActivity() {
     private lateinit var postId: String
     private lateinit var role: String
     private lateinit var userId: String
+    private lateinit var adminId: String
 
     private val viewModel: PostViewModel by viewModels {
         ViewModelFactory.getInstance(this)
@@ -57,6 +58,7 @@ class PostDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             role = pref.getRole().first() ?: ""
             userId = pref.getUser().firstOrNull()?.userId.toString()
+            adminId = pref.getAdmin().firstOrNull()?.adminId.toString()
         }
 
         setLoading()
@@ -131,7 +133,7 @@ class PostDetailActivity : AppCompatActivity() {
     private fun setupEventButtons(post: Post) {
         binding.apply {
             when {
-                role == "admin" -> setButtonVisibility(buttonExport = true)
+                role == "admin" && post.adminId.toString() == adminId -> setButtonVisibility(buttonExport = true)
                 role == "user" && post.type == "event" -> {
                     setButtonVisibility(buttonSchedule = true, buttonJoinEvent = true)
 

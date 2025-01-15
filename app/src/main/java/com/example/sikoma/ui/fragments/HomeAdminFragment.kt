@@ -5,24 +5,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.fragment.app.activityViewModels
 import com.denzcoskun.imageslider.constants.ScaleTypes
-import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sikoma.R
-import com.example.sikoma.data.models.PostProvider
+import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.FragmentHomeAdminBinding
+import com.example.sikoma.ui.viewmodels.PostViewModel
+import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class HomeAdminFragment : Fragment() {
+class HomeAdminFragment(private val adminId: String) : Fragment() {
     private lateinit var binding: FragmentHomeAdminBinding
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var constraintLayout: ConstraintLayout
+    private val viewModel: PostViewModel by activityViewModels {
+        ViewModelFactory.getInstance(requireContext().applicationContext)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,23 +84,40 @@ class HomeAdminFragment : Fragment() {
 
     private fun setImageSlider() {
         val imageList = ArrayList<SlideModel>()
+        var sliderPosts: List<Post>? = null
 
-        val posts = PostProvider.createDummy(5)
-        for (i in posts.indices) {
-            imageList.add(SlideModel(R.drawable.logo_app, "\uD83D\uDD34" + posts[i].title))
-        }
+        viewModel.getAllPost().observe(viewLifecycleOwner) { response ->
+            when {
+                response.status == "success" -> {
+                    val posts = response.data
 
-        val imageSlider = binding.imageSlider
-        imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
+                    sliderPosts = posts?.filter { it.adminId == 6 }
 
-        imageSlider.setItemClickListener(object : ItemClickListener {
-            override fun onItemSelected(position: Int) {
-                val title = posts[position].title
-                Toast.makeText(requireContext(), "Clicked $title", Toast.LENGTH_SHORT).show()
+                    if (sliderPosts.isNullOrEmpty()) {
+                        binding.imageSlider.layoutParams.height = 0
+                    } else {
+                        sliderPosts?.let {
+                            for (post in it) {
+                                imageList.add(
+                                    SlideModel(
+                                        post.image,
+                                        "\uD83D\uDD34 ${post.description}"
+                                    )
+                                )
+                            }
+                        }
+
+                        val imageSlider = binding.imageSlider
+                        imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
+
+                        binding.imageSlider.layoutParams.height =
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+                }
+
+                else -> handleError(response.message?.toInt())
             }
-
-            override fun doubleClick(position: Int) {}
-        })
+        }
     }
 
     private fun switchFragment(fragment: Fragment) {
@@ -153,5 +175,29 @@ class HomeAdminFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                requireContext(),
+                getString(R.string.error_server_500)
+            )
+        }
     }
 }
