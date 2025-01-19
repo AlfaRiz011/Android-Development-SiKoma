@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.databinding.ActivityHomeBinding
 import com.example.sikoma.ui.fragments.HomeFragment
 import com.example.sikoma.ui.fragments.MyEventFragment
@@ -26,12 +27,14 @@ class HomeActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        pref = viewModel.preferences
 
         setOnBack()
         setAppBar()

@@ -100,7 +100,7 @@ class HomeAdminFragment(private val adminId: String) : Fragment() {
                             for (post in it) {
                                 imageList.add(
                                     SlideModel(
-                                        post.image,
+                                        post.image.toString(),
                                         "\uD83D\uDD34 ${post.description}"
                                     )
                                 )

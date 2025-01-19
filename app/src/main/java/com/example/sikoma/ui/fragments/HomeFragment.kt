@@ -32,6 +32,7 @@ class HomeFragment : Fragment() {
     private val viewModel: PostViewModel by activityViewModels {
         ViewModelFactory.getInstance(requireContext().applicationContext)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,17 +97,14 @@ class HomeFragment : Fragment() {
         val imageList = ArrayList<SlideModel>()
         var sliderPosts: List<Post>? = null
 
-        viewModel.getAllPost().observe(viewLifecycleOwner) { response ->
+        viewModel.getPostById("9").observe(viewLifecycleOwner) { response ->
             when {
                 response.status == "success" -> {
                     val posts = response.data
-
-                    sliderPosts = posts?.filter { it.adminId == 6 }
-
                     if (sliderPosts.isNullOrEmpty()) {
                         binding.imageSlider.layoutParams.height = 0
                     } else {
-                        sliderPosts?.let {
+                        sliderPosts.let {
                             for (post in it) {
                                 imageList.add(
                                     SlideModel(

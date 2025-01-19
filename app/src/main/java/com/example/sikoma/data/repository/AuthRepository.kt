@@ -1,5 +1,6 @@
 package com.example.sikoma.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
@@ -68,27 +69,34 @@ class AuthRepository(
         val resultLiveData = MutableLiveData<GenericResponse<Login>>()
         val client = apiService.login(loginBodyRequest)
 
+        Log.d("LoginDebug", "Memulai permintaan login ke server...")
+
         client.enqueue(object : Callback<GenericResponse<Login>> {
             override fun onResponse(
                 call: Call<GenericResponse<Login>>,
                 response: Response<GenericResponse<Login>>
             ) {
                 if (response.isSuccessful) {
+                    Log.d("LoginDebug", "Berhasil mendapatkan respons dari server.")
                     resultLiveData.value = response.body()
+
                     CoroutineScope(Dispatchers.IO).launch {
                         response.body()?.data?.let {
                             if (it.role == "user") {
                                 pref.saveUser(it.user)
                                 pref.saveRole("user")
                             } else {
+                                Log.d("LoginDebug", "Login sebagai admin.")
                                 pref.saveAdmin(it.admin)
                                 pref.saveRole("admin")
                             }
                             pref.saveTokenUser(it.token)
                             pref.setSession()
+                            Log.d("LoginDebug", "Data user/admin dan token berhasil disimpan.")
                         }
                     }
                 } else {
+                    Log.d("LoginDebug", "Gagal mendapatkan respons yang sukses dari server. Kode respons: ${response.code()}")
                     resultLiveData.value = GenericResponse(
                         message = response.code().toString(),
                         status = response.body()?.status,
@@ -99,6 +107,7 @@ class AuthRepository(
             }
 
             override fun onFailure(call: Call<GenericResponse<Login>>, t: Throwable) {
+                Log.d("LoginDebug", "Gagal terhubung ke server. Kesalahan: ${t.message}")
                 resultLiveData.value = GenericResponse(
                     message = "500",
                     status = "error",
@@ -110,6 +119,7 @@ class AuthRepository(
 
         return resultLiveData
     }
+
 
     fun requestOtp(otpRequest: Register) : LiveData<GenericResponse<Otp>>{
         _isLoading.value = true

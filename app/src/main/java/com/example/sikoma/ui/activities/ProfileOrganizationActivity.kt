@@ -1,5 +1,6 @@
 package com.example.sikoma.ui.activities
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -79,7 +80,7 @@ class ProfileOrganizationActivity : AppCompatActivity() {
                         binding.organizationBio.text = it.data.bio
 
                         Glide.with(this@ProfileOrganizationActivity)
-                            .load(it.data.organizationName)
+                            .load(it.data.organizationName?.let{ img -> Uri.parse(img) })
                             .placeholder(R.drawable.icon_profile_fill)
                             .into(binding.profilePic)
                     }

@@ -86,7 +86,7 @@ class MyEventAdapter(private val items: List<Any>) :
 
             fun openProfileActivity() {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("adminId", item.posts.adminId)
+                    putExtra("adminId", item.posts.adminId.toString())
                 }
                 root.context.startActivity(intent)
             }

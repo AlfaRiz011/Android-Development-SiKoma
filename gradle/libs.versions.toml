@@ -1,7 +1,7 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.2"
 imageslideshow = "0.1.2"
-kotlin = "1.9.0"
+kotlin = "1.9.20"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -28,8 +28,8 @@ converterGson = "2.11.0"
 loggingInterceptor = "5.0.0-alpha.14"
 datastoreCoreAndroid = "1.1.1"
 datastorePreferences = "1.1.1"
-kotlinxCoroutinesCore = "1.10.1"
-kotlinxCoroutinesAndroid = "1.10.1"
+kotlinxCoroutinesCore = "1.7.3"
+kotlinxCoroutinesAndroid = "1.7.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

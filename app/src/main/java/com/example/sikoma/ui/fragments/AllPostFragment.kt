@@ -59,6 +59,7 @@ class AllPostFragment : Fragment() {
                     if(posts.isNullOrEmpty()){
                         binding.noData.visibility = View.VISIBLE
                     } else {
+                        binding.noData.visibility = View.GONE
                         postAdapter = AllPostAdapter(posts)
                         val layoutManager = LinearLayoutManager(requireContext())
                         binding.rvAllPost.layoutManager = layoutManager

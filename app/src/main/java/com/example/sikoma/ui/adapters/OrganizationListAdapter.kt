@@ -31,7 +31,7 @@ class OrganizationListAdapter (private val organizations: List<Admin>) : Recycle
 
             itemSearchOrganization.setOnClickListener {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("adminId", org.adminId)
+                    putExtra("adminId", org.adminId.toString())
                 }
                 root.context.startActivity(intent)
             }

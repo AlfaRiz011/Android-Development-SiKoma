@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.DateSection
 import com.example.sikoma.data.models.Notification
 import com.example.sikoma.data.models.Post
@@ -33,7 +34,7 @@ class PostNotificationFragment : Fragment() {
         ViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
     private var userId: String = ""
 
     override fun onCreateView(
@@ -46,6 +47,8 @@ class PostNotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        pref = viewModel.preferences
 
         lifecycleScope.launch {
             userId = pref.getUser().first()?.userId.toString()
@@ -66,12 +69,14 @@ class PostNotificationFragment : Fragment() {
                 it.status == "success" -> {
                     if (it.data != null) {
                         val posts = it.data
-
+                        binding.noData.visibility = View.GONE
                         val groupedItems = groupPostsByDate(posts)
                         adapter = NotificationListAdapter(groupedItems)
                         val layoutManager = LinearLayoutManager(requireContext())
                         binding.rvPostNotification.layoutManager = layoutManager
                         binding.rvPostNotification.adapter = adapter
+                    } else {
+                        binding.noData.visibility = View.VISIBLE
                     }
                 }
 

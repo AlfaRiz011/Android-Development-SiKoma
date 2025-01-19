@@ -49,6 +49,7 @@ class EventPostFragment : Fragment() {
                     if(posts.isNullOrEmpty()){
                         binding.noData.visibility = View.VISIBLE
                     } else {
+                        binding.noData.visibility = View.GONE
                         postAdapter = EventPostAdapter(posts)
                         val layoutManager = LinearLayoutManager(requireContext())
                         binding.rvEventPost.layoutManager = layoutManager

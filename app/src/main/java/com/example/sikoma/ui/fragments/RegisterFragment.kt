@@ -91,7 +91,7 @@ class RegisterFragment : Fragment() {
 
                 val dataVerifyOTP = OtpBodyRequest(
                     otp = otpInt,
-                    email = inputEmail.toString()
+                    email = inputEmail.text.toString()
                 )
 
                 viewModel.verifyOTP(dataVerifyOTP).observe(requireActivity()) {

@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.databinding.FragmentForYouBinding
 import com.example.sikoma.ui.adapters.ForYouAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
@@ -25,7 +26,7 @@ class ForYouFragment : Fragment() {
         ViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +34,7 @@ class ForYouFragment : Fragment() {
     ): View {
         binding = FragmentForYouBinding.inflate(layoutInflater)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +44,7 @@ class ForYouFragment : Fragment() {
             showLoading(it)
         }
 
+        pref = viewModel.preferences
 
         setAdapter()
     }
@@ -59,6 +62,7 @@ class ForYouFragment : Fragment() {
                         if (posts.isNullOrEmpty()) {
                             binding.noData.visibility = View.VISIBLE
                         } else {
+                            binding.noData.visibility = View.GONE
                             postAdapter = ForYouAdapter(posts)
                             val layoutManager = LinearLayoutManager(requireContext())
                             binding.rvForYou.layoutManager = layoutManager

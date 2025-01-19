@@ -47,6 +47,7 @@ class SearchTopicFragment(private val tagListener: OnTagClickListener) : Fragmen
             if (result.status == "success") {
                 val topics = result.data
                 if (topics != null) {
+                    binding.noData.visibility = View.GONE
                     topicListAdapter = TopicListAdapter(topics) { tag ->
                         tagListener.onTagClick(tag)
                     }
@@ -54,6 +55,8 @@ class SearchTopicFragment(private val tagListener: OnTagClickListener) : Fragmen
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter = topicListAdapter
                     }
+                } else {
+                    binding.noData.visibility = View.VISIBLE
                 }
             } else {
                 handleError(result.message?.toInt())

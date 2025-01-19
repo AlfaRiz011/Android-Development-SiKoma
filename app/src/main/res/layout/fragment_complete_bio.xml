@@ -99,6 +99,7 @@
                             android:inputType="textEmailAddress"
                             android:longClickable="false"
                             android:padding="13dp"
+                            android:textColor="@color/blueSecondary"
                             android:textColorHint="@color/blueSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,6 +120,7 @@
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:padding="13dp"
+                            android:textColor="@color/blueSecondary"
                             android:textColorHint="@color/blueSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,6 +141,7 @@
                             android:importantForAutofill="no"
                             android:inputType="number"
                             android:padding="13dp"
+                            android:textColor="@color/blueSecondary"
                             android:textColorHint="@color/blueSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,6 +162,7 @@
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:padding="13dp"
+                            android:textColor="@color/blueSecondary"
                             android:textColorHint="@color/blueSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,8 +181,9 @@
                             android:background="@drawable/shape_edit_text_2"
                             android:hint="@string/faculty"
                             android:importantForAutofill="no"
-                            android:inputType="phone"
+                            android:inputType="text"
                             android:padding="13dp"
+                            android:textColor="@color/blueSecondary"
                             android:textColorHint="@color/blueSecondary" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -187,6 +192,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:backgroundTint="@color/bluePrimary"
+                        android:textColor="@color/whitePrimary"
                         android:fontFamily="@font/poppins_medium"
                         android:gravity="center"
                         android:letterSpacing="0.3"

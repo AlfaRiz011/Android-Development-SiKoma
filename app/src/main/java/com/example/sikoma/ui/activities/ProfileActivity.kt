@@ -1,6 +1,7 @@
 package com.example.sikoma.ui.activities
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.User
 import com.example.sikoma.databinding.ActivityProfileBinding
 import com.example.sikoma.ui.viewmodels.UserViewModel
@@ -25,15 +27,20 @@ class ProfileActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setData()
-        setAction()
+        pref = viewModel.preferences
+
+        lifecycleScope.launch {
+            user = pref.getUser().firstOrNull()!!
+            setData()
+            setAction()
+        }
     }
 
     private fun setAction() {
@@ -92,8 +99,6 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun setData() {
         lifecycleScope.launch {
-            user.let { pref.getUser().firstOrNull() }
-
             binding.apply {
                 inputEmail.setText(user.email)
                 inputFullName.setText(user.fullName)

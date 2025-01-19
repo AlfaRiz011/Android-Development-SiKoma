@@ -62,29 +62,25 @@ class LoginFragment : Fragment() {
             inputEmail.setText(email)
             inputPassword.setText(password)
 
-            dataLogin = LoginBodyRequest(
-                inputEmail.toString(),
-                inputPassword.toString()
-            )
-            var isValid: Boolean
 
             buttonLogin.setOnClickListener {
-                isValid = if (inputPassword.text.toString() == password) {
-                    ValidatorAuthHelper.validateInputAuth(
-                        requireContext(),
-                        emailInputLayout,
-                        passwordInputLayout,
-                        inputEmail,
-                        inputPassword
-                    )
-                } else {
-                    false
-                }
+                val isValid = ValidatorAuthHelper.validateInputAuth(
+                    requireContext(),
+                    emailInputLayout,
+                    passwordInputLayout,
+                    inputEmail,
+                    inputPassword
+                )
+
+                dataLogin = LoginBodyRequest(
+                    email = inputEmail.text.toString(),
+                    password = inputPassword.text.toString()
+                )
 
                 if (isValid) {
-                    viewModel.login(dataLogin).observe(requireActivity()){ result ->
+                    viewModel.login(dataLogin).observe(requireActivity()) { result ->
                         when {
-                            result.status == "success" -> {
+                            result.status.toString() == "success" -> {
                                 val destinationActivity = when (result.data?.role) {
                                     "user" -> HomeActivity::class.java
                                     "admin" -> HomeAdminActivity::class.java
@@ -95,10 +91,12 @@ class LoginFragment : Fragment() {
                                     requireActivity().finish()
                                 }
                             }
+
                             else -> handleError(result.message?.toInt())
                         }
                     }
                 }
+
             }
 
             registerPage.setOnClickListener {

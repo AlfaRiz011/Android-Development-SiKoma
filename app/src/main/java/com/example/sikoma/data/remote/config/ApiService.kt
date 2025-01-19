@@ -104,7 +104,7 @@ interface ApiService {
         @Path("id") userId: String
     ): Call<GenericResponse<List<Post>>>
 
-    @GET("posts/event")
+    @GET("posts/event/events")
     fun getEventPost(): Call<GenericResponse<List<Post>>>
 
     @GET("posts/event/admin/{adminId}")
@@ -289,7 +289,7 @@ interface ApiService {
         @Body verifyOtpRequest: OtpBodyRequest
     ): Call<GenericResponse<Register>>
 
-    @POST("login")
+    @POST("login/")
     fun login(
         @Body loginRequest: LoginBodyRequest
     ): Call<GenericResponse<Login>>

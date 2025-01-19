@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.databinding.FragmentNotificationSettingBinding
 import com.example.sikoma.ui.adapters.AllPostAdapter
 import com.example.sikoma.ui.adapters.NotificationListAdapter
@@ -32,7 +33,7 @@ class NotificationSettingFragment : Fragment() {
         ViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
     private var userId: String = ""
 
     override fun onCreateView(
@@ -45,6 +46,9 @@ class NotificationSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        pref = viewModel.preferences
+
         lifecycleScope.launch {
             userId = pref.getUser().first()?.userId.toString()
         }

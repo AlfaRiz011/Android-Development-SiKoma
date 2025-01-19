@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.ActivityPostDetailBinding
 import com.example.sikoma.ui.adapters.TopicPostAdapter
@@ -45,7 +46,7 @@ class PostDetailActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private val pref = viewModel.preferences
+    private lateinit var pref : UserPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +55,8 @@ class PostDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         postId = intent.getStringExtra("postId") ?: ""
+
+        pref = viewModel.preferences
 
         lifecycleScope.launch {
             role = pref.getRole().first() ?: ""

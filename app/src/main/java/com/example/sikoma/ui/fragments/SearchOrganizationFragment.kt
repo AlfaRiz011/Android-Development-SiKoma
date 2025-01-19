@@ -47,10 +47,14 @@ class SearchOrganizationFragment : Fragment() {
                 it.status == "success" -> {
                     if (it.data != null){
                         val org = it.data
-                        organizationListAdapter = OrganizationListAdapter(org)
-                        val layoutManager = LinearLayoutManager(requireContext())
-                        binding.rvSearchOrganization.layoutManager = layoutManager
-                        binding.rvSearchOrganization.adapter = organizationListAdapter
+
+                            binding.noData.visibility = View.GONE
+                            organizationListAdapter = OrganizationListAdapter(org)
+                            val layoutManager = LinearLayoutManager(requireContext())
+                            binding.rvSearchOrganization.layoutManager = layoutManager
+                            binding.rvSearchOrganization.adapter = organizationListAdapter
+                    } else {
+                        binding.noData.visibility = View.VISIBLE
                     }
                 }
 

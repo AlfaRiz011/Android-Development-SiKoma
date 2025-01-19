@@ -38,14 +38,14 @@ class ForYouAdapter(private val posts: List<Post>) : RecyclerView.Adapter<ForYou
 
             itemPost.setOnClickListener {
                 val intent = Intent(root.context, PostDetailActivity::class.java).apply{
-                    putExtra("postId", post.postId)
+                    putExtra("postId", post.postId.toString())
                 }
                 root.context.startActivity(intent)
             }
 
             fun openProfileActivity() {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply{
-                    putExtra("adminId", post.adminId)
+                    putExtra("adminId", post.adminId.toString())
                 }
                 root.context.startActivity(intent)
             }

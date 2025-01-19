@@ -84,14 +84,14 @@ class NotificationListAdapter(private val items: List<Any>) :
 
             itemPost.setOnClickListener {
                 val intent = Intent(root.context, PostDetailActivity::class.java).apply {
-                    putExtra("postId", item.posts.postId)
+                    putExtra("postId", item.posts.postId.toString())
                 }
                 root.context.startActivity(intent)
             }
 
             fun openProfileActivity() {
                 val intent = Intent(root.context, ProfileOrganizationActivity::class.java).apply {
-                    putExtra("adminId", item.posts.adminId)
+                    putExtra("adminId", item.posts.adminId.toString())
                 }
                 root.context.startActivity(intent)
             }
