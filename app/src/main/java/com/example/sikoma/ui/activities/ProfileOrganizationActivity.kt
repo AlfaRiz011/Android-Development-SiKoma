@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
 import com.example.sikoma.databinding.ActivityProfileOrganizationBinding
+import com.example.sikoma.ui.fragments.AdminEventPostFragment
+import com.example.sikoma.ui.fragments.AdminPostFragment
 import com.example.sikoma.ui.fragments.AllPostFragment
 import com.example.sikoma.ui.fragments.EventPostFragment
 import com.example.sikoma.ui.viewmodels.AdminViewModel
@@ -48,8 +50,8 @@ class ProfileOrganizationActivity : AppCompatActivity() {
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
-                        0 -> switchFragment(AllPostFragment())
-                        1 -> switchFragment(EventPostFragment())
+                        0 -> switchFragment(AdminPostFragment(adminId))
+                        1 -> switchFragment(AdminEventPostFragment(adminId))
                     }
                 }
 
@@ -59,7 +61,7 @@ class ProfileOrganizationActivity : AppCompatActivity() {
             })
 
             selectTab(getTabAt(0))
-            switchFragment(AllPostFragment())
+            switchFragment(AdminPostFragment(adminId))
         }
 
     }
@@ -80,11 +82,12 @@ class ProfileOrganizationActivity : AppCompatActivity() {
                         binding.organizationBio.text = it.data.bio
 
                         Glide.with(this@ProfileOrganizationActivity)
-                            .load(it.data.organizationName?.let{ img -> Uri.parse(img) })
+                            .load(it.data.profilePic)
                             .placeholder(R.drawable.icon_profile_fill)
                             .into(binding.profilePic)
                     }
                 }
+
                 else -> handleError(it.message?.toInt())
             }
         }
@@ -115,7 +118,8 @@ class ProfileOrganizationActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility =
-            if (isLoading) View.VISIBLE else View.GONE
+        val visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = visibility
+        binding.loadingView.visibility = visibility
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sikoma.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,15 +15,14 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.sikoma.R
-import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.FragmentHomeBinding
-import com.example.sikoma.ui.viewmodels.AuthViewModel
 import com.example.sikoma.ui.viewmodels.PostViewModel
 import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
+
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
@@ -95,32 +95,24 @@ class HomeFragment : Fragment() {
 
     private fun setImageSlider() {
         val imageList = ArrayList<SlideModel>()
-        var sliderPosts: List<Post>? = null
 
-        viewModel.getPostById("9").observe(viewLifecycleOwner) { response ->
-            when {
-                response.status == "success" -> {
-                    val posts = response.data
-                    if (sliderPosts.isNullOrEmpty()) {
-                        binding.imageSlider.layoutParams.height = 0
-                    } else {
-                        sliderPosts.let {
-                            for (post in it) {
-                                imageList.add(
-                                    SlideModel(
-                                        post.image,
-                                        "\uD83D\uDD34 ${post.description}"
-                                    )
+        viewModel.getAllPost().observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                "success" -> {
+                    response.data?.let { posts ->
+                        for (post in posts) {
+                            Log.d("Image URL", "URL: ${post.image}")
+                            imageList.add(
+                                SlideModel(
+                                    post.image,
+                                    "\uD83D\uDD34 ${post.description}"
                                 )
-                            }
+                            )
                         }
-
-                        val imageSlider = binding.imageSlider
-                        imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
-
-                        binding.imageSlider.layoutParams.height =
-                            ViewGroup.LayoutParams.WRAP_CONTENT
                     }
+
+                    val imageSlider = binding.imageSlider
+                    imageSlider.setImageList(imageList, ScaleTypes.CENTER_INSIDE)
                 }
 
                 else -> handleError(response.message?.toInt())
@@ -129,16 +121,13 @@ class HomeFragment : Fragment() {
 
         binding.imageSlider.setItemClickListener(object : ItemClickListener {
             override fun onItemSelected(position: Int) {
-                sliderPosts?.let {
-                    val title = it[position].description
-                    Toast.makeText(requireContext(), "Clicked $title", Toast.LENGTH_SHORT).show()
-                }
+                val title = imageList[position].title
+                Toast.makeText(requireContext(), "Clicked $title", Toast.LENGTH_SHORT).show()
             }
 
             override fun doubleClick(position: Int) {}
         })
     }
-
 
     private fun switchFragment(fragment: Fragment) {
         val fragmentTransaction = parentFragmentManager.beginTransaction()

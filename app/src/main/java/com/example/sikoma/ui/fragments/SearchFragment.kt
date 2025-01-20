@@ -28,6 +28,13 @@ class SearchFragment : Fragment(), OnTagClickListener {
 
         setOnBack()
         setTabLayout()
+        setView()
+    }
+
+    private fun setView() {
+        binding.tagCard.backButtonSchedule.setOnClickListener{
+            binding.tagCard.layoutSeeTopic.visibility = View.GONE
+        }
     }
 
     private fun setTabLayout() {
@@ -73,6 +80,7 @@ class SearchFragment : Fragment(), OnTagClickListener {
     override fun onTagClick(tag: Tag) {
         binding.apply {
             tagCard.topicTitle.text = tag.tagName
+            tagCard.layoutSeeTopic.visibility = View.VISIBLE
         }
     }
 }

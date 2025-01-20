@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/whitePrimary"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.LoginFragment">
 
     <ImageView
@@ -13,36 +12,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/imageViewDescription"
-        android:src="@drawable/background_auth"
         android:scaleType="fitXY"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/background_auth"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/logoAuth"
         android:layout_width="300dp"
         android:layout_height="0dp"
         android:contentDescription="@string/imageViewDescription"
-        android:src="@drawable/logo_auth"
         android:scaleType="fitCenter"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/logo_auth"
         app:layout_constraintBottom_toTopOf="@id/card"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
-        app:cardBackgroundColor="@color/whiteSecondary"
         android:layout_margin="8dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="@color/whiteSecondary"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,13 +52,13 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login"
-                android:textColor="@color/bluePrimary"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="40dp"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
-                android:textSize="30sp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp" />
+                android:text="@string/login"
+                android:textColor="@color/bluePrimary"
+                android:textSize="30sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailInputLayout"
@@ -74,14 +73,14 @@
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:hint="@string/email"
                     android:background="@drawable/shape_edit_text"
-                    android:textColorHint="@color/blueSecondary"
-                    android:textColor="@color/blueSecondary"
                     android:drawableStart="@drawable/icon_email"
                     android:drawablePadding="8dp"
+                    android:hint="@string/email"
                     android:importantForAutofill="no"
-                    android:inputType="textEmailAddress"  />
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/blueSecondary"
+                    android:textColorHint="@color/blueSecondary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -97,30 +96,38 @@
                     android:id="@+id/input_password"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:hint="@string/password"
-                    android:textColorHint="@color/blueSecondary"
-                    android:textColor="@color/blueSecondary"
+                    android:background="@drawable/shape_edit_text"
                     android:drawableStart="@drawable/icon_password"
                     android:drawablePadding="8dp"
-                    android:background="@drawable/shape_edit_text"
+                    android:hint="@string/password"
                     android:importantForAutofill="no"
-                    android:inputType="textPassword"  />
+                    android:inputType="textPassword"
+                    android:textColor="@color/blueSecondary"
+                    android:textColorHint="@color/blueSecondary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_login"
                 android:layout_width="match_parent"
                 android:layout_height="53dp"
-                android:backgroundTint="@color/bluePrimary"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="40dp"
-                android:textColor="@color/whitePrimary"
-                android:text="@string/login_label"
-                android:letterSpacing="0.3"
+                android:backgroundTint="@color/bluePrimary"
                 android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
-                app:cornerRadius="10dp"/>
+                android:letterSpacing="0.3"
+                android:text="@string/login_label"
+                android:textColor="@color/whitePrimary"
+                app:cornerRadius="10dp" />
         </LinearLayout>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            tools:visibility="visible" />
 
     </androidx.cardview.widget.CardView>
 
@@ -128,38 +135,26 @@
         android:id="@+id/haveNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/have_no_account"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/poppins_semibold"
+        android:text="@string/have_no_account"
         android:textColor="@color/bluePrimary"
-        app:layout_constraintTop_toBottomOf="@id/card"
+        app:layout_constraintEnd_toStartOf="@id/registerPage"
         app:layout_constraintStart_toStartOf="@id/card"
-        app:layout_constraintEnd_toStartOf="@id/registerPage"/>
+        app:layout_constraintTop_toBottomOf="@id/card" />
 
     <TextView
         android:id="@+id/registerPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/register"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="40dp"
         android:fontFamily="@font/poppins_semibold"
+        android:text="@string/register"
         android:textColor="@color/blueSecondary"
-        app:layout_constraintTop_toBottomOf="@id/card"
+        app:layout_constraintEnd_toEndOf="@id/card"
         app:layout_constraintStart_toEndOf="@id/haveNo"
-        app:layout_constraintEnd_toEndOf="@id/card"/>
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
+        app:layout_constraintTop_toBottomOf="@id/card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -134,28 +134,41 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun setupEventButtons(post: Post) {
+        var participate = false
+
+        eventViewModel.getParticipantUserId(userId).observe(this) { response ->
+            when (response.status) {
+                "success" -> response.data?.let { dataList ->
+                    participate = dataList.any { it.postId == post.postId } == true
+                }
+                else -> handleError(response.message?.toInt())
+            }
+        }
+
         binding.apply {
             when {
-                role == "admin" && post.adminId.toString() == adminId -> setButtonVisibility(buttonExport = true)
+                role == "admin" && post.adminId.toString() == adminId && post.type == "event" -> {
+                    setButtonVisibility(buttonExport = true, buttonSchedule = true)
+                }
+
                 role == "user" && post.type == "event" -> {
-                    setButtonVisibility(buttonSchedule = true, buttonJoinEvent = true)
+                    setButtonVisibility(
+                        buttonSchedule = true,
+                        buttonJoinEvent = !participate,
+                        buttonCancelEvent = participate
+                    )
 
-                    buttonJoinEvent.setOnClickListener {
-                        handleJoinEvent(postId)
-                    }
-
-                    buttonCancelEvent.setOnClickListener {
-                        handleCancelEvent(postId)
-                    }
+                    buttonJoinEvent.setOnClickListener { handleEventParticipation(postId, true) }
+                    buttonCancelEvent.setOnClickListener { handleEventParticipation(postId, false) }
 
                     buttonSchedule.setOnClickListener {
                         includeSchedule.layoutSchedue.visibility = View.VISIBLE
                     }
-
                     includeSchedule.backButtonSchedule.setOnClickListener {
                         includeSchedule.layoutSchedue.visibility = View.GONE
                     }
                 }
+
                 else -> setButtonVisibility()
             }
         }
@@ -175,23 +188,38 @@ class PostDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleJoinEvent(postId: String) {
-        eventViewModel.participate(postId, userId).observe(this@PostDetailActivity) { event ->
-            when (event.status) {
-                "success" -> setButtonVisibility(buttonCancelEvent = true)
-                else -> handleError(event.message?.toInt())
+    private fun handleEventParticipation(postId: String, isJoining: Boolean) {
+        val layoutToShow = if (isJoining) binding.confirmJoin.layoutConfirmJoin else binding.cancelJoin.layoutCancelJoin
+        val buttonConfirm = if (isJoining) binding.confirmJoin.buttonConfirm else binding.cancelJoin.buttonCancel
+        val backButton = if (isJoining) binding.confirmJoin.backButton else binding.cancelJoin.backButton
+        val visibilityToSet = View.VISIBLE
+        val visibilityToHide = View.GONE
+
+        layoutToShow.visibility = visibilityToSet
+
+        backButton.setOnClickListener {
+            layoutToShow.visibility = visibilityToHide
+        }
+
+        buttonConfirm.setOnClickListener {
+            val eventAction = if (isJoining) {
+                eventViewModel.participate(postId, userId)
+            } else {
+                eventViewModel.deleteParticipant(postId, userId)
+            }
+
+            eventAction.observe(this@PostDetailActivity) { event ->
+                when (event.status) {
+                    "success" -> {
+                        layoutToShow.visibility = visibilityToHide
+                        setButtonVisibility(buttonJoinEvent = !isJoining, buttonCancelEvent = isJoining)
+                    }
+                    else -> handleError(event.message?.toInt())
+                }
             }
         }
     }
 
-    private fun handleCancelEvent(postId: String) {
-        eventViewModel.deleteParticipant(postId, userId).observe(this@PostDetailActivity) { event ->
-            when (event.status) {
-                "success" -> setButtonVisibility(buttonJoinEvent = true)
-                else -> handleError(event.message?.toInt())
-            }
-        }
-    }
 
     private fun loadImage(context: Context, url: String?, imageView: ImageView, placeholder: Int) {
         Glide.with(context)
@@ -226,7 +254,9 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility =
-            if (isLoading) View.VISIBLE else View.GONE
+        val visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.progressBar.visibility = visibility
+        binding.loadingView.visibility = visibility
     }
+
 }

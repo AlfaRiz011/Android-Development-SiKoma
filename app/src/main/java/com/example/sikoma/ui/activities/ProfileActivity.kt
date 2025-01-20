@@ -48,28 +48,32 @@ class ProfileActivity : AppCompatActivity() {
             buttonBack.setOnClickListener { finish() }
 
             buttonLogout.setOnClickListener {
-                lifecycleScope.launch {
-                    val role = pref.getRole().first()
-
-                    when (role) {
-                        "user" -> pref.deleteUser()
-                        "admin" -> pref.deleteAdmin()
-                    }
-
-                    pref.logOut()
-
-                    val intent = Intent(this@ProfileActivity, AuthActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                }
+                handleLogoutAction()
             }
 
-            buttonEditData.setOnClickListener { editDataAction() }
+            buttonEditData.setOnClickListener { enableEditMode() }
+
+            buttonDone.setOnClickListener { disableEditMode() }
         }
     }
 
-    private fun editDataAction() {
+    private fun handleLogoutAction() {
+        lifecycleScope.launch {
+            val role = pref.getRole().first()
+            when (role) {
+                "user" -> pref.deleteUser()
+                "admin" -> pref.deleteAdmin()
+            }
+            pref.logOut()
+
+            val intent = Intent(this@ProfileActivity, AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun enableEditMode() {
         binding.apply {
             buttonEditData.visibility = View.GONE
             buttonDone.visibility = View.VISIBLE
@@ -83,17 +87,21 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             inputEmail.requestFocus()
+        }
+    }
 
-            buttonDone.setOnClickListener {
-                inputs.forEach {
-                    it.isFocusableInTouchMode = false
-                    it.isFocusable = false
-                }
+    private fun disableEditMode() {
+        binding.apply {
+            val inputs = listOf(inputEmail, inputFullName, inputNim, inputStudyProgram, inputFaculty)
 
-                buttonEditData.visibility = View.VISIBLE
-                buttonDone.visibility = View.GONE
-                buttonEditData.isEnabled = true
+            inputs.forEach {
+                it.isFocusableInTouchMode = false
+                it.isFocusable = false
             }
+
+            buttonEditData.visibility = View.VISIBLE
+            buttonDone.visibility = View.GONE
+            buttonEditData.isEnabled = true
         }
     }
 

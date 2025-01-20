@@ -59,6 +59,7 @@
                 android:cursorVisible="true"
                 app:hideLineWhenFilled="false"
                 android:layout_gravity="center"
+                android:inputType="number"
                 app:itemRadius="0dp"
                 app:itemSpacing="5dp"
                 android:textSize="40sp"
