@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Like
 import com.example.sikoma.data.models.Post
+import com.example.sikoma.data.models.PostRequest
 import com.example.sikoma.data.remote.response.GenericResponse
 import com.example.sikoma.data.repository.PostRepository
 import okhttp3.MultipartBody
@@ -47,14 +48,6 @@ class PostViewModel(
         return repository.getLikePost(postId)
     }
 
-    fun likePost(userId: String, postId: String) : LiveData<GenericResponse<Like>> {
-        return repository.likePost(userId, postId)
-    }
-
-    fun unlikePost(userId: String, postId: String): LiveData<GenericResponse<Like>> {
-        return repository.unlikePost(userId, postId)
-    }
-
     fun toggleLike(userId: String, postId: String) : LiveData<GenericResponse<Like>>  {
         return repository.toggleLike(userId, postId)
     }
@@ -63,47 +56,11 @@ class PostViewModel(
         return repository.deletePostOrEvent(postId)
     }
 
-    fun addPost(
-        adminId: String,
-        adminBody: RequestBody,
-        description: RequestBody,
-        type: RequestBody,
-        eventName: RequestBody,
-        eventDate: RequestBody,
-        eventTime: RequestBody,
-        image: MultipartBody.Part
-    ) : LiveData<GenericResponse<Post>> {
-        return repository.addPostOrEvent(
-            adminId,
-            adminBody,
-            description,
-            type,
-            eventName,
-            eventDate,
-            eventTime,
-            image
-        )
+    fun addPost(postRequestBody: PostRequest) : LiveData<GenericResponse<Post>> {
+        return repository.addPostOrEvent(postRequestBody)
     }
 
-    fun editPost(
-        adminId: String,
-        adminBody: RequestBody,
-        description: RequestBody,
-        type: RequestBody,
-        eventName: RequestBody,
-        eventDate: RequestBody,
-        eventTime: RequestBody,
-        image: MultipartBody.Part
-    ) : LiveData<GenericResponse<Post>> {
-        return repository.editPostOrEvent(
-            adminId,
-            adminBody,
-            description,
-            type,
-            eventName,
-            eventDate,
-            eventTime,
-            image
-        )
+    fun editPost(postRequestBody: PostRequest) : LiveData<GenericResponse<Post>> {
+        return repository.editPostOrEvent(postRequestBody)
     }
 }

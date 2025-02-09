@@ -81,5 +81,10 @@
     <string name="no_org">There is no Organization</string>
     <string name="no_event">You have no event yet</string>
     <string name="no_notif">There is no Notification</string>
+    <string name="chooseImage">Choose Image</string>
+    <string name="caption">Write a caption....</string>
+    <string name="add_tags">Add Tag</string>
+    <string name="writeTag">Add Tag</string>
+    <string name="uploaded_success">Post Upload Successfully</string>
 
 </resources>

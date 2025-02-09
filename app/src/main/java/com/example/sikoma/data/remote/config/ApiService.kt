@@ -2,18 +2,13 @@ package com.example.sikoma.data.remote.config
 
 import com.example.sikoma.data.models.Admin
 import com.example.sikoma.data.models.EventParticipant
-import com.example.sikoma.data.models.FollowAdmin
-import com.example.sikoma.data.models.FollowTag
 import com.example.sikoma.data.models.Like
 import com.example.sikoma.data.models.Login
-import com.example.sikoma.data.models.Notification
-import com.example.sikoma.data.models.Otp
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.models.Register
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.data.models.User
 import com.example.sikoma.data.remote.request.LoginBodyRequest
-import com.example.sikoma.data.remote.request.OtpBodyRequest
 import com.example.sikoma.data.remote.request.RegisterBodyRequest
 import com.example.sikoma.data.remote.response.GenericResponse
 import okhttp3.MultipartBody
@@ -23,7 +18,6 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -119,7 +113,7 @@ interface ApiService {
         @Part("admin_id") adminBody: RequestBody,
         @Part("description") description: RequestBody,
         @Part("type") type: RequestBody,
-        @Part("event_name") eventName: RequestBody?,
+        @Part("event_location") eventLocation: RequestBody?,
         @Part("event_date") eventDate: RequestBody?,
         @Part("event_time") eventTime: RequestBody?,
         @Part image: MultipartBody.Part?
@@ -131,7 +125,7 @@ interface ApiService {
         @Part("admin_id") adminBody: RequestBody,
         @Part("description") description: RequestBody,
         @Part("type") type: RequestBody,
-        @Part("event_name") eventName: RequestBody?,
+        @Part("event_location") eventLocation: RequestBody?,
         @Part("event_date") eventDate: RequestBody?,
         @Part("event_time") eventTime: RequestBody?,
         @Part image: MultipartBody.Part?
@@ -158,49 +152,13 @@ interface ApiService {
         @Query("tag_name") tagName: String
     ): Call<GenericResponse<Tag>>
 
-    // FOLLOWING
-
-    @GET("follow/tag/{userId}")
-    fun getFollowTag(
-        @Path("userId") userId: String
-    ): Call<GenericResponse<List<FollowTag>>>
-
-    @GET("follow/admin/{userId}")
-    fun getFollowAdmin(
-        @Path("userId") userId: String
-    ): Call<GenericResponse<List<FollowAdmin>>>
-
-    @POST("follow/tag/{userId}")
-    fun followTag(
-        @Path("userId") userId: String,
-        @Query("tag_id") tagId: String
-    ): Call<GenericResponse<FollowTag>>
-
-    @POST("follow/admin/{userId}")
-    fun followAdmin(
-        @Path("userId") userId: String,
-        @Query("admin_id") adminId: String
-    ): Call<GenericResponse<FollowAdmin>>
-
-    @DELETE("follow/unfollow/tag/{userId}")
-    fun unfollowTag(
-        @Path("userId") userId: String,
-        @Query("tag_id") tagId: String
-    ): Call<GenericResponse<FollowTag>>
-
-    @DELETE("follow/unfollow/admin/{userId}")
-    fun unfollowAdmin(
-        @Path("userId") userId: String,
-        @Query("admin_id") adminId: String
-    ): Call<GenericResponse<FollowAdmin>>
-
     // EVENT PARTICIPATION
-    @GET("event/{postId}")
+    @GET("event/participant/{postId}")
     fun getParticipant(
         @Path("postId") postId: String
     ): Call<GenericResponse<List<EventParticipant>>>
 
-    @GET("event/{userId}")
+    @GET("event/post/{userId}")
     fun getParticipantUserId(
         @Path("userId") userId: String
     ): Call<GenericResponse<List<Post>>>
@@ -218,60 +176,16 @@ interface ApiService {
     ): Call<GenericResponse<EventParticipant>>
 
     // LIKES
-    @POST("posts/like/{userId}")
-    fun likePost(
-        @Path("userId") userId: String,
-        @Query("post_id") postId: String
-    ): Call<GenericResponse<Like>>
-
-    @DELETE("posts/unlike/{userId}")
-    fun unlikePost(
-        @Path("userId") userId: String,
-        @Query("post_id") postId: String
-    ): Call<GenericResponse<Like>>
-
-    @POST("posts/like/{postId}")
-    fun getLikePost(
-        @Path("postId") postId: String,
-    ): Call<GenericResponse<List<Like>>>
-
     @POST("posts/toggleLike/{userId}")
     fun toggleLike(
         @Path("userId") userId: String,
         @Query("post_id") postId: String
     ): Call<GenericResponse<Like>>
 
-    // NOTIFICATIONS
-    @POST("notifications/{userId}")
-    fun createNotification(
-        @Path("userId") userId: String,
-        @Query("post_id") postId: String
-    ): Call<GenericResponse<Notification>>
-
-    @PATCH("notifications/all/{userId}")
-    fun updateAllNotifications(
-        @Path("userId") userId: String,
-    ): Call<GenericResponse<Notification>>
-
-    @PATCH("notifications/one/{notifId}")
-    fun updateOneNotifications(
-        @Path("notifId") notifId: String,
-    ): Call<GenericResponse<Notification>>
-
-    @GET("notifications/info/{userId}")
-    fun getUserNotificationPost(
-        @Path("userId") userId: String
-    ): Call<GenericResponse<List<Post>>>
-
-    @GET("notifications/event/{userId}")
-    fun getUserNotificationEvent(
-        @Path("userId") userId: String
-    ): Call<GenericResponse<List<Post>>>
-
-    @GET("notifications/{notifId}")
-    fun getNotifById(
-        @Path("notifId") notifId: String
-    ): Call<GenericResponse<Notification>>
+    @GET("posts/like/{postId}")
+    fun getLikePost(
+        @Path("post_id") postId: String
+    ): Call<GenericResponse<List<Like>>>
 
     // REGISTER AND LOGIN
     @POST("register")
@@ -279,14 +193,9 @@ interface ApiService {
         @Body registerRequest: RegisterBodyRequest
     ): Call<GenericResponse<User>>
 
-    @POST("register/request-otp")
-    fun requestOtp(
-        @Body otpRequest: Register
-    ): Call<GenericResponse<Otp>>
-
-    @POST("register/verify-otp")
-    fun verifyOtp(
-        @Body verifyOtpRequest: OtpBodyRequest
+    @POST("register/check")
+    fun checkUser(
+        @Body checkRequest: Register
     ): Call<GenericResponse<Register>>
 
     @POST("login/")

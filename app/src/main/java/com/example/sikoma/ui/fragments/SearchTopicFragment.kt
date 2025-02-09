@@ -11,17 +11,16 @@ import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentSearchTopicBinding
 import com.example.sikoma.ui.adapters.TopicListAdapter
 import com.example.sikoma.ui.viewmodels.TagViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
-import com.example.sikoma.utils.OnTagClickListener
+import com.example.sikoma.ui.viewmodels.factory.TagViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
-class SearchTopicFragment(private val tagListener: OnTagClickListener) : Fragment() {
+class SearchTopicFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchTopicBinding
     private lateinit var topicListAdapter: TopicListAdapter
 
     private val viewModel: TagViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        TagViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -48,9 +47,7 @@ class SearchTopicFragment(private val tagListener: OnTagClickListener) : Fragmen
                 val topics = result.data
                 if (topics != null) {
                     binding.noData.visibility = View.GONE
-                    topicListAdapter = TopicListAdapter(topics) { tag ->
-                        tagListener.onTagClick(tag)
-                    }
+                    topicListAdapter = TopicListAdapter(topics)
                     binding.rvSearchTopic.apply {
                         layoutManager = LinearLayoutManager(requireContext())
                         adapter = topicListAdapter
@@ -91,5 +88,7 @@ class SearchTopicFragment(private val tagListener: OnTagClickListener) : Fragmen
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

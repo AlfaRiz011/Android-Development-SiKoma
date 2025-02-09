@@ -11,7 +11,7 @@ import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentSearchOrganizationBinding
 import com.example.sikoma.ui.adapters.OrganizationListAdapter
 import com.example.sikoma.ui.viewmodels.AdminViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AdminViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class SearchOrganizationFragment : Fragment() {
@@ -20,7 +20,7 @@ class SearchOrganizationFragment : Fragment() {
     private lateinit var organizationListAdapter : OrganizationListAdapter
 
     private val viewModel: AdminViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        AdminViewModelFactory.getInstance(requireContext().applicationContext)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,5 +91,7 @@ class SearchOrganizationFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

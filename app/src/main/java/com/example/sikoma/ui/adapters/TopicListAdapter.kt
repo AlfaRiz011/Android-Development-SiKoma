@@ -4,13 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sikoma.data.models.Tag
-import com.example.sikoma.databinding.ItemLookTopicBinding
 import com.example.sikoma.databinding.ItemSearchTopicBinding
-import com.example.sikoma.utils.OnTagClickListener
 
 class TopicListAdapter(
-    private val topics: List<Tag>,
-    private val tagListener: (Tag) -> Unit
+    private val topics: List<Tag>
 ) : RecyclerView.Adapter<TopicListAdapter.TopicViewHolder>() {
     inner class TopicViewHolder(val binding: ItemSearchTopicBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -24,8 +21,6 @@ class TopicListAdapter(
     override fun onBindViewHolder(holder: TopicViewHolder, position: Int) {
         val topic = topics[position]
         holder.binding.topicLabel.text = topic.tagName
-        holder.itemView.setOnClickListener { tagListener(topic) }
-
     }
 
     override fun getItemCount(): Int = topics.size

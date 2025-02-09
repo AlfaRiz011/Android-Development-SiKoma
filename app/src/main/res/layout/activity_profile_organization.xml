@@ -92,17 +92,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/banner"
                 app:layout_constraintTop_toBottomOf="@id/banner" />
 
-            <ImageButton
-                android:id="@+id/button_notification"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/shape_button_2"
-                android:src="@drawable/icon_notification_fill"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/banner"
-                app:tint="@color/whitePrimary" />
 
             <TextView
                 android:id="@+id/organization_name"
@@ -111,10 +100,11 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/organization_label"
                 android:textSize="20sp"
+                android:layout_marginEnd="30dp"
                 android:fontFamily="@font/roboto_bold"
-                app:layout_constraintTop_toBottomOf="@id/button_notification"
+                app:layout_constraintTop_toBottomOf="@id/profile_pic"
                 app:layout_constraintStart_toStartOf="@id/profile_pic"
-                app:layout_constraintEnd_toStartOf="@id/button_notification" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/organization_bio"
@@ -126,7 +116,7 @@
                 android:fontFamily="@font/roboto_regular"
                 app:layout_constraintTop_toBottomOf="@id/organization_name"
                 app:layout_constraintStart_toStartOf="@id/profile_pic"
-                app:layout_constraintEnd_toEndOf="@id/button_notification" />
+                app:layout_constraintEnd_toEndOf="@id/organization_name" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -163,7 +153,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"

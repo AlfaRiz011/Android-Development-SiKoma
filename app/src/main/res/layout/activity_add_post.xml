@@ -8,4 +8,256 @@
     android:background="@color/whitePrimary"
     tools:context=".ui.activities.AddPostActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/blueSecondary"
+            android:elevation="4dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:id="@+id/button_back"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/imageViewDescription"
+                    android:src="@drawable/icon_arrow_back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/center_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/imageViewDescription"
+                    android:src="@drawable/icon_app"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/button_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:fontFamily="@font/roboto_regular"
+                    android:background="@drawable/shape_button_3"
+                    android:textColor="@color/whitePrimary"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_container"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:contentDescription="@string/imageViewDescription"
+                tools:src="@drawable/gradient"
+                android:background="@color/bluePrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_choose_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:icon="@drawable/icon_image"
+                android:text="@string/chooseImage"
+                app:iconGravity="textStart"
+                android:backgroundTint="@color/transparent"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                app:layout_constraintBottom_toBottomOf="@id/image_container"
+                app:layout_constraintEnd_toEndOf="@id/image_container"
+                app:layout_constraintStart_toStartOf="@id/image_container"
+                app:layout_constraintTop_toTopOf="@id/image_container" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_container">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/event_label"
+                    android:paddingHorizontal="30dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/whitePrimary"
+                    android:background="@color/blueSecondary"
+                    app:thumbTint="@color/bluePrimary"
+                    app:trackTint="@color/whiteSecondary"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/caption_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" "
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    app:boxBackgroundMode="outline">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/caption"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:scrollHorizontally="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/blackTransparent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/topic_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/shape_tag"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                    tools:itemCount="14"
+                    tools:listitem="@layout/item_topic" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tag_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint=" "
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    app:boxBackgroundMode="outline">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/writeTag"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:scrollHorizontally="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/blackTransparent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_done_add_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:backgroundTint="@color/bluePrimary"
+                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_add_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_tags"
+                    android:layout_marginTop="10dp"
+                    app:icon="@drawable/icon_add"
+                    app:iconGravity="textStart"
+                    android:layout_marginHorizontal="20dp"
+                    style="@style/Widget.MaterialComponents.Button.Icon"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/location_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tempat_pelaksanaan"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:scrollHorizontally="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/blackTransparent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/date_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/tanggal_pelaksanaan"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="date"
+                        android:focusable="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/blackTransparent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/time_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/waktu_pelaksanaan"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:importantForAutofill="no"
+                        android:inputType="time"
+                        android:focusable="false"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/blackTransparent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

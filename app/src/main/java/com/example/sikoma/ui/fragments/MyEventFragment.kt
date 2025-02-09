@@ -12,20 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
 import com.example.sikoma.data.local.UserPreferences
-import com.example.sikoma.data.models.DateSection
-import com.example.sikoma.data.models.Notification
-import com.example.sikoma.data.models.Post
-import com.example.sikoma.data.models.PostItem
 import com.example.sikoma.databinding.FragmentMyEventBinding
 import com.example.sikoma.ui.viewmodels.EventViewModel
-import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.EventViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class MyEventFragment : Fragment() {
 
@@ -34,7 +26,7 @@ class MyEventFragment : Fragment() {
     private lateinit var adapter: MyEventAdapter
 
     private val viewModel: EventViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        EventViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     private lateinit var pref : UserPreferences
@@ -65,17 +57,13 @@ class MyEventFragment : Fragment() {
     }
 
     private fun setAdapter() {
-
         viewModel.getParticipantUserId(userId).observe(requireActivity()) {
             when {
                 it.status == "success" -> {
                     if (it.data != null) {
                         binding.noData.visibility = View.GONE
 
-                        val posts = it.data
-                        val groupedItems = groupPostsByDate(posts)
-
-                        adapter = MyEventAdapter(groupedItems)
+                        adapter = MyEventAdapter(it.data)
                         val layoutManager = LinearLayoutManager(requireContext())
                         binding.rvMyEventPost.layoutManager = layoutManager
                         binding.rvMyEventPost.adapter = adapter
@@ -88,32 +76,6 @@ class MyEventFragment : Fragment() {
         }
     }
 
-    private fun groupPostsByDate(posts: List<Post>): List<Any> {
-        val groupedItems = mutableListOf<Any>()
-
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val today = dateFormat.format(java.util.Date())
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.DAY_OF_YEAR, 1)
-        val tomorrow = dateFormat.format(calendar.time)
-
-        val grouped = posts.groupBy { it.eventDate }
-
-        for ((dateStr, postsOnDate) in grouped) {
-            val sectionTitle = when {
-                dateStr == today -> "Today"
-                dateStr == tomorrow -> "Tomorrow"
-                else -> dateStr
-            }
-            groupedItems.add(DateSection(sectionTitle))
-            postsOnDate.forEach { post ->
-                groupedItems.add(PostItem(post))
-            }
-        }
-
-        return groupedItems
-    }
-
     private fun setOnBack() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -123,7 +85,6 @@ class MyEventFragment : Fragment() {
                 }
             })
     }
-
 
     private fun handleError(error: Int?) {
         when (error) {
@@ -152,5 +113,7 @@ class MyEventFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

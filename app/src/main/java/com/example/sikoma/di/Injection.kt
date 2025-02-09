@@ -7,8 +7,6 @@ import com.example.sikoma.data.remote.config.ApiConfig
 import com.example.sikoma.data.repository.AdminRepository
 import com.example.sikoma.data.repository.AuthRepository
 import com.example.sikoma.data.repository.EventRepository
-import com.example.sikoma.data.repository.FollowRepository
-import com.example.sikoma.data.repository.NotificationRepository
 import com.example.sikoma.data.repository.PostRepository
 import com.example.sikoma.data.repository.TagRepository
 import com.example.sikoma.data.repository.UserRepository
@@ -19,7 +17,8 @@ object Injection {
 
     fun provideAuthRepository(context: Context): AuthRepository {
         val pref = UserPreferences.getInstance(context.dataStore)
-        val apiService = ApiConfig.getApiInstance("")
+        val token = runBlocking { pref.getUserToken().first() }
+        val apiService = ApiConfig.getApiInstance(token)
         return AuthRepository.getInstance(apiService, pref)
     }
 
@@ -42,20 +41,6 @@ object Injection {
         val token = runBlocking { pref.getUserToken().first() }
         val apiService = ApiConfig.getApiInstance(token)
         return EventRepository.getInstance(apiService, pref)
-    }
-
-    fun provideFollowRepository(context: Context): FollowRepository {
-        val pref = UserPreferences.getInstance(context.dataStore)
-        val token = runBlocking { pref.getUserToken().first() }
-        val apiService = ApiConfig.getApiInstance(token)
-        return FollowRepository.getInstance(apiService, pref)
-    }
-
-    fun provideNotificationRepository(context: Context): NotificationRepository {
-        val pref = UserPreferences.getInstance(context.dataStore)
-        val token = runBlocking { pref.getUserToken().first() }
-        val apiService = ApiConfig.getApiInstance(token)
-        return NotificationRepository.getInstance(apiService, pref)
     }
 
     fun providePostRepository(context: Context): PostRepository {

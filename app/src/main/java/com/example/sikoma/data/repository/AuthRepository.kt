@@ -1,11 +1,9 @@
 package com.example.sikoma.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Login
-import com.example.sikoma.data.models.Otp
 import com.example.sikoma.data.models.Register
 import com.example.sikoma.data.models.User
 import com.example.sikoma.data.remote.config.ApiService
@@ -69,15 +67,12 @@ class AuthRepository(
         val resultLiveData = MutableLiveData<GenericResponse<Login>>()
         val client = apiService.login(loginBodyRequest)
 
-        Log.d("LoginDebug", "Memulai permintaan login ke server...")
-
         client.enqueue(object : Callback<GenericResponse<Login>> {
             override fun onResponse(
                 call: Call<GenericResponse<Login>>,
                 response: Response<GenericResponse<Login>>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("LoginDebug", "Berhasil mendapatkan respons dari server.")
                     resultLiveData.value = response.body()
 
                     CoroutineScope(Dispatchers.IO).launch {
@@ -86,17 +81,14 @@ class AuthRepository(
                                 pref.saveUser(it.user)
                                 pref.saveRole("user")
                             } else {
-                                Log.d("LoginDebug", "Login sebagai admin.")
                                 pref.saveAdmin(it.admin)
                                 pref.saveRole("admin")
                             }
                             pref.saveTokenUser(it.token)
                             pref.setSession()
-                            Log.d("LoginDebug", "Data user/admin dan token berhasil disimpan.")
                         }
                     }
                 } else {
-                    Log.d("LoginDebug", "Gagal mendapatkan respons yang sukses dari server. Kode respons: ${response.code()}")
                     resultLiveData.value = GenericResponse(
                         message = response.code().toString(),
                         status = response.body()?.status,
@@ -107,7 +99,6 @@ class AuthRepository(
             }
 
             override fun onFailure(call: Call<GenericResponse<Login>>, t: Throwable) {
-                Log.d("LoginDebug", "Gagal terhubung ke server. Kesalahan: ${t.message}")
                 resultLiveData.value = GenericResponse(
                     message = "500",
                     status = "error",
@@ -120,46 +111,10 @@ class AuthRepository(
         return resultLiveData
     }
 
-
-    fun requestOtp(otpRequest: Register) : LiveData<GenericResponse<Otp>>{
-        _isLoading.value = true
-        val resultLiveData = MutableLiveData<GenericResponse<Otp>>()
-        val client = apiService.requestOtp(otpRequest = otpRequest)
-
-        client.enqueue(object : Callback<GenericResponse<Otp>> {
-            override fun onResponse(
-                call: Call<GenericResponse<Otp>>,
-                response: Response<GenericResponse<Otp>>
-            ) {
-                if (response.isSuccessful) {
-                    resultLiveData.value = response.body()
-                } else {
-                    resultLiveData.value = GenericResponse(
-                        message = response.code().toString(),
-                        status = response.body()?.status,
-                        data = null
-                    )
-                }
-                _isLoading.value = false
-            }
-
-            override fun onFailure(call: Call<GenericResponse<Otp>>, t: Throwable) {
-                resultLiveData.value = GenericResponse(
-                    message = "500",
-                    status = "error",
-                    data = null
-                )
-                _isLoading.value = false
-            }
-        })
-
-        return resultLiveData
-    }
-
-    fun verifyOtp(otpBodyRequest: OtpBodyRequest) : LiveData<GenericResponse<Register>>{
+    fun checkUser(register: Register) : LiveData<GenericResponse<Register>>{
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<Register>>()
-        val client = apiService.verifyOtp(otpBodyRequest)
+        val client = apiService.checkUser(register)
 
         client.enqueue(object : Callback<GenericResponse<Register>> {
             override fun onResponse(

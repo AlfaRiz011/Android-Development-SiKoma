@@ -8,14 +8,10 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.activityViewModels
 import com.example.sikoma.R
-import com.example.sikoma.data.models.Otp
-import com.example.sikoma.data.models.Register
-import com.example.sikoma.data.models.User
-import com.example.sikoma.data.remote.request.OtpBodyRequest
 import com.example.sikoma.data.remote.request.RegisterBodyRequest
 import com.example.sikoma.databinding.FragmentCompleteBioBinding
 import com.example.sikoma.ui.viewmodels.AuthViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AuthViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class CompleteBioFragment : Fragment() {
@@ -23,7 +19,7 @@ class CompleteBioFragment : Fragment() {
     private lateinit var binding: FragmentCompleteBioBinding
 
     private val viewModel: AuthViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        AuthViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     private var email: String? = null
@@ -57,32 +53,31 @@ class CompleteBioFragment : Fragment() {
             inputEmail.hint = email
 
             buttonDone.setOnClickListener {
-                val isValid = ValidatorAuthHelper.validateInputBio(
-                    requireContext(),
-                    nameLayout,
-                    nimLayout,
-                    prodiLayout,
-                    facultyLayout,
-                    inputName,
-                    inputNim,
-                    inputStudyProgram,
-                    inputFaculty
-                )
+                if (ValidatorAuthHelper.validateInputBio(
+                        requireContext(),
+                        nameLayout,
+                        nimLayout,
+                        prodiLayout,
+                        facultyLayout,
+                        inputName,
+                        inputNim,
+                        inputStudyProgram,
+                        inputFaculty
+                    )
+                ) {
+                    val dataRegister = RegisterBodyRequest(
+                        email = email,
+                        password = password,
+                        fullName = inputName.text.toString(),
+                        nim = inputNim.text.toString(),
+                        studyProg = inputStudyProgram.text.toString(),
+                        faculty = inputFaculty.text.toString(),
+                        profilePic = ""
+                    )
 
-                val dataRegister = RegisterBodyRequest(
-                    email = email,
-                    password = password,
-                    fullName = inputName.toString(),
-                    nim = inputNim.toString(),
-                    studyProg = inputStudyProgram.toString(),
-                    faculty = inputFaculty.toString(),
-                    profilePic = ""
-                )
-
-                if (isValid) {
-                    viewModel.register(dataRegister).observe(requireActivity()) {
-                        when {
-                            it.status == "success" -> {
+                    viewModel.register(dataRegister).observe(requireActivity()) { result ->
+                        when (result.status) {
+                            "success" -> {
                                 val nextFragment = LoginFragment().apply {
                                     arguments = Bundle().apply {
                                         putString("email", email)
@@ -90,19 +85,18 @@ class CompleteBioFragment : Fragment() {
                                     }
                                 }
 
-                                parentFragmentManager.beginTransaction().apply {
-                                    setCustomAnimations(
+                                parentFragmentManager.beginTransaction()
+                                    .setCustomAnimations(
                                         R.anim.slide_in_right,
                                         R.anim.slide_out_left,
                                         R.anim.slide_in_left,
                                         R.anim.slide_out_right
                                     )
-                                    replace(R.id.fragment_container_auth, nextFragment)
-                                    addToBackStack(null)
-                                }.commit()
+                                    .replace(R.id.fragment_container_auth, nextFragment)
+                                    .addToBackStack(null)
+                                    .commit()
                             }
-
-                            else -> handleError(it.message?.toInt())
+                            else -> handleError(result.message?.toInt())
                         }
                     }
                 }

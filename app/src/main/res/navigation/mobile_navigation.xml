@@ -17,12 +17,6 @@
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/nav_notification"
-        android:name="com.example.sikoma.ui.fragments.NotificationFragment"
-        android:label="@string/notification_label"
-        tools:layout="@layout/fragment_notification" />
-
-    <fragment
         android:id="@+id/nav_myevent"
         android:name="com.example.sikoma.ui.fragments.MyEventFragment"
         android:label="@string/activity_label"

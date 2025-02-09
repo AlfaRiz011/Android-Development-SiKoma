@@ -11,7 +11,7 @@ import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentEventPostBinding
 import com.example.sikoma.ui.adapters.EventPostAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class EventPostFragment : Fragment() {
@@ -19,7 +19,7 @@ class EventPostFragment : Fragment() {
     private lateinit var postAdapter: EventPostAdapter
 
     private val viewModel: PostViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -89,5 +89,7 @@ class EventPostFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

@@ -11,11 +11,9 @@ import com.bumptech.glide.Glide
 import com.example.sikoma.R
 import com.example.sikoma.databinding.ActivityHomeAdminBinding
 import com.example.sikoma.ui.fragments.HomeAdminFragment
-import com.example.sikoma.ui.fragments.HomeFragment
 import com.example.sikoma.ui.fragments.StatisticFragment
 import com.example.sikoma.ui.viewmodels.AdminViewModel
-import com.example.sikoma.ui.viewmodels.UserViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AdminViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -25,7 +23,7 @@ class HomeAdminActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeAdminBinding
     
     private val viewModel: AdminViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
+        AdminViewModelFactory.getInstance(this)
     } 
     
     private val pref = viewModel.preferences
@@ -49,17 +47,6 @@ class HomeAdminActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        Glide.with(this)
-            .load(R.drawable.logo_upn)
-            .placeholder(R.drawable.icon_profile_fill)
-            .into(binding.profilePic)
-
-
-        binding.profilePic.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun setNavBar() {

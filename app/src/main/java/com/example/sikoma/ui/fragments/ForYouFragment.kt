@@ -13,7 +13,7 @@ import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.databinding.FragmentForYouBinding
 import com.example.sikoma.ui.adapters.ForYouAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class ForYouFragment : Fragment() {
     private lateinit var postAdapter: ForYouAdapter
 
     private val viewModel: PostViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     private lateinit var pref : UserPreferences
@@ -104,5 +104,7 @@ class ForYouFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

@@ -9,10 +9,9 @@ import androidx.activity.OnBackPressedCallback
 import com.example.sikoma.R
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.databinding.FragmentSearchBinding
-import com.example.sikoma.utils.OnTagClickListener
 import com.google.android.material.tabs.TabLayout
 
-class SearchFragment : Fragment(), OnTagClickListener {
+class SearchFragment : Fragment(){
 
     private lateinit var binding: FragmentSearchBinding
     override fun onCreateView(
@@ -28,13 +27,6 @@ class SearchFragment : Fragment(), OnTagClickListener {
 
         setOnBack()
         setTabLayout()
-        setView()
-    }
-
-    private fun setView() {
-        binding.tagCard.backButtonSchedule.setOnClickListener{
-            binding.tagCard.layoutSeeTopic.visibility = View.GONE
-        }
     }
 
     private fun setTabLayout() {
@@ -46,7 +38,7 @@ class SearchFragment : Fragment(), OnTagClickListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
                         0 -> switchFragment(SearchOrganizationFragment())
-                        1 -> switchFragment(SearchTopicFragment(this@SearchFragment))
+                        1 -> switchFragment(SearchTopicFragment())
                     }
                 }
 
@@ -75,12 +67,5 @@ class SearchFragment : Fragment(), OnTagClickListener {
                     requireActivity().finish()
                 }
             })
-    }
-
-    override fun onTagClick(tag: Tag) {
-        binding.apply {
-            tagCard.topicTitle.text = tag.tagName
-            tagCard.layoutSeeTopic.visibility = View.VISIBLE
-        }
     }
 }

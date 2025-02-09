@@ -8,12 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
-import com.example.sikoma.data.models.Admin
 import com.example.sikoma.databinding.FragmentAllPostBinding
 import com.example.sikoma.ui.adapters.AllPostAdapter
 import com.example.sikoma.ui.viewmodels.AdminViewModel
 import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AdminViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class AllPostFragment : Fragment() {
@@ -22,11 +22,11 @@ class AllPostFragment : Fragment() {
     private lateinit var postAdapter: AllPostAdapter
 
     private val viewModel: PostViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     private val adminViewModel: AdminViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        AdminViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -71,8 +71,6 @@ class AllPostFragment : Fragment() {
             }
 
         }
-
-
     }
 
     private fun handleError(error: Int?) {
@@ -102,5 +100,7 @@ class AllPostFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

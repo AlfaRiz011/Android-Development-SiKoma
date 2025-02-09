@@ -13,14 +13,14 @@ import com.example.sikoma.data.models.Register
 import com.example.sikoma.data.remote.request.OtpBodyRequest
 import com.example.sikoma.databinding.FragmentRegisterBinding
 import com.example.sikoma.ui.viewmodels.AuthViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AuthViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
     private val viewModel: AuthViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        AuthViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     override fun onCreateView(
@@ -50,73 +50,46 @@ class RegisterFragment : Fragment() {
     }
 
     private fun setView() {
-
-        viewModel.isLoading.observe(requireActivity()) {
-            showLoading(it)
-        }
-
         binding.apply {
 
             buttonRegister.setOnClickListener {
-                val isValid = ValidatorAuthHelper.validateInputAuth(
-                    requireContext(),
-                    emailInputLayout,
-                    passwordInputLayout,
-                    inputEmail,
-                    inputPassword
-                )
+                if (ValidatorAuthHelper.validateInputAuth(
+                        requireContext(),
+                        emailInputLayout,
+                        passwordInputLayout,
+                        inputEmail,
+                        inputPassword
+                    )
+                ) {
+                    val data = Register(
+                        email = inputEmail.text.toString(),
+                        password = inputPassword.text.toString()
+                    )
 
-                val dataReqOTP = Register(
-                    email = inputEmail.toString(),
-                    password = inputPassword.toString()
-                )
+                    viewModel.checkUser(data).observe(requireActivity()) { result ->
+                        when (result.status) {
+                            "success" -> {
+                                val nextFragment = CompleteBioFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putString("email", data.email)
+                                        putString("password", data.password)
+                                    }
+                                }
 
-                if (isValid) {
-                    viewModel.requestOTP(dataReqOTP).observe(requireActivity()) {
-                        when {
-                            it.status == "success" -> {
-                                otpInclude.layoutOtp.visibility = View.VISIBLE
-                            }
-
-                            else -> handleError(it.message?.toInt())
-                        }
-                    }
-                }
-            }
-
-            otpInclude.buttonSendOtp.setOnClickListener {
-
-                val otpString = otpInclude.pinview.text.toString()
-                val otpInt = otpString.toIntOrNull()
-
-                val dataVerifyOTP = OtpBodyRequest(
-                    otp = otpInt,
-                    email = inputEmail.text.toString()
-                )
-
-                viewModel.verifyOTP(dataVerifyOTP).observe(requireActivity()) {
-                    when {
-                        it.status == "success" -> {
-                            val nextFragment = CompleteBioFragment().apply {
-                                arguments = Bundle().apply {
-                                    putString("email", inputEmail.text.toString())
-                                    putString("password", inputPassword.text.toString())
+                                parentFragmentManager.beginTransaction().apply {
+                                    setCustomAnimations(
+                                        R.anim.slide_in_right,
+                                        R.anim.slide_out_left,
+                                        R.anim.slide_in_left,
+                                        R.anim.slide_out_right
+                                    )
+                                    replace(R.id.fragment_container_auth, nextFragment)
+                                    addToBackStack(null)
+                                    commit()
                                 }
                             }
-
-                            parentFragmentManager.beginTransaction().apply {
-                                setCustomAnimations(
-                                    R.anim.slide_in_right,
-                                    R.anim.slide_out_left,
-                                    R.anim.slide_in_left,
-                                    R.anim.slide_out_right
-                                )
-                                replace(R.id.fragment_container_auth, nextFragment)
-                                addToBackStack(null)
-                            }.commit()
+                            else -> handleError(result.message?.toInt())
                         }
-
-                        else -> handleError(it.message?.toInt())
                     }
                 }
             }
@@ -131,10 +104,12 @@ class RegisterFragment : Fragment() {
                     )
                     replace(R.id.fragment_container_auth, LoginFragment())
                     addToBackStack(null)
-                }.commit()
+                    commit()
+                }
             }
         }
     }
+
 
     private fun handleError(error: Int?) {
         when (error) {
@@ -158,10 +133,5 @@ class RegisterFragment : Fragment() {
                 getString(R.string.error_server_500)
             )
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility =
-            if (isLoading) View.VISIBLE else View.GONE
     }
 }

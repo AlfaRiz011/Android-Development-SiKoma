@@ -1,7 +1,6 @@
 package com.example.sikoma.ui.activities
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -13,7 +12,7 @@ import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.User
 import com.example.sikoma.databinding.ActivityProfileBinding
 import com.example.sikoma.ui.viewmodels.UserViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.UserViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var user : User
 
     private val viewModel: UserViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
+        UserViewModelFactory.getInstance(this)
     }
 
     private lateinit var pref : UserPreferences

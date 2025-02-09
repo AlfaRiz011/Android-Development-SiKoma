@@ -33,7 +33,7 @@ class EventRepository (
                 if (response.isSuccessful) {
                     resultLiveData.value = response.body()
                 } else {
-                    resultLiveData.value = GenericResponse(
+                    resultLiveData.value = GenericResponse<List<EventParticipant>>(
                         message = response.code().toString(),
                         status = response.body()?.status,
                         data = null
@@ -43,7 +43,7 @@ class EventRepository (
             }
 
             override fun onFailure(call: Call<GenericResponse<List<EventParticipant>>>, t: Throwable) {
-                resultLiveData.value = GenericResponse(
+                resultLiveData.value = GenericResponse<List<EventParticipant>>(
                     message = "500",
                     status = "error",
                     data = null

@@ -6,10 +6,19 @@
     android:layout_width="match_parent"
     android:id="@+id/layout_confirm_join"
     android:elevation="10dp"
-    android:visibility="visible"
-    android:background="@color/blackTransparent"
+    android:visibility="gone"
+    android:background="@color/transparent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blackTransparent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"

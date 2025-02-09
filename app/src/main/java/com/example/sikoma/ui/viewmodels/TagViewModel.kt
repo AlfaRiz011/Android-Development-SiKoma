@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.data.remote.response.GenericResponse
-import com.example.sikoma.data.repository.NotificationRepository
 import com.example.sikoma.data.repository.TagRepository
 
 class TagViewModel(

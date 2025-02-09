@@ -15,14 +15,14 @@ import com.example.sikoma.databinding.FragmentLoginBinding
 import com.example.sikoma.ui.activities.HomeActivity
 import com.example.sikoma.ui.activities.HomeAdminActivity
 import com.example.sikoma.ui.viewmodels.AuthViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AuthViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val viewModel: AuthViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        AuthViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     private lateinit var dataLogin: LoginBodyRequest
@@ -52,51 +52,43 @@ class LoginFragment : Fragment() {
 
 
     private fun setView() {
-
-        viewModel.isLoading.observe(requireActivity()) {
-            showLoading(it)
-        }
-
         binding.apply {
-
             inputEmail.setText(email)
             inputPassword.setText(password)
 
-
             buttonLogin.setOnClickListener {
-                val isValid = ValidatorAuthHelper.validateInputAuth(
-                    requireContext(),
-                    emailInputLayout,
-                    passwordInputLayout,
-                    inputEmail,
-                    inputPassword
-                )
+                if (ValidatorAuthHelper.validateInputAuth(
+                        requireContext(),
+                        emailInputLayout,
+                        passwordInputLayout,
+                        inputEmail,
+                        inputPassword
+                    )
+                ) {
+                    val dataLogin = LoginBodyRequest(
+                        email = inputEmail.text.toString(),
+                        password = inputPassword.text.toString()
+                    )
 
-                dataLogin = LoginBodyRequest(
-                    email = inputEmail.text.toString(),
-                    password = inputPassword.text.toString()
-                )
-
-                if (isValid) {
                     viewModel.login(dataLogin).observe(requireActivity()) { result ->
-                        when {
-                            result.status.toString() == "success" -> {
-                                val destinationActivity = when (result.data?.role) {
+                        when (result.status) {
+                            "success" -> {
+                                val activityClass = when (result.data?.role) {
                                     "user" -> HomeActivity::class.java
                                     "admin" -> HomeAdminActivity::class.java
                                     else -> null
                                 }
-                                destinationActivity?.let {
-                                    startActivity(Intent(requireActivity(), it))
+                                activityClass?.let {
+                                    startActivity(Intent(requireActivity(), it).apply {
+                                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    })
                                     requireActivity().finish()
                                 }
                             }
-
                             else -> handleError(result.message?.toInt())
                         }
                     }
                 }
-
             }
 
             registerPage.setOnClickListener {
@@ -109,10 +101,12 @@ class LoginFragment : Fragment() {
                     )
                     replace(R.id.fragment_container_auth, RegisterFragment())
                     addToBackStack(null)
-                }.commit()
+                    commit()
+                }
             }
         }
     }
+
 
     private fun handleError(error: Int?) {
         when (error) {
@@ -146,10 +140,5 @@ class LoginFragment : Fragment() {
                     requireActivity().finish()
                 }
             })
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility =
-            if (isLoading) View.VISIBLE else View.GONE
     }
 }

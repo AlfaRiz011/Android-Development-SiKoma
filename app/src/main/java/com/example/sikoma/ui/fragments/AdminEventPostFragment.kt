@@ -9,10 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentAdminEventPostBinding
-import com.example.sikoma.ui.adapters.AllPostAdapter
 import com.example.sikoma.ui.adapters.EventPostAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
 class AdminEventPostFragment(private val adminId: String) : Fragment() {
@@ -21,7 +20,7 @@ class AdminEventPostFragment(private val adminId: String) : Fragment() {
     private lateinit var postAdapter: EventPostAdapter
 
     private val viewModel: PostViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,5 +87,7 @@ class AdminEventPostFragment(private val adminId: String) : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+        binding.noData.visibility =
+            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

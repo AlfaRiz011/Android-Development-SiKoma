@@ -15,7 +15,7 @@ import com.example.sikoma.R
 import com.example.sikoma.data.models.Post
 import com.example.sikoma.databinding.FragmentHomeAdminBinding
 import com.example.sikoma.ui.viewmodels.PostViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
@@ -25,8 +25,9 @@ class HomeAdminFragment(private val adminId: String) : Fragment() {
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var constraintLayout: ConstraintLayout
+
     private val viewModel: PostViewModel by activityViewModels {
-        ViewModelFactory.getInstance(requireContext().applicationContext)
+        PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
     override fun onCreateView(

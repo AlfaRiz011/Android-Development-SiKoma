@@ -1,6 +1,5 @@
 package com.example.sikoma.ui.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,10 +10,8 @@ import com.example.sikoma.R
 import com.example.sikoma.databinding.ActivityProfileOrganizationBinding
 import com.example.sikoma.ui.fragments.AdminEventPostFragment
 import com.example.sikoma.ui.fragments.AdminPostFragment
-import com.example.sikoma.ui.fragments.AllPostFragment
-import com.example.sikoma.ui.fragments.EventPostFragment
 import com.example.sikoma.ui.viewmodels.AdminViewModel
-import com.example.sikoma.ui.viewmodels.factory.ViewModelFactory
+import com.example.sikoma.ui.viewmodels.factory.AdminViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.tabs.TabLayout
 
@@ -24,7 +21,7 @@ class ProfileOrganizationActivity : AppCompatActivity() {
     private lateinit var adminId: String
 
     private val viewModel: AdminViewModel by viewModels {
-        ViewModelFactory.getInstance(this)
+        AdminViewModelFactory.getInstance(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +37,14 @@ class ProfileOrganizationActivity : AppCompatActivity() {
 
         setView()
         setTabLayout()
+        setAppBar()
+    }
+
+    private fun setAppBar() {
+        setSupportActionBar(binding.toolbar)
+        binding.buttonBack.setOnClickListener { finish() }
+
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun setTabLayout() {
