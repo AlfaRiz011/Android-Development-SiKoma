@@ -87,7 +87,5 @@ class AdminEventPostFragment(private val adminId: String) : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
-        binding.noData.visibility =
-            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

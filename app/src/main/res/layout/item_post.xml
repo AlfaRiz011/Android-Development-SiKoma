@@ -51,6 +51,7 @@
         tools:src="@tools:sample/avatars"
         android:background="@color/bluePrimary"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintTop_toBottomOf="@id/post_content"
         app:layout_constraintStart_toStartOf="@id/post_content"
         app:layout_constraintEnd_toEndOf="parent"/>

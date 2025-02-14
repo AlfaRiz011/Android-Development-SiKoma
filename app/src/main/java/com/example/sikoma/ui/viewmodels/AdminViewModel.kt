@@ -10,7 +10,7 @@ import okhttp3.MultipartBody
 
 class AdminViewModel(
     private val repository: AdminRepository,
-    private val pref: UserPreferences
+    pref: UserPreferences
 ) : ViewModel() {
 
     var preferences = pref

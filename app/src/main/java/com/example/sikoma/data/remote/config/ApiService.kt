@@ -135,7 +135,11 @@ interface ApiService {
     fun deletePost(
         @Path("postId") postId: String
     ): Call<GenericResponse<Post>>
-
+    
+    @GET("posts/tags/tagName")
+    fun getPostByTags(
+        @Query("tag_name") tagName: String
+    ): Call<GenericResponse<List<Post>>>
 
     // TAGS
     @GET("tags")
@@ -184,7 +188,7 @@ interface ApiService {
 
     @GET("posts/like/{postId}")
     fun getLikePost(
-        @Path("post_id") postId: String
+        @Path("postId") postId: String
     ): Call<GenericResponse<List<Like>>>
 
     // REGISTER AND LOGIN

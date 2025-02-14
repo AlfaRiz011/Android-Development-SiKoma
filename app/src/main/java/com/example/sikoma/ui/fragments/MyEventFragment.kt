@@ -2,6 +2,7 @@ package com.example.sikoma.ui.fragments
 
 import MyEventAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,24 +47,26 @@ class MyEventFragment : Fragment() {
 
         lifecycleScope.launch {
             userId = pref.getUser().first()?.userId.toString()
+            Log.d("MyEventFragment", "User ID: $userId")
+            setAdapter()
         }
+
 
         viewModel.isLoading.observe(requireActivity()) {
             showLoading(it)
         }
 
         setOnBack()
-        setAdapter()
     }
 
     private fun setAdapter() {
-        viewModel.getParticipantUserId(userId).observe(requireActivity()) {
-            when {
-                it.status == "success" -> {
-                    if (it.data != null) {
+        viewModel.getParticipantUserId(userId).observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+                "success" -> {
+                    if (!response.data.isNullOrEmpty()) {
                         binding.noData.visibility = View.GONE
 
-                        adapter = MyEventAdapter(it.data)
+                        adapter = MyEventAdapter(response.data)
                         val layoutManager = LinearLayoutManager(requireContext())
                         binding.rvMyEventPost.layoutManager = layoutManager
                         binding.rvMyEventPost.adapter = adapter
@@ -71,7 +74,7 @@ class MyEventFragment : Fragment() {
                         binding.noData.visibility = View.VISIBLE
                     }
                 }
-                else -> handleError(it.message?.toInt())
+                else -> handleError(response.message?.toInt())
             }
         }
     }
@@ -113,7 +116,5 @@ class MyEventFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
-        binding.noData.visibility =
-            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

@@ -91,7 +91,5 @@ class SearchOrganizationFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
-        binding.noData.visibility =
-            if (!isLoading) View.VISIBLE else View.GONE
     }
 }

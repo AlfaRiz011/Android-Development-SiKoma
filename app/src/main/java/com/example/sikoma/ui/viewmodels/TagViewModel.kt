@@ -9,7 +9,7 @@ import com.example.sikoma.data.repository.TagRepository
 
 class TagViewModel(
     private val repository: TagRepository,
-    private val pref: UserPreferences
+    pref: UserPreferences
 ): ViewModel() {
     var preferences = pref
     var isLoading = repository.isLoading

@@ -10,7 +10,7 @@ import com.example.sikoma.data.repository.EventRepository
 
 class EventViewModel(
     private val repository: EventRepository,
-    private val pref: UserPreferences
+    pref: UserPreferences
 ): ViewModel() {
     var preferences = pref
     var isLoading = repository.isLoading

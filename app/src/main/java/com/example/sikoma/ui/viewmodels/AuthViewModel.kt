@@ -14,7 +14,7 @@ import com.example.sikoma.data.repository.AuthRepository
 
 class AuthViewModel(
     private val repository: AuthRepository,
-    private val pref: UserPreferences
+    pref: UserPreferences
 ) : ViewModel() {
 
     var preferences = pref

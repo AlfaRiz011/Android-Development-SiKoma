@@ -8,7 +8,7 @@ import okhttp3.MultipartBody
 
 class UserViewModel(
     private val repository: UserRepository,
-    private val pref: UserPreferences
+    pref: UserPreferences
 ): ViewModel() {
     var preferences = pref
     var isLoading = repository.isLoading

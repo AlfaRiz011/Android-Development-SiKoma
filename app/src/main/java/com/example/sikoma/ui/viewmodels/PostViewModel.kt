@@ -44,6 +44,10 @@ class PostViewModel(
         return repository.getEventPostAdmin(adminId)
     }
 
+    fun getPostByTag(tagName: String) : LiveData<GenericResponse<List<Post>>>  {
+        return repository.getPostByTags(tagName)
+    }
+
     fun getLikePost(postId: String): LiveData<GenericResponse<List<Like>>>   {
         return repository.getLikePost(postId)
     }

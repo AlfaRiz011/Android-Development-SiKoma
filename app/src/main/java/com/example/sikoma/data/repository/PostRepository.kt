@@ -8,8 +8,6 @@ import com.example.sikoma.data.models.Post
 import com.example.sikoma.data.models.PostRequest
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -220,6 +218,41 @@ class PostRepository(
         _isLoading.value = true
         val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
         val client = apiService.getPostByAdmin(adminId = adminId)
+
+        client.enqueue(object : Callback<GenericResponse<List<Post>>> {
+            override fun onResponse(
+                call: Call<GenericResponse<List<Post>>>,
+                response: Response<GenericResponse<List<Post>>>
+            ) {
+                if (response.isSuccessful) {
+                    resultLiveData.value = response.body()
+                } else {
+                    resultLiveData.value = GenericResponse(
+                        message = response.code().toString(),
+                        status = response.body()?.status,
+                        data = null
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onFailure(call: Call<GenericResponse<List<Post>>>, t: Throwable) {
+                resultLiveData.value = GenericResponse(
+                    message = "500",
+                    status = "error",
+                    data = null
+                )
+                _isLoading.value = false
+            }
+        })
+
+        return resultLiveData
+    }
+
+    fun getPostByTags (tagName:String) : LiveData<GenericResponse<List<Post>>> {
+        _isLoading.value = true
+        val resultLiveData = MutableLiveData<GenericResponse<List<Post>>>()
+        val client = apiService.getPostByTags(tagName = tagName)
 
         client.enqueue(object : Callback<GenericResponse<List<Post>>> {
             override fun onResponse(
