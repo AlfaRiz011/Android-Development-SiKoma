@@ -3,6 +3,7 @@ package com.example.sikoma.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.sikoma.data.local.UserPreferences
+import com.example.sikoma.data.models.Admin
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.data.remote.config.ApiService
 import com.example.sikoma.data.remote.response.GenericResponse
@@ -123,6 +124,39 @@ class TagRepository (
         return resultLiveData
     }
 
+    fun getTagByName(tagName: String) : LiveData<GenericResponse<List<Tag>>>{
+        _isLoading.value = true
+        val resultLiveData = MutableLiveData<GenericResponse<List<Tag>>>()
+        val client = apiService.getTagsByName(tagName = tagName)
+
+        client.enqueue(object : Callback<GenericResponse<List<Tag>>> {
+            override fun onResponse(
+                call: Call<GenericResponse<List<Tag>>>,
+                response: Response<GenericResponse<List<Tag>>>
+            ) {
+                if (response.isSuccessful) {
+                    resultLiveData.value = response.body()
+                } else {
+                    resultLiveData.value = GenericResponse(
+                        message = response.code().toString(),
+                        status = response.body()?.status,
+                        data = null
+                    )
+                }
+                _isLoading.value = false
+            }
+
+            override fun onFailure(call: Call<GenericResponse<List<Tag>>>, t: Throwable) {
+                resultLiveData.value = GenericResponse(
+                    message = "500",
+                    status = "error",
+                    data = null
+                )
+                _isLoading.value = false
+            }
+        })
+        return resultLiveData
+    }
 
     companion object {
         @Volatile

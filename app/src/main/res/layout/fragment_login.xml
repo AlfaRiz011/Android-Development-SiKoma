@@ -149,4 +149,31 @@
         app:layout_constraintStart_toEndOf="@id/haveNo"
         app:layout_constraintTop_toBottomOf="@id/card" />
 
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:textSize="16sp"
+        android:textColor="@color/bluePrimary"
+        android:fontFamily="@font/poppins_bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:indeterminate="true"
+        android:progressTint="@color/bluePrimary"
+        android:layout_marginHorizontal="20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

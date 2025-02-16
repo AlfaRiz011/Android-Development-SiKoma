@@ -14,10 +14,12 @@ import com.example.sikoma.ui.viewmodels.PostViewModel
 import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.utils.ValidatorAuthHelper
 
-class AdminPostFragment(private val adminId: String) : Fragment() {
+class AdminPostFragment : Fragment() {
 
     private lateinit var binding: FragmentAdminPostBinding
     private lateinit var postAdapter: AllPostAdapter
+    private val adminId: String?
+        get() = arguments?.getString(ARG_ADMIN_ID)
 
     private val viewModel: PostViewModel by activityViewModels {
         PostViewModelFactory.getInstance(requireContext().applicationContext)
@@ -42,22 +44,24 @@ class AdminPostFragment(private val adminId: String) : Fragment() {
     }
 
     private fun setAdapter() {
-        viewModel.getPostAdmin(adminId).observe(requireActivity()){
-            when {
-                it.status == "success" ->{
-                    val posts = it.data
+        adminId?.let { id ->
+            viewModel.getPostAdmin(id).observe(requireActivity()) { response ->
+                when (response.status) {
+                    "success" -> {
+                        val posts = response.data
 
-                    if(posts.isNullOrEmpty()){
-                        binding.noData.visibility = View.VISIBLE
-                    } else {
-                        binding.noData.visibility = View.GONE
-                        postAdapter = AllPostAdapter(posts)
-                        val layoutManager = LinearLayoutManager(requireContext())
-                        binding.rvAllPost.layoutManager = layoutManager
-                        binding.rvAllPost.adapter = postAdapter
+                        if (posts.isNullOrEmpty()) {
+                            binding.noData.visibility = View.VISIBLE
+                        } else {
+                            binding.noData.visibility = View.GONE
+                            postAdapter = AllPostAdapter(posts)
+                            val layoutManager = LinearLayoutManager(requireContext())
+                            binding.rvAllPost.layoutManager = layoutManager
+                            binding.rvAllPost.adapter = postAdapter
+                        }
                     }
+                    else -> handleError(response.message?.toInt())
                 }
-                else -> handleError(it.message?.toInt())
             }
         }
     }
@@ -89,5 +93,16 @@ class AdminPostFragment(private val adminId: String) : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private const val ARG_ADMIN_ID = "arg_admin_id"
+        fun newInstance(adminId: String?): AdminPostFragment {
+            return AdminPostFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ADMIN_ID, adminId)
+                }
+            }
+        }
     }
 }

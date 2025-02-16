@@ -18,7 +18,6 @@ class PostViewModel(
 ) : ViewModel() {
     var preferences = pref
     var isLoading = repository.isLoading
-    val postResult = MutableLiveData<GenericResponse<Post>>()
 
     fun getAllPost() : LiveData<GenericResponse<List<Post>>> {
         return repository.getAllPostsOrEvents()

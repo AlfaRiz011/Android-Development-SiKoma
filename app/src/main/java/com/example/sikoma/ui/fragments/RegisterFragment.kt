@@ -35,6 +35,10 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
+
         setView()
         setOnBack()
     }
@@ -133,5 +137,12 @@ class RegisterFragment : Fragment() {
                 getString(R.string.error_server_500)
             )
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
+        binding.loadingText.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

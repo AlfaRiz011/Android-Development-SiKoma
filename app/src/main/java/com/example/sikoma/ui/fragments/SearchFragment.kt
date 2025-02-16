@@ -11,7 +11,7 @@ import com.example.sikoma.data.models.Tag
 import com.example.sikoma.databinding.FragmentSearchBinding
 import com.google.android.material.tabs.TabLayout
 
-class SearchFragment : Fragment(){
+class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     override fun onCreateView(
@@ -27,6 +27,35 @@ class SearchFragment : Fragment(){
 
         setOnBack()
         setTabLayout()
+        setSearch()
+    }
+
+    private fun setSearch() {
+        binding.searchView.setupWithSearchBar(binding.searchbar)
+        binding.searchView.editText.setOnEditorActionListener { _, _, _ ->
+            val query = binding.searchView.editText.text.toString().trim()
+            binding.searchbar.setText(query)
+            searchData(query)
+            binding.searchView.hide()
+            true
+        }
+    }
+
+    private fun searchData(query: String) {
+
+        when (binding.tabLayout.selectedTabPosition) {
+            0 -> {
+                switchFragment(SearchOrganizationFragment.newInstance(query))
+            }
+
+            1 -> {
+                switchFragment(SearchTopicFragment.newInstance(query))
+            }
+
+            else -> {
+                switchFragment(SearchOrganizationFragment.newInstance(query))
+            }
+        }
     }
 
     private fun setTabLayout() {
@@ -37,8 +66,8 @@ class SearchFragment : Fragment(){
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
-                        0 -> switchFragment(SearchOrganizationFragment())
-                        1 -> switchFragment(SearchTopicFragment())
+                        0 -> switchFragment(SearchOrganizationFragment.newInstance(binding.searchbar.text.toString()))
+                        1 -> switchFragment(SearchTopicFragment.newInstance(binding.searchbar.text.toString()))
                     }
                 }
 
@@ -48,7 +77,7 @@ class SearchFragment : Fragment(){
             })
 
             selectTab(getTabAt(0))
-            switchFragment(SearchOrganizationFragment())
+            switchFragment(SearchOrganizationFragment.newInstance(null))
         }
 
     }

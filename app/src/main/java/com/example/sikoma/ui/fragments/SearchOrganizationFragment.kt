@@ -19,9 +19,13 @@ class SearchOrganizationFragment : Fragment() {
     private lateinit var binding: FragmentSearchOrganizationBinding
     private lateinit var organizationListAdapter : OrganizationListAdapter
 
+    private val query: String?
+        get() = arguments?.getString(ARG_QUERY)
+
     private val viewModel: AdminViewModel by activityViewModels {
         AdminViewModelFactory.getInstance(requireContext().applicationContext)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,26 +46,43 @@ class SearchOrganizationFragment : Fragment() {
 
     private fun setAdapter() {
 
-        viewModel.getAllAdmins().observe(requireActivity()){
-            when {
-                it.status == "success" -> {
-                    if (it.data != null){
-                        val org = it.data
+        val queryText = query
 
-                            binding.noData.visibility = View.GONE
-                            organizationListAdapter = OrganizationListAdapter(org)
-                            val layoutManager = LinearLayoutManager(requireContext())
-                            binding.rvSearchOrganization.layoutManager = layoutManager
-                            binding.rvSearchOrganization.adapter = organizationListAdapter
+        if(query.isNullOrEmpty()){
+            viewModel.getAllAdmins().observe(requireActivity()) {result ->
+                if (result.status == "success") {
+                    val organizationList = result.data
+                    if (!organizationList.isNullOrEmpty()) {
+                        binding.noData.visibility = View.GONE
+                        organizationListAdapter = OrganizationListAdapter(organizationList)
+                        binding.rvSearchOrganization.apply {
+                            layoutManager = LinearLayoutManager(requireContext())
+                            adapter = organizationListAdapter
+                        }
                     } else {
                         binding.noData.visibility = View.VISIBLE
                     }
                 }
-
-                else -> handleError(it.message?.toInt())
+            }
+        } else {
+            if (queryText != null) {
+                viewModel.getAdminByName(queryText).observe(requireActivity()){ result ->
+                    if (result.status == "success") {
+                        val organizationList = result.data
+                        if (!organizationList.isNullOrEmpty()) {
+                            binding.noData.visibility = View.GONE
+                            organizationListAdapter = OrganizationListAdapter(organizationList)
+                            binding.rvSearchOrganization.apply {
+                                layoutManager = LinearLayoutManager(requireContext())
+                                adapter = organizationListAdapter
+                            }
+                        } else {
+                            binding.noData.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
         }
-
     }
 
     private fun handleError(error: Int?) {
@@ -91,5 +112,16 @@ class SearchOrganizationFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private const val ARG_QUERY = "arg_query"
+        fun newInstance(query: String?): SearchOrganizationFragment {
+            return SearchOrganizationFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUERY, query)
+                }
+            }
+        }
     }
 }

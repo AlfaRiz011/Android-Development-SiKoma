@@ -3,6 +3,7 @@ package com.example.sikoma.ui.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.sikoma.data.local.UserPreferences
+import com.example.sikoma.data.models.Admin
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.data.remote.response.GenericResponse
 import com.example.sikoma.data.repository.TagRepository
@@ -20,6 +21,10 @@ class TagViewModel(
 
     fun getTagByPost(postId:String) : LiveData<GenericResponse<List<Tag>>> {
         return repository.getTagsByPost(postId)
+    }
+
+    fun getTagByName(tagName: String): LiveData<GenericResponse<List<Tag>>> {
+        return repository.getTagByName(tagName)
     }
 
     fun tagPost(postId:String, tagName: String) : LiveData<GenericResponse<Tag>> {

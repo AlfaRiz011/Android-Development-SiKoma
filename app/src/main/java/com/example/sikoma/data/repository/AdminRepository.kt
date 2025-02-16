@@ -56,15 +56,15 @@ class AdminRepository(
         return resultLiveData
     }
 
-    fun getAdminByName(organizationName: String) : LiveData<GenericResponse<Admin>>{
+    fun getAdminByName(organizationName: String) : LiveData<GenericResponse<List<Admin>>>{
         _isLoading.value = true
-        val resultLiveData = MutableLiveData<GenericResponse<Admin>>()
+        val resultLiveData = MutableLiveData<GenericResponse<List<Admin>>>()
         val client = apiService.getAdminByName(organizationName = organizationName)
 
-        client.enqueue(object : Callback<GenericResponse<Admin>> {
+        client.enqueue(object : Callback<GenericResponse<List<Admin>>> {
             override fun onResponse(
-                call: Call<GenericResponse<Admin>>,
-                response: Response<GenericResponse<Admin>>
+                call: Call<GenericResponse<List<Admin>>>,
+                response: Response<GenericResponse<List<Admin>>>
             ) {
                 if (response.isSuccessful) {
                     resultLiveData.value = response.body()
@@ -78,7 +78,7 @@ class AdminRepository(
                 _isLoading.value = false
             }
 
-            override fun onFailure(call: Call<GenericResponse<Admin>>, t: Throwable) {
+            override fun onFailure(call: Call<GenericResponse<List<Admin>>>, t: Throwable) {
                 resultLiveData.value = GenericResponse(
                     message = "500",
                     status = "error",

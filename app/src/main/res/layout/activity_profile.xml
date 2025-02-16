@@ -71,78 +71,64 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-                <EditText
+                <TextView
                     android:id="@+id/input_email"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:background="@drawable/shape_edit_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/email"
-                    android:importantForAutofill="no"
-                    android:inputType="textEmailAddress"
                     android:padding="13dp"
+                    android:text="@string/email"
+                    android:textColor="@color/blueSecondary"
                     android:textColorHint="@color/blueSecondary" />
 
-                <EditText
+                <TextView
                     android:id="@+id/input_full_name"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_edit_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/full_name"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
                     android:padding="13dp"
+                    android:text="@string/full_name"
+                    android:textColor="@color/blueSecondary"
                     android:textColorHint="@color/blueSecondary" />
 
-                <EditText
+                <TextView
                     android:id="@+id/input_nim"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_edit_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/student_id"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
                     android:padding="13dp"
+                    android:text="@string/student_id"
+                    android:textColor="@color/blueSecondary"
                     android:textColorHint="@color/blueSecondary" />
 
-                <EditText
+                <TextView
                     android:id="@+id/input_study_program"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/shape_edit_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/student_program"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
                     android:padding="13dp"
+                    android:text="@string/student_program"
+                    android:textColor="@color/blueSecondary"
                     android:textColorHint="@color/blueSecondary" />
 
-                <EditText
+                <TextView
                     android:id="@+id/input_faculty"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:background="@drawable/shape_edit_text"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/faculty"
-                    android:importantForAutofill="no"
-                    android:inputType="phone"
                     android:padding="13dp"
+                    android:text="@string/faculty"
+                    android:textColor="@color/blueSecondary"
                     android:textColorHint="@color/blueSecondary" />
+
 
             </LinearLayout>
 
@@ -151,32 +137,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="10dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_edit_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:backgroundTint="@color/bluePrimary"
-                    android:fontFamily="@font/poppins_medium"
-                    android:gravity="center"
-                    android:letterSpacing="0.3"
-                    android:text="@string/edit_data"
-                    android:visibility="visible"
-                    app:cornerRadius="10dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_done"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:backgroundTint="@color/bluePrimary"
-                    android:fontFamily="@font/poppins_medium"
-                    android:gravity="center"
-                    android:letterSpacing="0.3"
-                    android:text="@string/done"
-                    android:visibility="gone"
-                    app:cornerRadius="10dp" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_logout"

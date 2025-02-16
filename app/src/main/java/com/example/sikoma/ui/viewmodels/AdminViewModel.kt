@@ -24,7 +24,7 @@ class AdminViewModel(
         return repository.getAdminById(adminId)
     }
 
-    fun getAdminByName(adminName: String): LiveData<GenericResponse<Admin>> {
+    fun getAdminByName(adminName: String): LiveData<GenericResponse<List<Admin>>> {
         return repository.getAdminByName(adminName)
     }
 

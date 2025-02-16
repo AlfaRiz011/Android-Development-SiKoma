@@ -60,7 +60,7 @@ interface ApiService {
     @GET("admins/find")
     fun getAdminByName(
         @Query("organization_name") organizationName: String
-    ): Call<GenericResponse<Admin>>
+    ): Call<GenericResponse<List<Admin>>>
 
     @GET("admins/{id}")
     fun getAdminById(
@@ -144,6 +144,11 @@ interface ApiService {
     // TAGS
     @GET("tags")
     fun getAllTags(): Call<GenericResponse<List<Tag>>>
+
+    @GET("tags/find")
+    fun getTagsByName(
+        @Query("tag_name") tagName: String
+    ): Call<GenericResponse<List<Tag>>>
 
     @GET("tags/{postId}")
     fun getTagsByPost(

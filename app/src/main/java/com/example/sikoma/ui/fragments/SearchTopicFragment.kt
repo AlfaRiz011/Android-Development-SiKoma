@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentSearchTopicBinding
+import com.example.sikoma.ui.adapters.OrganizationListAdapter
 import com.example.sikoma.ui.adapters.TopicListAdapter
 import com.example.sikoma.ui.viewmodels.TagViewModel
 import com.example.sikoma.ui.viewmodels.factory.TagViewModelFactory
@@ -18,6 +19,9 @@ class SearchTopicFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchTopicBinding
     private lateinit var topicListAdapter: TopicListAdapter
+
+    private val query: String?
+        get() = arguments?.getString(ARG_QUERY)
 
     private val viewModel: TagViewModel by activityViewModels {
         TagViewModelFactory.getInstance(requireContext().applicationContext)
@@ -42,24 +46,44 @@ class SearchTopicFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        viewModel.getAllTag().observe(viewLifecycleOwner) { result ->
-            if (result.status == "success") {
-                val topics = result.data
-                if (topics != null) {
-                    binding.noData.visibility = View.GONE
-                    topicListAdapter = TopicListAdapter(topics)
-                    binding.rvSearchTopic.apply {
-                        layoutManager = LinearLayoutManager(requireContext())
-                        adapter = topicListAdapter
+        val queryText = query
+        if (query.isNullOrEmpty()) {
+            viewModel.getAllTag().observe(viewLifecycleOwner) { result ->
+                if (result.status == "success") {
+                    val topics = result.data
+                    if (!topics.isNullOrEmpty()) {
+                        binding.noData.visibility = View.GONE
+                        topicListAdapter = TopicListAdapter(topics)
+                        binding.rvSearchTopic.apply {
+                            layoutManager = LinearLayoutManager(requireContext())
+                            adapter = topicListAdapter
+                        }
+                    } else {
+                        binding.noData.visibility = View.VISIBLE
                     }
-                } else {
-                    binding.noData.visibility = View.VISIBLE
                 }
-            } else {
-                handleError(result.message?.toInt())
+            }
+        } else {
+            if (queryText != null) {
+                viewModel.getTagByName(queryText).observe(requireActivity()) { result ->
+                    if (result.status == "success") {
+                        val topics = result.data
+                        if (!topics.isNullOrEmpty()) {
+                            binding.noData.visibility = View.GONE
+                            topicListAdapter = TopicListAdapter(topics)
+                            binding.rvSearchTopic.apply {
+                                layoutManager = LinearLayoutManager(requireContext())
+                                adapter = topicListAdapter
+                            }
+                        } else {
+                            binding.noData.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
         }
     }
+
 
     private fun handleError(error: Int?) {
         when (error) {
@@ -88,5 +112,16 @@ class SearchTopicFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility =
             if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private const val ARG_QUERY = "arg_query"
+        fun newInstance(query: String?): SearchTopicFragment {
+            return SearchTopicFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_QUERY, query)
+                }
+            }
+        }
     }
 }

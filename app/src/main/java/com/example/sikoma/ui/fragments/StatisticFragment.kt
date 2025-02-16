@@ -10,14 +10,18 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentStatisticBinding
+import com.example.sikoma.utils.BottomNavView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 class StatisticFragment(private val adminId: String) : Fragment() {
     private lateinit var binding: FragmentStatisticBinding
+
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var constraintLayout: ConstraintLayout
+    private val fragmentContainerId = R.id.fragment_container_home_admin
+    private val navViewId = R.id.nav_view_admin
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +42,7 @@ class StatisticFragment(private val adminId: String) : Fragment() {
     }
 
     private fun setView() {
-        bottomNav = requireActivity().findViewById(R.id.nav_view)
+        bottomNav = requireActivity().findViewById(R.id.nav_view_admin)
 
         binding.stickyScroll.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (scrollY > oldScrollY && isBottomNavVisible) {
@@ -57,8 +61,8 @@ class StatisticFragment(private val adminId: String) : Fragment() {
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
-                        0 -> switchFragment(AdminPostFragment(adminId))
-                        1 -> switchFragment(AdminEventPostFragment(adminId))
+                        0 -> switchFragment(AdminPostFragment.newInstance(adminId))
+                        1 -> switchFragment(AdminEventPostFragment.newInstance(adminId))
                     }
                 }
 
@@ -79,42 +83,12 @@ class StatisticFragment(private val adminId: String) : Fragment() {
     }
 
     private fun hideBottomNavigationView() {
-        bottomNav.animate()
-            .translationY(bottomNav.height.toFloat())
-            .setDuration(200)
-            .start()
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-        constraintSet.connect(
-            R.id.fragment_container_home,
-            ConstraintSet.BOTTOM,
-            ConstraintSet.PARENT_ID,
-            ConstraintSet.BOTTOM
-        )
-        constraintSet.applyTo(constraintLayout)
-
+        BottomNavView.hide(bottomNav, constraintLayout, fragmentContainerId)
         isBottomNavVisible = false
     }
 
     private fun showBottomNavigationView() {
-        bottomNav.animate()
-            .translationY(0f)
-            .setDuration(200)
-            .start()
-
-        bottomNav.postDelayed({
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(constraintLayout)
-            constraintSet.connect(
-                R.id.fragment_container_home,
-                ConstraintSet.BOTTOM,
-                R.id.nav_view,
-                ConstraintSet.TOP
-            )
-            constraintSet.applyTo(constraintLayout)
-        }, 200)
-
+        BottomNavView.show(bottomNav, constraintLayout, fragmentContainerId, navViewId)
         isBottomNavVisible = true
     }
 

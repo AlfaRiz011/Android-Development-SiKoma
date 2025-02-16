@@ -37,7 +37,7 @@ class ProfileActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             user = pref.getUser().firstOrNull()!!
-            setData()
+            setData(user)
             setAction()
         }
     }
@@ -49,10 +49,6 @@ class ProfileActivity : AppCompatActivity() {
             buttonLogout.setOnClickListener {
                 handleLogoutAction()
             }
-
-            buttonEditData.setOnClickListener { enableEditMode() }
-
-            buttonDone.setOnClickListener { disableEditMode() }
         }
     }
 
@@ -72,52 +68,18 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun enableEditMode() {
+    private fun setData(user: User) {
         binding.apply {
-            buttonEditData.visibility = View.GONE
-            buttonDone.visibility = View.VISIBLE
-            buttonEditData.isEnabled = false
+            inputEmail.text = user.email
+            inputFullName.text = user.fullName
+            inputNim.text = user.nim
+            inputStudyProgram.text = user.studyProg
+            inputFaculty.text = user.faculty
 
-            val inputs = listOf(inputEmail, inputFullName, inputNim, inputStudyProgram, inputFaculty)
-
-            inputs.forEach {
-                it.isFocusableInTouchMode = true
-                it.isFocusable = true
-            }
-
-            inputEmail.requestFocus()
-        }
-    }
-
-    private fun disableEditMode() {
-        binding.apply {
-            val inputs = listOf(inputEmail, inputFullName, inputNim, inputStudyProgram, inputFaculty)
-
-            inputs.forEach {
-                it.isFocusableInTouchMode = false
-                it.isFocusable = false
-            }
-
-            buttonEditData.visibility = View.VISIBLE
-            buttonDone.visibility = View.GONE
-            buttonEditData.isEnabled = true
-        }
-    }
-
-    private fun setData() {
-        lifecycleScope.launch {
-            binding.apply {
-                inputEmail.setText(user.email)
-                inputFullName.setText(user.fullName)
-                inputNim.setText(user.nim)
-                inputStudyProgram.setText(user.studyProg)
-                inputFaculty.setText(user.faculty)
-
-                Glide.with(this@ProfileActivity)
-                    .load(user.profilePic)
-                    .placeholder(R.drawable.icon_profile_fill)
-                    .into(profilePic)
-            }
+            Glide.with(this@ProfileActivity)
+                .load(user.profilePic)
+                .placeholder(R.drawable.icon_profile_fill)
+                .into(profilePic)
         }
     }
 }

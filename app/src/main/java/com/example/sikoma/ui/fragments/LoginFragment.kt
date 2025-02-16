@@ -25,8 +25,6 @@ class LoginFragment : Fragment() {
         AuthViewModelFactory.getInstance(requireContext().applicationContext)
     }
 
-    private lateinit var dataLogin: LoginBodyRequest
-
     private var email: String? = null
     private var password: String? = null
 
@@ -42,6 +40,9 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
+        viewModel.isLoading.observe(requireActivity()) {
+            showLoading(it)
+        }
 
         email = arguments?.getString("email")
         password = arguments?.getString("password")
@@ -140,5 +141,12 @@ class LoginFragment : Fragment() {
                     requireActivity().finish()
                 }
             })
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
+        binding.loadingText.visibility =
+            if (isLoading) View.VISIBLE else View.GONE
     }
 }

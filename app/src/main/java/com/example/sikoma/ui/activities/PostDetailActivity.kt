@@ -21,6 +21,7 @@ import com.example.sikoma.ui.viewmodels.TagViewModel
 import com.example.sikoma.ui.viewmodels.factory.EventViewModelFactory
 import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
 import com.example.sikoma.ui.viewmodels.factory.TagViewModelFactory
+import com.example.sikoma.utils.ExportHelper
 import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -201,6 +202,7 @@ class PostDetailActivity : AppCompatActivity() {
                         binding.buttonJoinEvent.visibility = View.VISIBLE
                     }
                 }
+
                 else -> handleError(response.message?.toInt())
             }
 
@@ -223,115 +225,140 @@ class PostDetailActivity : AppCompatActivity() {
     }
 
     private fun setupAdminEventView() {
-            binding.apply {
-                buttonSchedule.visibility = View.VISIBLE
-                buttonExport.visibility = View.VISIBLE
+        binding.apply {
+            buttonSchedule.visibility = View.VISIBLE
+            buttonExport.visibility = View.VISIBLE
+
+            binding.buttonExport.setOnClickListener {
+                exportDataParticipant()
             }
         }
+    }
 
-        private fun joinEvent() {
-            eventViewModel.participate(postId, userId)
-                .observe(this@PostDetailActivity) { response ->
-                    when (response.status) {
-                        "success" -> refreshActivity()
-                        else -> handleError(response.message?.toInt())
+    private fun exportDataParticipant() {
+        eventViewModel.getParticipant(postId).observe(this@PostDetailActivity) { response ->
+            when (response.status) {
+                "success" ->{
+                    response.data?.let {
+                        ExportHelper.exportUserData(
+                            context = this,
+                            participants = it,
+                            directory = getExternalFilesDir(null) ?: filesDir
+                        )
                     }
                 }
+                else -> handleError(response.message?.toInt())
+            }
         }
+    }
 
-        private fun cancelEvent() {
-            eventViewModel.deleteParticipant(postId, userId).observe(this) { response ->
+    private fun joinEvent() {
+        eventViewModel.participate(postId, userId)
+            .observe(this@PostDetailActivity) { response ->
                 when (response.status) {
                     "success" -> refreshActivity()
                     else -> handleError(response.message?.toInt())
                 }
             }
-        }
+    }
 
-        private fun setupLike() {
-            viewModel.getLikePost(postId).observe(this) { response ->
-                when (response.status) {
-                    "success" -> {
-                        response.data?.let { responsePosts ->
-                            val liked = responsePosts.any { it.postId.toString() == postId }
-                            updateLikeButtonUI(liked)
-
-                            binding.buttonLike.setOnClickListener {
-                                toggleLike(liked)
-                            }
-                        }
-                    }
-
-                    else -> handleError(response.message?.toInt())
-                }
+    private fun cancelEvent() {
+        eventViewModel.deleteParticipant(postId, userId).observe(this) { response ->
+            when (response.status) {
+                "success" -> refreshActivity()
+                else -> handleError(response.message?.toInt())
             }
-        }
-
-        private fun toggleLike(liked: Boolean) {
-            viewModel.toggleLike(userId, postId).observe(this) { response ->
-                when (response.status) {
-                    "success" -> {
-                        updateLikeButtonUI(!liked)
-                    }
-
-                    else -> handleError(response.message?.toInt())
-                }
-            }
-        }
-
-        private fun updateLikeButtonUI(liked: Boolean) {
-            binding.buttonLike.setIconResource(
-                if (liked) R.drawable.icon_like_fill else R.drawable.icon_like
-            )
-        }
-
-        private fun loadImage(
-            context: Context,
-            url: String?,
-            imageView: ImageView,
-            placeholder: Int
-        ) {
-            Glide.with(context)
-                .load(url)
-                .placeholder(placeholder)
-                .into(imageView)
-        }
-
-        private fun refreshActivity() {
-            val refreshIntent = Intent(this, PostDetailActivity::class.java).apply {
-                putExtra("postId", postId)
-            }
-            finish()
-            startActivity(refreshIntent)
-        }
-
-        private fun handleError(error: Int?) {
-            when (error) {
-                400 -> ValidatorAuthHelper.showToast(
-                    this@PostDetailActivity,
-                    getString(R.string.error_invalid_input)
-                )
-
-                401 -> ValidatorAuthHelper.showToast(
-                    this@PostDetailActivity,
-                    getString(R.string.error_unauthorized_401)
-                )
-
-                500 -> ValidatorAuthHelper.showToast(
-                    this@PostDetailActivity,
-                    getString(R.string.error_server_500)
-                )
-
-                503 -> ValidatorAuthHelper.showToast(
-                    this@PostDetailActivity,
-                    getString(R.string.error_server_500)
-                )
-            }
-        }
-
-        private fun showLoading(isLoading: Boolean) {
-            val visibility = if (isLoading) View.VISIBLE else View.GONE
-            binding.loadingView.visibility = visibility
-            binding.progressBar.visibility = visibility
         }
     }
+
+    private fun setupLike() {
+        viewModel.getLikePost(postId).observe(this) { response ->
+            when (response.status) {
+                "success" -> {
+                    response.data?.let { responsePosts ->
+                        val likeCount = responsePosts.count()
+
+                        binding.buttonLike.text = likeCount.toString()
+
+                        val liked = responsePosts.any { it.postId.toString() == postId }
+                        updateLikeButtonUI(liked)
+
+                        binding.buttonLike.setOnClickListener {
+                            toggleLike(liked)
+                        }
+                    }
+                }
+
+                else -> handleError(response.message?.toInt())
+            }
+        }
+    }
+
+    private fun toggleLike(liked: Boolean) {
+        viewModel.toggleLike(userId, postId).observe(this) { response ->
+            when (response.status) {
+                "success" -> {
+                    updateLikeButtonUI(!liked)
+                }
+
+                else -> handleError(response.message?.toInt())
+            }
+        }
+    }
+
+    private fun updateLikeButtonUI(liked: Boolean) {
+        binding.buttonLike.setIconResource(
+            if (liked) R.drawable.icon_like_fill else R.drawable.icon_like
+        )
+    }
+
+    private fun loadImage(
+        context: Context,
+        url: String?,
+        imageView: ImageView,
+        placeholder: Int
+    ) {
+        Glide.with(context)
+            .load(url)
+            .placeholder(placeholder)
+            .into(imageView)
+    }
+
+    private fun refreshActivity() {
+        val refreshIntent = Intent(this, PostDetailActivity::class.java).apply {
+            putExtra("postId", postId)
+        }
+        finish()
+        startActivity(refreshIntent)
+    }
+
+    private fun handleError(error: Int?) {
+        when (error) {
+            400 -> ValidatorAuthHelper.showToast(
+                this@PostDetailActivity,
+                getString(R.string.error_invalid_input)
+            )
+
+            401 -> ValidatorAuthHelper.showToast(
+                this@PostDetailActivity,
+                getString(R.string.error_unauthorized_401)
+            )
+
+            500 -> ValidatorAuthHelper.showToast(
+                this@PostDetailActivity,
+                getString(R.string.error_server_500)
+            )
+
+            503 -> ValidatorAuthHelper.showToast(
+                this@PostDetailActivity,
+                getString(R.string.error_server_500)
+            )
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        val visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.loadingView.visibility = visibility
+        binding.progressBar.visibility = visibility
+    }
+}

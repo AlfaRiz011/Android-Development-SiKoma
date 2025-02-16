@@ -43,7 +43,7 @@
                 app:tabTextColor="@android:color/darker_gray" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_container_tab"
+                android:id="@+id/fragment_container_tab_home_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tab_layout"
