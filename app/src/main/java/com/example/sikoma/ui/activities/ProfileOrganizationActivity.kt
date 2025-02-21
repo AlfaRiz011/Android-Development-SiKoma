@@ -55,8 +55,8 @@ class ProfileOrganizationActivity : AppCompatActivity() {
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     when (tab?.position) {
-                        0 -> switchFragment(AdminPostFragment(adminId))
-                        1 -> switchFragment(AdminEventPostFragment(adminId))
+                        0 -> switchFragment(AdminPostFragment.newInstance(adminId))
+                        1 -> switchFragment(AdminEventPostFragment.newInstance(adminId))
                     }
                 }
 
@@ -66,7 +66,7 @@ class ProfileOrganizationActivity : AppCompatActivity() {
             })
 
             selectTab(getTabAt(0))
-            switchFragment(AdminPostFragment(adminId))
+            switchFragment(AdminPostFragment.newInstance(adminId))
         }
 
     }

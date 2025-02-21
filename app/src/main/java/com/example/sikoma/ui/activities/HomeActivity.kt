@@ -52,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupNavBar() {
-        binding.navView.setOnItemSelectedListener { menuItem ->
+        binding.navViewUser.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> setFragment(HomeFragment())
                 R.id.nav_search -> setFragment(SearchFragment())
@@ -71,10 +71,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setFragment(fragment: Fragment) {
-        val currentFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerHome.id)
+        val currentFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerHomeUser.id)
         if (currentFragment?.javaClass != fragment.javaClass) {
             supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainerHome.id, fragment)
+                .replace(binding.fragmentContainerHomeUser.id, fragment)
                 .commit()
         }
     }

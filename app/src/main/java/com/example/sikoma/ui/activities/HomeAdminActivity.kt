@@ -9,40 +9,48 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
+import com.example.sikoma.data.local.UserPreferences
+import com.example.sikoma.data.local.dataStore
 import com.example.sikoma.databinding.ActivityHomeAdminBinding
 import com.example.sikoma.ui.fragments.HomeAdminFragment
 import com.example.sikoma.ui.fragments.StatisticFragment
 import com.example.sikoma.ui.viewmodels.AdminViewModel
 import com.example.sikoma.ui.viewmodels.factory.AdminViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class HomeAdminActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeAdminBinding
-    
-    private val viewModel: AdminViewModel by viewModels {
-        AdminViewModelFactory.getInstance(this)
-    } 
-    
-    private val pref = viewModel.preferences
+
+    private lateinit var pref: UserPreferences
+
     private lateinit var adminId: String
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycleScope.launch{
-            adminId =  pref.getAdmin().first()?.adminId.toString()
+        pref = UserPreferences.getInstance(this.dataStore)
+
+        lifecycleScope.launch {
+            val admin = pref.getAdmin().first()
+            adminId = admin?.adminId.toString()
+
+            setAppBar()
+            setOnBack()
+
+            withContext(Dispatchers.Main) {
+                setNavBar()
+                setFragment(HomeAdminFragment.newInstance(adminId))
+            }
         }
-        
-        setOnBack()
-        setAppBar()
-        setNavBar()
-        setFragment(HomeAdminFragment(adminId))
     }
+
     private fun setAppBar() {
         setSupportActionBar(binding.toolbar)
 
@@ -50,17 +58,18 @@ class HomeAdminActivity : AppCompatActivity() {
     }
 
     private fun setNavBar() {
-        binding.navView.setOnNavigationItemSelectedListener { menuItem ->
+        binding.navViewAdmin.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home_admin -> {
-                    setFragment(HomeAdminFragment(adminId))
+                    setFragment(HomeAdminFragment.newInstance(adminId))
                     true
                 }
 
                 R.id.nav_statistic -> {
-                    setFragment(StatisticFragment(adminId))
+                    setFragment(StatisticFragment.newInstance(adminId))
                     true
                 }
+
                 else -> false
             }
         }
@@ -76,7 +85,7 @@ class HomeAdminActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainerHome.id, fragment)
+            .replace(binding.fragmentContainerHomeAdmin.id, fragment)
             .commit()
     }
 }

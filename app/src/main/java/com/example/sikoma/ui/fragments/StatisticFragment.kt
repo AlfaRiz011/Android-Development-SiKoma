@@ -14,7 +14,7 @@ import com.example.sikoma.utils.BottomNavView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class StatisticFragment(private val adminId: String) : Fragment() {
+class StatisticFragment : Fragment() {
     private lateinit var binding: FragmentStatisticBinding
 
     private var isBottomNavVisible = true
@@ -22,6 +22,9 @@ class StatisticFragment(private val adminId: String) : Fragment() {
     private lateinit var constraintLayout: ConstraintLayout
     private val fragmentContainerId = R.id.fragment_container_home_admin
     private val navViewId = R.id.nav_view_admin
+
+    private val adminId: String?
+        get() = arguments?.getString(ARG_ADMIN_ID)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,5 +104,16 @@ class StatisticFragment(private val adminId: String) : Fragment() {
                 }
             }
         )
+    }
+
+    companion object {
+        private const val ARG_ADMIN_ID = "arg_adminId"
+        fun newInstance(query: String?): StatisticFragment {
+            return StatisticFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ADMIN_ID, query)
+                }
+            }
+        }
     }
 }

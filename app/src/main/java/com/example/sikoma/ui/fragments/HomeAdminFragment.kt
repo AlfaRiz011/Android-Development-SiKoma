@@ -21,7 +21,7 @@ import com.example.sikoma.utils.ValidatorAuthHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
-class HomeAdminFragment(private val adminId: String) : Fragment() {
+class HomeAdminFragment : Fragment() {
     private lateinit var binding: FragmentHomeAdminBinding
 
     private var isBottomNavVisible = true
@@ -29,6 +29,9 @@ class HomeAdminFragment(private val adminId: String) : Fragment() {
     private lateinit var constraintLayout: ConstraintLayout
     private val fragmentContainerId = R.id.fragment_container_home_admin
     private val navViewId = R.id.nav_view_admin
+
+    private val adminId: String?
+        get() = arguments?.getString(ARG_ADMIN_ID)
 
     private val viewModel: PostViewModel by activityViewModels {
         PostViewModelFactory.getInstance(requireContext().applicationContext)
@@ -173,6 +176,17 @@ class HomeAdminFragment(private val adminId: String) : Fragment() {
                 requireContext(),
                 getString(R.string.error_server_500)
             )
+        }
+    }
+
+    companion object {
+        private const val ARG_ADMIN_ID = "arg_adminId"
+        fun newInstance(adminId: String?): HomeAdminFragment {
+            return HomeAdminFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_ADMIN_ID, adminId)
+                }
+            }
         }
     }
 }
