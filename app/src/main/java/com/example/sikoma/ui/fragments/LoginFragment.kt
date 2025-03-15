@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.sikoma.R
 import com.example.sikoma.data.remote.request.LoginBodyRequest
 import com.example.sikoma.databinding.FragmentLoginBinding
+import com.example.sikoma.ui.activities.AuthSessionActivity
 import com.example.sikoma.ui.activities.HomeActivity
 import com.example.sikoma.ui.activities.HomeAdminActivity
 import com.example.sikoma.ui.viewmodels.AuthViewModel
@@ -74,18 +75,13 @@ class LoginFragment : Fragment() {
                     viewModel.login(dataLogin).observe(requireActivity()) { result ->
                         when (result.status) {
                             "success" -> {
-                                val activityClass = when (result.data?.role) {
-                                    "user" -> HomeActivity::class.java
-                                    "admin" -> HomeAdminActivity::class.java
-                                    else -> null
-                                }
-                                activityClass?.let {
-                                    startActivity(Intent(requireActivity(), it).apply {
-                                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    })
-                                    requireActivity().finish()
-                                }
+                                startActivity(Intent(requireActivity(), AuthSessionActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                })
+
+                                requireActivity().finish()
                             }
+
                             else -> handleError(result.message?.toInt())
                         }
                     }

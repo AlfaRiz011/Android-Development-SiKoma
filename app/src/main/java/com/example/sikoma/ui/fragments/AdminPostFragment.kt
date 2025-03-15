@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sikoma.R
 import com.example.sikoma.databinding.FragmentAdminPostBinding
+import com.example.sikoma.ui.adapters.AdminPostAdapter
 import com.example.sikoma.ui.adapters.AllPostAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
 import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
@@ -17,7 +18,7 @@ import com.example.sikoma.utils.ValidatorAuthHelper
 class AdminPostFragment : Fragment() {
 
     private lateinit var binding: FragmentAdminPostBinding
-    private lateinit var postAdapter: AllPostAdapter
+    private lateinit var postAdapter: AdminPostAdapter
     private val adminId: String?
         get() = arguments?.getString(ARG_ADMIN_ID)
 
@@ -45,7 +46,7 @@ class AdminPostFragment : Fragment() {
 
     private fun setAdapter() {
         adminId?.let { id ->
-            viewModel.getPostAdmin(id).observe(requireActivity()) { response ->
+            viewModel.getPostAdmin(id).observe(viewLifecycleOwner) { response ->
                 when (response.status) {
                     "success" -> {
                         val posts = response.data
@@ -53,8 +54,9 @@ class AdminPostFragment : Fragment() {
                         if (posts.isNullOrEmpty()) {
                             binding.noData.visibility = View.VISIBLE
                         } else {
+                            binding.rvAllPost.adapter = null
                             binding.noData.visibility = View.GONE
-                            postAdapter = AllPostAdapter(posts)
+                            postAdapter = AdminPostAdapter(posts)
                             val layoutManager = LinearLayoutManager(requireContext())
                             binding.rvAllPost.layoutManager = layoutManager
                             binding.rvAllPost.adapter = postAdapter

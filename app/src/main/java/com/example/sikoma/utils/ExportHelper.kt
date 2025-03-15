@@ -10,14 +10,15 @@ import com.example.sikoma.data.models.EventParticipant
 import com.opencsv.CSVWriter
 import java.io.File
 import java.io.FileWriter
+
 object ExportHelper {
     /**
-     * Mengekspor data user dari daftar [participants] ke file CSV.
+     * Mengekspor data user dari daftar [participants] ke file CSV dan membuka dialog pemilihan aplikasi untuk menyimpan atau membagikannya.
      *
      * @param context Context yang digunakan untuk menampilkan Toast.
      * @param participants List dari [EventParticipant] yang berisi data user.
      * @param directory Direktori tempat file CSV akan disimpan.
-     * @param csvFileName Nama file CSV (default: "UserData.csv").
+     * @param csvFileName Nama file CSV (default: "EventData.csv").
      */
     fun exportUserData(
         context: Context,
@@ -55,12 +56,18 @@ object ExportHelper {
                 csvFile
             )
 
+            // Intent untuk memilih aplikasi penyimpanan atau berbagi file
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/csv"
                 putExtra(Intent.EXTRA_STREAM, uri)
-                putExtra(Intent.EXTRA_SUBJECT, "User Data CSV")
-                putExtra(Intent.EXTRA_TEXT, "Berikut file CSV hasil ekspor data user.")
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            val chooser = Intent.createChooser(shareIntent, "Simpan atau bagikan file CSV")
+            if (shareIntent.resolveActivity(context.packageManager) != null) {
+                context.startActivity(chooser)
+            } else {
+                Toast.makeText(context, "Tidak ada aplikasi yang dapat menyimpan atau membagikan file CSV", Toast.LENGTH_LONG).show()
             }
 
             Toast.makeText(
@@ -68,6 +75,7 @@ object ExportHelper {
                 "Data berhasil diekspor ke ${csvFile.absolutePath}",
                 Toast.LENGTH_LONG
             ).show()
+
         } catch (e: Exception) {
             Log.e("CsvExportHelper", e.message, e)
             Toast.makeText(
@@ -78,3 +86,4 @@ object ExportHelper {
         }
     }
 }
+

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PostDetailActivity : AppCompatActivity() {
 
@@ -167,9 +170,10 @@ class PostDetailActivity : AppCompatActivity() {
             postAuthor.text = post.admin?.organizationName.orEmpty()
             postContent.text = post.description.orEmpty()
 
-            includeSchedule.date.text = post.eventDate
-            includeSchedule.time.text = post.eventTime
-            includeSchedule.location.text = post.eventLocation
+            includeSchedule.date.text = formatDate(post.eventDate)
+            includeSchedule.time.text = formatTime(post.eventTime)
+            includeSchedule.location.text = post.eventLocation.orEmpty()
+
             loadImage(
                 this@PostDetailActivity,
                 post.admin?.profilePic,
@@ -177,6 +181,30 @@ class PostDetailActivity : AppCompatActivity() {
                 R.drawable.icon_profile_fill
             )
             loadImage(this@PostDetailActivity, post.image, postImage, R.drawable.logo_app)
+        }
+    }
+
+    private fun formatDate(dateTime: String?): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        return try {
+            val date = inputFormat.parse(dateTime ?: return "-")
+            outputFormat.format(date ?: return "-")
+        } catch (e: Exception) {
+            Toast.makeText(this@PostDetailActivity, "Format tanggal tidak valid: ${e.message}", Toast.LENGTH_SHORT).show()
+            "-"
+        }
+    }
+
+    private fun formatTime(time: String?): String {
+        val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return try {
+            val date = inputFormat.parse(time ?: return "-")
+            outputFormat.format(date ?: return "-")
+        } catch (e: Exception) {
+            "-"
         }
     }
 
@@ -206,6 +234,14 @@ class PostDetailActivity : AppCompatActivity() {
                 else -> handleError(response.message?.toInt())
             }
 
+            binding.buttonSchedule.setOnClickListener {
+                binding.includeSchedule.layoutSchedue.visibility = View.VISIBLE
+            }
+
+            binding.includeSchedule.backButtonSchedule.setOnClickListener {
+                binding.includeSchedule.layoutSchedue.visibility = View.GONE
+            }
+
             binding.buttonJoinEvent.setOnClickListener {
                 binding.confirmJoin.layoutConfirmJoin.visibility = View.VISIBLE
 
@@ -231,6 +267,14 @@ class PostDetailActivity : AppCompatActivity() {
 
             binding.buttonExport.setOnClickListener {
                 exportDataParticipant()
+            }
+
+            binding.buttonSchedule.setOnClickListener {
+                binding.includeSchedule.layoutSchedue.visibility = View.VISIBLE
+            }
+
+            binding.includeSchedule.backButtonSchedule.setOnClickListener {
+                binding.includeSchedule.layoutSchedue.visibility = View.GONE
             }
         }
     }

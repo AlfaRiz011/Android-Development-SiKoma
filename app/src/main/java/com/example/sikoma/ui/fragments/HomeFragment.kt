@@ -29,9 +29,6 @@ class HomeFragment : Fragment() {
     private var isBottomNavVisible = true
     private lateinit var bottomNav: BottomNavigationView
     private lateinit var constraintLayout: ConstraintLayout
-    private val fragmentContainerId = R.id.fragment_container_tab
-    private val navViewId = R.id.nav_view_user
-
     private val viewModel: PostViewModel by activityViewModels {
         PostViewModelFactory.getInstance(requireContext().applicationContext)
     }
@@ -56,7 +53,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setView() {
-
         viewModel.isLoading.observe(requireActivity()) {
             showLoading(it)
         }
@@ -134,17 +130,47 @@ class HomeFragment : Fragment() {
 
     private fun switchFragment(fragment: Fragment) {
         val fragmentTransaction = parentFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.fragment_container_tab, fragment)
+        fragmentTransaction.replace(R.id.fragment_container_tab_home_user, fragment)
         fragmentTransaction.commit()
     }
 
     private fun hideBottomNavigationView() {
-        BottomNavView.hide(bottomNav, constraintLayout, fragmentContainerId)
+        bottomNav.animate()
+            .translationY(bottomNav.height.toFloat())
+            .setDuration(200)
+            .start()
+
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            R.id.fragment_container_home_user,
+            ConstraintSet.BOTTOM,
+            ConstraintSet.PARENT_ID,
+            ConstraintSet.BOTTOM
+        )
+        constraintSet.applyTo(constraintLayout)
+
         isBottomNavVisible = false
     }
 
     private fun showBottomNavigationView() {
-        BottomNavView.show(bottomNav, constraintLayout, fragmentContainerId, navViewId)
+        bottomNav.animate()
+            .translationY(0f)
+            .setDuration(200)
+            .start()
+
+        bottomNav.postDelayed({
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(constraintLayout)
+            constraintSet.connect(
+                R.id.fragment_container_home_user,
+                ConstraintSet.BOTTOM,
+                R.id.nav_view_user,
+                ConstraintSet.TOP
+            )
+            constraintSet.applyTo(constraintLayout)
+        }, 200)
+
         isBottomNavVisible = true
     }
 

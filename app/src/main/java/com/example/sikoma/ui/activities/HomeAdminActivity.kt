@@ -47,7 +47,17 @@ class HomeAdminActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 setNavBar()
                 setFragment(HomeAdminFragment.newInstance(adminId))
+                setView()
             }
+        }
+    }
+
+    private fun setView() {
+        binding.fabAdd.setOnClickListener{
+            val intent = Intent(this, AddPostActivity::class.java).apply {
+                putExtra("adminId", adminId)
+            }
+            startActivity(intent)
         }
     }
 
@@ -84,8 +94,11 @@ class HomeAdminActivity : AppCompatActivity() {
     }
 
     private fun setFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(binding.fragmentContainerHomeAdmin.id, fragment)
-            .commit()
+        val currentFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerHomeAdmin.id)
+        if (currentFragment?.javaClass != fragment.javaClass) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentContainerHomeAdmin.id, fragment)
+                .commit()
+        }
     }
 }

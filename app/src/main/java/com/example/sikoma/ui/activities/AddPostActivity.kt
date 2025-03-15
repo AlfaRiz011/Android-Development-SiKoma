@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.sikoma.R
@@ -17,7 +20,7 @@ import com.example.sikoma.data.local.UserPreferences
 import com.example.sikoma.data.models.PostRequest
 import com.example.sikoma.data.models.Tag
 import com.example.sikoma.databinding.ActivityAddPostBinding
-import com.example.sikoma.ui.adapters.TopicPostAdapter
+import com.example.sikoma.ui.adapters.AddTopicAdapter
 import com.example.sikoma.ui.viewmodels.PostViewModel
 import com.example.sikoma.ui.viewmodels.TagViewModel
 import com.example.sikoma.ui.viewmodels.factory.PostViewModelFactory
@@ -43,8 +46,8 @@ class AddPostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddPostBinding
 
-    private lateinit var adapter: TopicPostAdapter
-    private lateinit var tagList: List<Tag>
+    private lateinit var adapter: AddTopicAdapter
+    private var tagList: MutableList<Tag> = mutableListOf()
     private lateinit var adminId: String
     private var imageUri: Uri? = null
     private lateinit var postRequest: PostRequest
@@ -70,6 +73,7 @@ class AddPostActivity : AppCompatActivity() {
             adminId = pref.getAdmin().firstOrNull()?.adminId.toString()
             setAppBar()
             setAction()
+            setupRecyclerView()
 
             withContext(Dispatchers.Main) {
                 setView()
@@ -125,6 +129,7 @@ class AddPostActivity : AppCompatActivity() {
 
                             navigateToHome()
                         }
+
                         else -> handleError(response.message?.toInt())
                     }
                 }
@@ -139,7 +144,6 @@ class AddPostActivity : AppCompatActivity() {
             timeInputLayout.visibility = View.GONE
             tagInputLayout.visibility = View.GONE
             buttonDoneAddTag.visibility = View.GONE
-            topicRv.visibility = View.GONE
             switchOption.isChecked = false
         }
     }
@@ -159,25 +163,34 @@ class AddPostActivity : AppCompatActivity() {
                 val year = calendar.get(Calendar.YEAR)
                 val month = calendar.get(Calendar.MONTH)
                 val day = calendar.get(Calendar.DAY_OF_MONTH)
+                val whiteColor = ContextCompat.getColor(this@AddPostActivity, R.color.whiteSecondary)
+                val blueColor = ContextCompat.getColor(this@AddPostActivity, R.color.bluePrimary)
 
                 val datePicker = DatePickerDialog(
-                    this@AddPostActivity,
+                    ContextThemeWrapper(this@AddPostActivity, R.style.CustomDatePicker),
                     { _, selectedYear, selectedMonth, selectedDay ->
-                        val monthName = SimpleDateFormat(
-                            "MMMM",
-                            Locale.getDefault()
-                        ).format(Calendar.getInstance().apply {
-                            set(Calendar.MONTH, selectedMonth)
-                        }.time)
+                        val monthName = SimpleDateFormat("MMMM", Locale.getDefault()).format(
+                            Calendar.getInstance().apply {
+                                set(Calendar.MONTH, selectedMonth)
+                            }.time
+                        )
 
-                        val formattedDate =
-                            String.format("%02d %s %d", selectedDay, monthName, selectedYear)
+                        val formattedDate = String.format("%02d %s %d", selectedDay, monthName, selectedYear)
                         inputDate.setText(formattedDate)
+                        inputDate.clearFocus()
                     },
-                    year,
-                    month,
-                    day
+                    year, month, day
                 )
+
+                datePicker.setOnShowListener {
+                    datePicker.window?.setBackgroundDrawable(ColorDrawable(whiteColor))
+                    datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(blueColor)
+                    datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(blueColor)
+                }
+
+                datePicker.setOnCancelListener {
+                    inputDate.clearFocus()
+                }
 
                 datePicker.show()
             }
@@ -186,12 +199,28 @@ class AddPostActivity : AppCompatActivity() {
                 val calendar = Calendar.getInstance()
                 val hour = calendar.get(Calendar.HOUR_OF_DAY)
                 val minute = calendar.get(Calendar.MINUTE)
+                val whiteColor = ContextCompat.getColor(this@AddPostActivity, R.color.whiteSecondary)
+                val blueColor = ContextCompat.getColor(this@AddPostActivity, R.color.bluePrimary)
 
-                val timePicker =
-                    TimePickerDialog(this@AddPostActivity, { _, selectedHour, selectedMinute ->
+                val timePicker = TimePickerDialog(
+                    ContextThemeWrapper(this@AddPostActivity, R.style.CustomTimePicker),
+                    { _, selectedHour, selectedMinute ->
                         val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
                         inputTime.setText(formattedTime)
-                    }, hour, minute, true)
+                        inputTime.clearFocus()
+                    },
+                    hour, minute, true
+                )
+
+                timePicker.setOnShowListener {
+                    timePicker.window?.setBackgroundDrawable(ColorDrawable(whiteColor))
+                    timePicker.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(blueColor)
+                    timePicker.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(blueColor)
+                }
+
+                timePicker.setOnCancelListener {
+                    inputTime.clearFocus()
+                }
 
                 timePicker.show()
             }
@@ -216,6 +245,7 @@ class AddPostActivity : AppCompatActivity() {
         }
     }
 
+
     private fun addTag() {
         binding.apply {
             buttonAddTag.visibility = View.GONE
@@ -224,11 +254,17 @@ class AddPostActivity : AppCompatActivity() {
 
             buttonDoneAddTag.setOnClickListener {
                 val tagText = inputTag.text.toString().trim()
-                if (tagText.isNotEmpty()) {
+
+                if (tagText.isNotEmpty() && !tagList.any { it.tagName == tagText }) {
                     val newTag = Tag(tagId = null, tagName = tagText)
-                    tagList = tagList + newTag
-                    setAdapter(tagList)
+                    tagList.add(newTag)
+                    adapter.notifyDataSetChanged()
                     inputTag.text?.clear()
+                } else {
+                    ValidatorAuthHelper.showToast(
+                        this@AddPostActivity,
+                        "Tag sudah ada atau kosong!"
+                    )
                 }
 
                 buttonAddTag.visibility = View.VISIBLE
@@ -238,14 +274,16 @@ class AddPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAdapter(listTag: List<Tag>) {
-        adapter = TopicPostAdapter(listTag)
 
-        val layoutManager = FlexboxLayoutManager(this@AddPostActivity)
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.CENTER
-        binding.topicRv.layoutManager = layoutManager
-        binding.topicRv.adapter = adapter
+    private fun setupRecyclerView() {
+        adapter = AddTopicAdapter(tagList)
+        binding.topicRv.apply {
+            layoutManager = FlexboxLayoutManager(this@AddPostActivity).apply {
+                flexDirection = FlexDirection.ROW
+                justifyContent = JustifyContent.CENTER
+            }
+            adapter = this@AddPostActivity.adapter
+        }
     }
 
 
@@ -283,7 +321,8 @@ class AddPostActivity : AppCompatActivity() {
             binding.inputTime.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
         } else null
 
-        val eventLocation = binding.inputLocation.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+        val eventLocation =
+            binding.inputLocation.text.toString().toRequestBody("text/plain".toMediaTypeOrNull())
 
         return PostRequest(
             image = imagePart,
@@ -307,7 +346,7 @@ class AddPostActivity : AppCompatActivity() {
                 return false
             }
 
-            if(imageUri.toString().isEmpty()){
+            if (imageUri.toString().isEmpty()) {
                 ValidatorAuthHelper.showToast(
                     this@AddPostActivity,
                     "Image tidak boleh kosong"

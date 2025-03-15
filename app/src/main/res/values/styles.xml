@@ -9,4 +9,12 @@
         <item name="cornerRadius">0dp</item>
     </style>
 
+    <style name="CustomDatePicker" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="CustomTimePicker" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
 </resources>

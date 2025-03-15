@@ -18,7 +18,7 @@ object ValidatorAuthHelper {
     }
 
     private fun validateEmail(email: String): Boolean {
-        val pattern = Regex("^[a-zA-Z0-9._%+-]+@mahasiswa\\.upnvj\\.ac\\.id$")
+        val pattern = Regex("^[a-zA-Z0-9._%+-]+@(gmail\\.com|mahasiswa\\.upnvj\\.ac\\.id)$")
         return pattern.matches(email)
     }
 
@@ -29,7 +29,7 @@ object ValidatorAuthHelper {
     private fun validateEmailField(emailInputLayout: TextInputLayout, emailEditText: EditText): Boolean {
         val email = emailEditText.text.toString().trim()
         return if (!validateEmail(email)) {
-            emailInputLayout.error = "Use official UPN Email"
+            emailInputLayout.error = "Input Invalid"
             false
         } else {
             emailInputLayout.error = null

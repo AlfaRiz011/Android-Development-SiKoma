@@ -51,7 +51,7 @@ class AllPostFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        viewModel.getAllPost().observe(requireActivity()){
+        viewModel.getAllPost().observe(viewLifecycleOwner){
             when {
                 it.status == "success" ->{
                     val posts = it.data
@@ -59,6 +59,7 @@ class AllPostFragment : Fragment() {
                     if(posts.isNullOrEmpty()){
                         binding.noData.visibility = View.VISIBLE
                     } else {
+                        binding.rvAllPost.adapter = null
                         binding.noData.visibility = View.GONE
                         postAdapter = AllPostAdapter(posts)
                         val layoutManager = LinearLayoutManager(requireContext())
